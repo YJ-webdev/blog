@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <div className="flex justify-between items-start py-10">
       <h1 className="font-bold md:text-6xl text-5xl flex-1">
-        {pathname === '/' ? 'Bravura' : 'About'}
+        {pathname === '/about' ? 'About' : 'Bravura'}
         <span>.</span>
       </h1>
       <div className="flex justify-end gap-x-4">
