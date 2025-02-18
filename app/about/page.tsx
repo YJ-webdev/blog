@@ -1,8 +1,8 @@
 export default function About() {
   return (
-    <section className="max-w-[750px] mx-auto">
+    <section className="max-w-[750px] mx-auto dark:text-muted-foreground">
       <h1 className="py-5">
-        Welcome to <strong>Bravura</strong> –{' '}
+        Welcome to <strong className="text-primary">Bravura</strong> –{' '}
         <span className="italic font-light">A Journey of Excellence</span>
       </h1>
       <p>
@@ -15,7 +15,7 @@ export default function About() {
         curated, thoughtfully crafted, and expertly presented.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 inline-block">
+      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
         Why Bravura?
       </h2>
       <p>
@@ -37,7 +37,7 @@ export default function About() {
         boundaries, embracing new perspectives, and taking risks.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 inline-block">
+      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
         Our Mission
       </h2>
       <p>
@@ -51,7 +51,7 @@ export default function About() {
         cover it all with precision, depth, and a unique perspective.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 inline-block">
+      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
         What to Expect
       </h2>
       <p>
@@ -114,7 +114,7 @@ export default function About() {
         </li>
       </ul>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 inline-block">
+      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
         Our Promise to You
       </h2>
       <p>
@@ -135,7 +135,7 @@ export default function About() {
         transformation.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 inline-block">
+      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
         Join Us on Our Journey
       </h2>
       <p>
