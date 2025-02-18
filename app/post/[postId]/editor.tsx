@@ -149,7 +149,7 @@ export const Editor = () => {
           </div>
         </FloatingMenu>
       )}
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} spellCheck={false} />
     </>
   );
 };

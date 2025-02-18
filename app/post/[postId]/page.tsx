@@ -6,7 +6,7 @@ interface BlogIdPageProps {
 }
 
 export default async function BlogIdPage({ params }: BlogIdPageProps) {
-  const { postId } = await params;
+  // const { postId } = await params;
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-10 dark:text-muted-foreground">
@@ -14,7 +14,7 @@ export default async function BlogIdPage({ params }: BlogIdPageProps) {
         <Image src="/preview-image.jpg" alt="Preview" fill objectFit="cover" />
       </div>{' '}
       <div className="flex flex-col gap-4">
-        <p className="text-2xl">{postId}</p>
+        {/* <p className="text-2xl">{postId}</p> */}
         <Editor />
       </div>
     </div>
