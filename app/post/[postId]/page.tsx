@@ -1,5 +1,5 @@
+import { Editor } from '@/components/dynamic-editor';
 import Image from 'next/image';
-import { Editor } from './editor';
 
 interface BlogIdPageProps {
   params: Promise<{ postId: string }>;

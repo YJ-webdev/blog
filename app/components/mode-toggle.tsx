@@ -6,6 +6,16 @@ import { useTheme } from 'next-themes';
 
 export function ModeToggle() {
   const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false); // Track if component is mounted
+
+  // Set mounted to true once the component is mounted (client-side)
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // Prevents rendering the toggle on the server-side
+  }
 
   const isDarkMode = theme === 'dark';
 
