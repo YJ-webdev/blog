@@ -1,7 +1,3 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import {
   Card,
@@ -15,21 +11,13 @@ import {
 import GoogleSignIn from './google-sign-in';
 import GithubSignIn from './github-sign-in';
 
-export const LoginDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface LoginDialogProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
 
+export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
   // Handle keyboard shortcut
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
-        e.preventDefault();
-        setIsOpen((prev) => !prev); // Toggle dialog
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   return (
     <div>

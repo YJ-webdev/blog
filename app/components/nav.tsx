@@ -1,11 +1,6 @@
-import Link from 'next/link';
-import { Title } from './title';
-
 import { auth } from '@/auth';
-
-import { ModeToggle } from './mode-toggle';
-
-import { DropDownMenu } from './drop-down-menu';
+import { Title } from './title';
+import { ResponsiveMenu } from './responsive-menu';
 
 export default async function Nav() {
   const session = await auth();
@@ -22,16 +17,7 @@ export default async function Nav() {
       <Title />
 
       <div className="flex justify-end items-center gap-x-4 text-[15px]">
-        <Link href="/">Blog</Link>
-        <Link href="/about">About</Link>
-
-        {session && session.user ? (
-          <div className="flex items-center gap-2">
-            <DropDownMenu initials={initials} />
-          </div>
-        ) : (
-          <ModeToggle />
-        )}
+        <ResponsiveMenu initials={initials} session={session} />
       </div>
     </div>
   );
