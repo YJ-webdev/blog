@@ -52,7 +52,7 @@ export const ImageDropZone = () => {
           <img
             src={preview}
             alt="Preview"
-            className="w-full h-full object-cover rounded"
+            className="w-full h-full object-cover"
           />
         ) : (
           <ImageIcon
