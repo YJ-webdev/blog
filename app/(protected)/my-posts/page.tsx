@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import { List } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 export default async function MyPostsPage() {
@@ -8,5 +9,10 @@ export default async function MyPostsPage() {
     return redirect('/');
   }
 
-  return <div>My Posts</div>;
+  return (
+    <div className="flex items-center gap-2">
+      <List size={20} className="" />
+      My Posts
+    </div>
+  );
 }

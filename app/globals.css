@@ -73,6 +73,12 @@ body {
   }
 }
 
+@layer components {
+  .section-heading {
+    @apply relative mt-5 mb-2 inline-block text-primary dark:text-primary before:absolute before:left-0 before:right-0 before:bottom-0 before:-z-10 before:rounded-full before:bg-lime-100 before:dark:bg-sky-800 before:h-[16px] before:translate-y-1 before:-translate-x-3;
+  }
+}
+
 .tiptap {
   /* Remove margin from first child */
   :first-child {
@@ -200,4 +206,9 @@ body {
       }
     }
   }
+}
+
+.bn-container[data-theming-css-variables-demo][data-color-scheme='dark'] {
+  --bn-colors-editor-text: #ffffff;
+  --bn-colors-editor-background: #000000;
 }

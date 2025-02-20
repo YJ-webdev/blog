@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import { Bookmark } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 export default async function SavedPostsPage() {
@@ -8,5 +9,10 @@ export default async function SavedPostsPage() {
     return redirect('/');
   }
 
-  return <div>Saved Posts</div>;
+  return (
+    <div className="flex items-center gap-2">
+      <Bookmark size={20} className="" />
+      Saved Posts
+    </div>
+  );
 }

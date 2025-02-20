@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import Navbar from './components/navbar';
+
 import Footer from './components/footer';
+import Nav from './components/nav';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -27,7 +28,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex flex-col min-h-screen max-w-[1000px] mx-auto">
-            <Navbar />
+            <Nav />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>

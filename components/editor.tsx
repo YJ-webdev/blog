@@ -1,6 +1,6 @@
 'use client';
 
-import TextareaAutosize from 'react-textarea-autosize';
+// import TextareaAutosize from 'react-textarea-autosize';
 import { useCreateBlockNote } from '@blocknote/react';
 import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
@@ -46,16 +46,18 @@ export default function Editor({ initialContent, editable }: EditorProps) {
 
   return (
     <div className="flex flex-col w-full">
-      <TextareaAutosize
-        placeholder="Untitled"
-        className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
-      />
-      <div className="-mx-[54px] my-4">
+      {/* <TextareaAutosize
+        placeholder="Title"
+        autoFocus
+        className="w-fit resize-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+      /> */}
+      <div className="-mx-[54px] -translate-y-2">
         <BlockNoteView
           editor={editor}
           editable={editable}
           onChange={onChange}
           theme={theme}
+          data-theming-css-variables-demo
         />
       </div>
     </div>

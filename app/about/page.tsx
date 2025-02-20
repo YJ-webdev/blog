@@ -15,9 +15,7 @@ export default function About() {
         curated, thoughtfully crafted, and expertly presented.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
-        Why Bravura?
-      </h2>
+      <h2 className="section-heading">Why Bravura?</h2>
       <p>
         The word <em>Bravura</em> itself speaks volumes about what we strive to
         create here. In music and the arts, bravura is the term used to describe
@@ -37,9 +35,7 @@ export default function About() {
         boundaries, embracing new perspectives, and taking risks.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
-        Our Mission
-      </h2>
+      <h2 className="section-heading">Our Mission</h2>
       <p>
         At Bravura, our mission is to inspire and empower our readers with
         knowledge, creativity, and innovation. We want to provide a platform
@@ -51,9 +47,7 @@ export default function About() {
         cover it all with precision, depth, and a unique perspective.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
-        What to Expect
-      </h2>
+      <h2 className="section-heading">What to Expect</h2>
       <p>
         Each piece of content on Bravura is crafted with one goal in mind: to
         inform, inspire, and engage. Here&apos;s a glimpse of what you can
@@ -114,9 +108,7 @@ export default function About() {
         </li>
       </ul>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
-        Our Promise to You
-      </h2>
+      <h2 className="section-heading">Our Promise to You</h2>
       <p>
         Bravura is more than just a blog—it&apos;s a community of like-minded
         individuals who are dedicated to living life with passion and purpose.
@@ -135,9 +127,7 @@ export default function About() {
         transformation.
       </p>
 
-      <h2 className="mt-5 mb-2 bg-lime-100 dark:bg-sky-800 dark:text-primary inline-block">
-        Join Us on Our Journey
-      </h2>
+      <h2 className="section-heading">Join Us on Our Journey</h2>
       <p>
         At Bravura, we&apos;re just getting started. The world is full of
         endless opportunities to learn, grow, and make an impact, and we&apos;re
