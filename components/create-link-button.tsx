@@ -7,10 +7,10 @@ export function CreateLinkButton() {
   const editor = useBlockNoteEditor();
   const Components = useComponentsContext()!;
 
-  const [url, setUrl] = useState<string>('');
+  const [href, setHref] = useState<string>('');
 
   const handleAddLink = async (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && url) {
+    if (e.key === 'Enter' && href) {
       const block = editor.getTextCursorPosition().block;
 
       if (block.type === 'image') {
@@ -27,11 +27,11 @@ export function CreateLinkButton() {
           [
             {
               id: block.id,
-              type: 'image',
+              type: 'linkedImage',
               props: {
                 url: imageProps.url,
                 caption: imageProps.caption || '',
-                href: url, // Store the link
+                href: href, // Store the link
               },
               content: undefined,
               children: [],
@@ -60,12 +60,12 @@ export function CreateLinkButton() {
           <Components.Generic.Form.TextInput
             name={'image-link'}
             icon={<Link size={16} />}
-            value={url || ''}
+            value={href || ''}
             autoFocus={true}
             placeholder={'Add URL'}
             onKeyDown={handleAddLink}
             onChange={(e) => {
-              setUrl(e.target.value);
+              setHref(e.target.value);
             }}
           />
         </Components.Generic.Form.Root>

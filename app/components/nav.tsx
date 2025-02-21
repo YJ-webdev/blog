@@ -13,7 +13,7 @@ export default async function Nav() {
       : nameParts[0].charAt(0).toUpperCase();
 
   return (
-    <div className="flex justify-between items-start pt-10 pb-7">
+    <div className="flex justify-between items-start pt-10 pb-5">
       <Title />
 
       <div className="flex justify-end items-center gap-x-4 text-[15px]">

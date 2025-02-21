@@ -1,9 +1,10 @@
 import { createReactBlockSpec } from '@blocknote/react';
+import Link from 'next/link';
 
 export const LinkedImageBlock = createReactBlockSpec(
   {
     type: 'linkedImage',
-    content: 'none',
+    content: 'inline',
     propSchema: {
       url: {
         type: 'string',
@@ -20,21 +21,19 @@ export const LinkedImageBlock = createReactBlockSpec(
     },
   },
   {
-    render: (props: any) => {
-      // Access the data properties correctly
-      const { url, caption, href } = props.data as {
-        url: string;
-        caption: string;
-        href: string;
-      };
-
+    render: ({ block }) => {
       return (
-        <div>
-          <a href={href}>
+        <div className="flex w-full mx-auto max-w-[500px]">
+          <Link
+            href={block.props.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cursor-pointer"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={url} alt={caption} />
-            <p>{caption}</p>
-          </a>
+            <img src={block.props.url} alt={block.props.caption} />
+            <p>{block.props.caption}</p>
+          </Link>
         </div>
       );
     },

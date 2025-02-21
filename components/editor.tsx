@@ -43,7 +43,7 @@ async function uploadFile(file: File) {
 const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
-    linkedImage: LinkedImageBlock, // Your React component
+    linkedImage: LinkedImageBlock,
   },
 });
 
@@ -70,7 +70,7 @@ export default function Editor({ initialContent, editable }: EditorProps) {
     return () => observer.disconnect();
   }, []);
 
-  const editor: any = useCreateBlockNote({
+  const editor: BlockNoteEditor = useCreateBlockNote({
     schema,
     domAttributes: {
       block: {
@@ -98,13 +98,9 @@ export default function Editor({ initialContent, editable }: EditorProps) {
         >
           <FormattingToolbarController
             formattingToolbar={() => {
-              const blockType = editor.getTextCursorPosition().block.type;
+              const block = editor.getTextCursorPosition().block;
 
-              if (
-                blockType === 'image' ||
-                blockType === 'file' ||
-                blockType === 'video'
-              ) {
+              if (block.type === 'image' || block.type === 'linkedImage') {
                 return (
                   <FormattingToolbar>
                     <FileCaptionButton key="fileCaptionButton" />
@@ -123,12 +119,10 @@ export default function Editor({ initialContent, editable }: EditorProps) {
                       key="textAlignRightButton"
                     />
 
-                    {/* <EditLinkButton url={url} text={text} editLink={editLink} /> */}
                     <CreateLinkButton />
                   </FormattingToolbar>
                 );
               }
-
               return <FormattingToolbar />;
             }}
           />
