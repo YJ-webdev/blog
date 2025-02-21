@@ -8,18 +8,12 @@ import {
   TextAlignButton,
   useCreateBlockNote,
 } from '@blocknote/react';
-import {
-  BlockNoteEditor,
-  BlockNoteSchema,
-  defaultBlockSpecs,
-  PartialBlock,
-} from '@blocknote/core';
+import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 import { useEffect, useState } from 'react';
 import { CreateLinkButton } from './create-link-button';
-import { LinkedImageBlock } from './linked-image-block';
 
 interface EditorProps {
   initialContent?: string;
@@ -39,13 +33,6 @@ async function uploadFile(file: File) {
     'tmpfiles.org/dl/',
   );
 }
-
-const schema = BlockNoteSchema.create({
-  blockSpecs: {
-    ...defaultBlockSpecs,
-    linkedImage: LinkedImageBlock,
-  },
-});
 
 export default function Editor({ initialContent, editable }: EditorProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -71,7 +58,6 @@ export default function Editor({ initialContent, editable }: EditorProps) {
   }, []);
 
   const editor: BlockNoteEditor = useCreateBlockNote({
-    schema,
     domAttributes: {
       block: {
         class: 'blocknote-block',
@@ -100,7 +86,7 @@ export default function Editor({ initialContent, editable }: EditorProps) {
             formattingToolbar={() => {
               const block = editor.getTextCursorPosition().block;
 
-              if (block.type === 'image' || block.type === 'linkedImage') {
+              if (block.type === 'image') {
                 return (
                   <FormattingToolbar>
                     <FileCaptionButton key="fileCaptionButton" />

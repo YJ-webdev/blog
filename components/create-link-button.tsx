@@ -14,30 +14,27 @@ export function CreateLinkButton() {
       const block = editor.getTextCursorPosition().block;
 
       if (block.type === 'image') {
-        const imageProps = block.props as { url?: string; caption?: string };
-
-        if (!imageProps?.url) {
-          console.error('Image URL not found.');
-          return;
-        }
-
-        // Replace the image block with a new one that includes the href
         editor.replaceBlocks(
           [block],
           [
             {
               id: block.id,
-              type: 'linkedImage',
+              type: 'image',
               props: {
-                url: imageProps.url,
-                caption: imageProps.caption || '',
-                href: href, // Store the link
+                url: block.props.url,
+                caption: block.props.caption,
+                previewWidth: block.props.previewWidth,
+                textAlignment: 'center',
+                name: href, // Add href properly
               },
               content: undefined,
               children: [],
             },
           ],
         );
+        setTimeout(() => {
+          console.log('Updated Image Block:', editor.getBlock(block.id));
+        }, 500);
       }
     }
   };

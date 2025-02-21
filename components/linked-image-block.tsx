@@ -1,39 +1,28 @@
+import { defaultBlockSchema } from '@blocknote/core';
 import { createReactBlockSpec } from '@blocknote/react';
-import Link from 'next/link';
 
-export const LinkedImageBlock = createReactBlockSpec(
+export const CustomImageBlock = createReactBlockSpec(
   {
-    type: 'linkedImage',
-    content: 'inline',
+    type: 'image', // Use 'image' type to keep the default block
+    content: 'none',
     propSchema: {
-      url: {
-        type: 'string',
-        default: '',
-      },
-      caption: {
-        type: 'string',
-        default: '',
-      },
-      href: {
-        type: 'string',
-        default: '',
-      },
+      ...defaultBlockSchema.image.propSchema,
+      name: { type: 'string', default: undefined }, // Use 'name' for href
     },
   },
   {
     render: ({ block }) => {
       return (
         <div className="flex w-full mx-auto max-w-[500px]">
-          <Link
-            href={block.props.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cursor-pointer"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={block.props.url} alt={block.props.caption} />
-            <p>{block.props.caption}</p>
-          </Link>
+          {block.props.url && (
+            <a
+              href={block.props.name}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={block.props.url} alt={block.props.caption || 'Image'} />
+            </a>
+          )}
         </div>
       );
     },
