@@ -11,7 +11,7 @@ export default async function NewPostPage() {
   }
 
   return (
-    <div className="max-w-[750px] mx-auto flex flex-col gap-10 dark:text-muted-foreground">
+    <div className="max-w-[750px] mx-auto flex flex-col gap-5">
       <ImageDropZone />
       <Editor />
     </div>

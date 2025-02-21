@@ -44,7 +44,7 @@ export const ResponsiveMenu = ({
         <div className="items-center gap-4 flex">
           {pathname !== '/new-post' && (
             <Link href="/new-post" className="hidden md:flex">
-              <PencilLine size={24} strokeWidth={1.5} />
+              <PencilLine size={20} strokeWidth={1.5} />
             </Link>
           )}
           <div className="flex items-center">
