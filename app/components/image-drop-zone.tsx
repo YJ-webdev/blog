@@ -8,14 +8,23 @@ import { cn } from '@/lib/utils';
 export const ImageDropZone = () => {
   const [preview, setPreview] = useState<string | null>(null);
 
+  useEffect(() => {
+    const storedImage = localStorage.getItem('uploadedImage');
+    if (storedImage) {
+      setPreview(storedImage);
+    }
+  }, []);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-
-      // Cleanup old object URLs when a new file is selected
-      return () => URL.revokeObjectURL(objectUrl);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64Image = reader.result as string;
+        setPreview(base64Image);
+        localStorage.setItem('uploadedImage', base64Image); // Save to localStorage
+      };
     }
   }, []);
 
@@ -24,6 +33,13 @@ export const ImageDropZone = () => {
     accept: { 'image/*': [] }, // Accepts all image types
     multiple: false,
   });
+
+  // Remove the image
+  const removeImage = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setPreview(null);
+    localStorage.removeItem('uploadedImage'); // Remove from localStorage
+  };
 
   // Cleanup preview URL on component unmount
   useEffect(() => {
@@ -64,10 +80,7 @@ export const ImageDropZone = () => {
 
       {preview && (
         <div
-          onClick={(event) => {
-            event.stopPropagation(); // Prevent triggering file selection
-            setPreview(null);
-          }}
+          onClick={removeImage}
           className="absolute top-4 right-5 rounded-full w-10 h-10 flex items-center justify-center text-white  hover:bg-stone-800/30 bg-stone-300/60 cursor-pointer"
         >
           <Trash className="w-5 h-5" />

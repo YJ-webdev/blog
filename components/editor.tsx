@@ -6,14 +6,12 @@ import {
   FormattingToolbar,
   FormattingToolbarController,
   TextAlignButton,
-  useCreateBlockNote,
 } from '@blocknote/react';
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
-import { useEffect, useState } from 'react';
-import { CreateLinkButton } from './create-link-button';
+import { useEffect, useMemo, useState } from 'react';
 
 interface EditorProps {
   initialContent?: string;
@@ -34,8 +32,23 @@ async function uploadFile(file: File) {
   );
 }
 
-export default function Editor({ initialContent, editable }: EditorProps) {
+async function saveToStorage(jsonBlocks: Block[]) {
+  localStorage.setItem('editorContent', JSON.stringify(jsonBlocks));
+}
+
+async function loadFromStorage() {
+  const storageString = localStorage.getItem('editorContent');
+  return storageString
+    ? (JSON.parse(storageString) as PartialBlock[])
+    : undefined;
+}
+
+export default function Editor({ editable }: EditorProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  const [initialContent, setInitialContent] = useState<
+    PartialBlock[] | undefined | 'loading'
+  >('loading');
 
   useEffect(() => {
     const currentTheme = document.documentElement.classList.contains('dark')
@@ -57,19 +70,34 @@ export default function Editor({ initialContent, editable }: EditorProps) {
     return () => observer.disconnect();
   }, []);
 
-  const editor: BlockNoteEditor = useCreateBlockNote({
-    domAttributes: {
-      block: {
-        class: 'blocknote-block',
-      },
-    },
-    initialContent: initialContent
-      ? (JSON.parse(initialContent) as PartialBlock[])
-      : undefined,
-    uploadFile,
-  });
+  useEffect(() => {
+    loadFromStorage().then((content) => {
+      setInitialContent(content);
+    });
+  }, []);
 
-  const onChange = () => {};
+  const editor = useMemo(() => {
+    if (initialContent === 'loading') {
+      return undefined;
+    }
+    return BlockNoteEditor.create({
+      domAttributes: {
+        block: {
+          class: 'blocknote-block',
+        },
+      },
+      initialContent,
+      uploadFile,
+    });
+  }, [initialContent]);
+
+  if (editor === undefined) {
+    return 'Loading content...';
+  }
+
+  const onChange = () => {
+    saveToStorage(editor.document);
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -79,7 +107,6 @@ export default function Editor({ initialContent, editable }: EditorProps) {
           editable={editable}
           onChange={onChange}
           theme={theme}
-          data-theming-css-variables-demo
           formattingToolbar={false}
         >
           <FormattingToolbarController
@@ -105,7 +132,7 @@ export default function Editor({ initialContent, editable }: EditorProps) {
                       key="textAlignRightButton"
                     />
 
-                    <CreateLinkButton />
+                    {/* <CreateLinkButton /> */}
                   </FormattingToolbar>
                 );
               }

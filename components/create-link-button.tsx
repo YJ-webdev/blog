@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useBlockNoteEditor, useComponentsContext } from '@blocknote/react';
-import { Link } from 'lucide-react';
+import { LinkIcon } from 'lucide-react';
 import '@blocknote/mantine/style.css';
 
 export function CreateLinkButton() {
@@ -46,7 +46,7 @@ export function CreateLinkButton() {
           className={'bn-button'}
           label={'Link'}
           mainTooltip={'Add Link'}
-          icon={<Link size={16} />}
+          icon={<LinkIcon size={16} />}
         />
       </Components.Generic.Popover.Trigger>
       <Components.Generic.Popover.Content
@@ -56,7 +56,7 @@ export function CreateLinkButton() {
         <Components.Generic.Form.Root>
           <Components.Generic.Form.TextInput
             name={'image-link'}
-            icon={<Link size={16} />}
+            icon={<LinkIcon size={16} />}
             value={href || ''}
             autoFocus={true}
             placeholder={'Add URL'}

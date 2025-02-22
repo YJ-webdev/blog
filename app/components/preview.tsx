@@ -16,7 +16,7 @@ export const Preview = () => {
         />
       </div>
 
-      <div className="flex flex-col mt-2 gap-1 mb-2  group-hover:text-zinc-700 dark:group-hover:text-zinc-300 ">
+      <div className="flex flex-col gap-1  group-hover:text-zinc-700 dark:group-hover:text-zinc-300 ">
         <div className="flex justify-between items-start">
           <h3 className=" text-lg font-semibold">Title</h3>
           <p className="text-xs italic">2025-03-03</p>

@@ -10,7 +10,7 @@ export default async function MyPostsPage() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 mt-5">
       <List size={20} className="" />
       My Posts
     </div>
