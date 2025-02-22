@@ -1,7 +1,7 @@
-import { Editor } from '@/components/dynamic-editor';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { ImageDropZone } from '@/app/components/image-drop-zone';
+
+import { ClientPage } from './client-page';
 
 export default async function NewPostPage() {
   const session = await auth();
@@ -12,8 +12,7 @@ export default async function NewPostPage() {
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-5">
-      <ImageDropZone />
-      <Editor />
+      <ClientPage />
     </div>
   );
 }
