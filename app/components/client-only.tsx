@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
-import { useClientOnly } from '../hooks/useClientOnly';
+import { useEffect, useState } from 'react';
 
-interface ClientOnlyProps {
-  children: React.ReactNode;
-}
+export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
+  const [isClient, setIsClient] = useState(false);
 
-export const ClientOnly: React.FC<ClientOnlyProps> = ({ children }) => {
-  const isClient = useClientOnly();
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  if (!isClient) return null; // Prevents rendering on the server
+  if (!isClient) return null;
 
   return <>{children}</>;
 };

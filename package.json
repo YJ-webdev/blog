@@ -31,6 +31,8 @@
     "@uploadthing/react": "^7.3.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "jsdom": "^26.0.0",
+    "link-preview-js": "^3.0.14",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",
     "next-auth": "^5.0.0-beta.25",
@@ -46,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
