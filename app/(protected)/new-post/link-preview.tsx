@@ -24,9 +24,9 @@ const LinkPreview: React.FC<{ preview: LinkViewProps }> = ({ preview }) => {
       href={preview.url!}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-primary hover:underline rounded-lg w-full overflow-hidden md:hover:shadow-xl transition-all duration-150 ease-linear"
+      className="text-primary border hover:underline rounded-lg w-full overflow-hidden sm:hover:shadow-xl transition-all duration-150 ease-linear"
     >
-      <Card>
+      <Card className="border-none shadow-none">
         {preview.image && (
           <div className="relative aspect-video">
             <Image

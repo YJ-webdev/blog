@@ -71,25 +71,26 @@ const LinkPreviews = () => {
 
   return (
     <form
-      className="w-full max-w-[750px] mx-auto flex flex-col items-center gap-4"
+      className="w-full max-w-[750px] mx-auto flex flex-col items-center gap-10"
       onSubmit={getData}
     >
       <Input
-        type="hidden"
+        // type="hidden"
         value={url}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setUrl(e.target.value)
         }
         placeholder="Enter a URL to preview"
+        autoFocus={false}
       />
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <Button className="mb-10 hidden" type="submit">
+      <Button variant="secondary" className="mb-10  hidden" type="submit">
         Add open graph
       </Button>
 
-      <div className="grid grid-cols-1 sm:flex gap-5 mb-10 justify-between w-full h-full">
+      <div className="grid grid-cols-1 sm:flex gap-5 justify-between w-full h-full">
         {links.map((link, index) => {
           if (typeof link === 'string') {
             return <SimpleLinkPreview key={index} url={link} />;
