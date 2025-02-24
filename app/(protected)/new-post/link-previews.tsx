@@ -80,7 +80,7 @@ const LinkPreviews = () => {
 
       <Button type="submit">Create preview</Button>
 
-      <div className="flex gap-10 mb-10">
+      <div className="flex gap-10 mb-10 max-w-[750px] mx-auto">
         {links.map((link, index) => {
           if (typeof link === 'string') {
             return <SimpleLinkPreview key={index} url={link} />;

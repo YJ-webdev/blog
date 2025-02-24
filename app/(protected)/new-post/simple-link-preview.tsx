@@ -4,7 +4,7 @@ import React from 'react';
 
 const SimpleLinkPreview = ({ url }: { url: string }) => {
   return (
-    <Card className="p-2">
+    <Card className="p-2 w-full overflow-hidden">
       <Link
         href={url}
         target="_blank"

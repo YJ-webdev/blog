@@ -5,11 +5,23 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: '**.coupangcdn.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'www.google.com',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.youtube.com',
       },
       {
         protocol: 'http',

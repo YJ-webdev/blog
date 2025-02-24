@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Image from 'next/image';
 import {
@@ -21,24 +19,18 @@ export interface LinkViewProps {
 }
 
 const LinkPreview: React.FC<{ preview: LinkViewProps }> = ({ preview }) => {
-  console.log(preview);
-  // Provide a fallback image if preview.image is null
-  const imageUrl = preview.image?.startsWith('//')
-    ? 'https:' + preview.image // Add https:// if it starts with //
-    : preview.image ||
-      'https://images.unsplash.com/photo-1726064856002-fe00cbbd5898?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Replace with your default image path
-
   return (
     <Card className="w-full max-w-sm overflow-hidden md:hover:shadow-xl transition-all duration-150 ease-linear">
-      <div className="relative aspect-video">
-        <Image
-          src={imageUrl}
-          alt="Link preview"
-          layout="fill"
-          objectFit="cover"
-        />
-      </div>
-
+      {preview.image && (
+        <div className="relative aspect-video">
+          <Image
+            src={preview.image}
+            alt="Link preview"
+            layout="fill"
+            objectFit="cover"
+          />
+        </div>
+      )}
       <CardHeader>
         <CardTitle className="line-clamp-2">{preview.title}</CardTitle>
         {preview.siteName && (
