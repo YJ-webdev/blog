@@ -100,7 +100,7 @@ export default function Editor({ editable }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-hidden">
       <div className="-mx-[54px] -translate-y-2 z-50">
         <BlockNoteView
           editor={editor}

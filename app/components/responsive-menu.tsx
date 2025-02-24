@@ -63,7 +63,7 @@ export const ResponsiveMenu = ({
             <p onClick={openLoginDialog}>Login</p>
             <ModeToggle />
           </div>
-          <div className="flex md:hidden items-center -mr-4">
+          <div className="flex md:hidden items-center">
             <DropDownMenu
               session={session}
               initials={initials}

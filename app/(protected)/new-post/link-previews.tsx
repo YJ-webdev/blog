@@ -56,19 +56,26 @@ const LinkPreviews = () => {
     const res = await getPreview(normalizedUrl);
     console.log(res);
     if (typeof res === 'string') {
-      setLinks((prevLinks) => [res, ...prevLinks]);
+      setLinks((prevLinks) => {
+        const updatedLinks = [res, ...prevLinks];
+        return updatedLinks.slice(0, 3); // Ensure only the most recent 3 entries are kept
+      });
       return;
     }
     const linkPreview = transformResponse(res, normalizedUrl);
-    setLinks((prevLinks) => [linkPreview, ...prevLinks]);
+    setLinks((prevLinks) => {
+      const updatedLinks = [linkPreview, ...prevLinks];
+      return updatedLinks.slice(0, 3); // Ensure only the most recent 3 entries are kept
+    });
   };
 
   return (
     <form
-      className="md:w-[60vw] flex flex-col items-center gap-4"
+      className="w-full max-w-[750px] mx-auto flex flex-col items-center gap-4"
       onSubmit={getData}
     >
       <Input
+        type="hidden"
         value={url}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setUrl(e.target.value)
@@ -78,9 +85,11 @@ const LinkPreviews = () => {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <Button type="submit">Create preview</Button>
+      <Button className="mb-10 hidden" type="submit">
+        Add open graph
+      </Button>
 
-      <div className="flex gap-10 mb-10 max-w-[750px] mx-auto">
+      <div className="grid grid-cols-1 sm:flex gap-5 mb-10 justify-between w-full h-full">
         {links.map((link, index) => {
           if (typeof link === 'string') {
             return <SimpleLinkPreview key={index} url={link} />;
