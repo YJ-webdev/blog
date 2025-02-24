@@ -12,7 +12,7 @@ export default async function SavedPostsPage() {
   return (
     <div className="flex items-center gap-2 mt-5">
       <Bookmark size={20} className="" />
-      Saved Posts
+      Bookmarked Posts
     </div>
   );
 }

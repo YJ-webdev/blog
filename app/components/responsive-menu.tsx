@@ -1,11 +1,11 @@
 'use client';
 
-import { PencilLine } from 'lucide-react';
+// import { NotebookPen } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { DropDownMenu } from './drop-down-menu';
 
-import { usePathname } from 'next/navigation';
+// import { usePathname } from 'next/navigation';
 import { Session } from 'next-auth';
 import { ModeToggle } from './mode-toggle';
 import { LoginDialog } from './(auth)/login-dialog';
@@ -17,7 +17,7 @@ export const ResponsiveMenu = ({
   initials: string;
   session: Session | null;
 }) => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,12 +41,12 @@ export const ResponsiveMenu = ({
   return (
     <>
       {session && session.user ? (
-        <div className="items-center gap-4 flex">
-          {pathname !== '/new-post' && (
+        <div className="items-center gap-6 flex">
+          {/* {pathname !== '/new-post' && (
             <Link href="/new-post" className="hidden md:flex">
-              <PencilLine size={20} strokeWidth={1.5} />
+              Write your post
             </Link>
-          )}
+          )} */}
           <div className="flex items-center">
             <DropDownMenu
               session={session}

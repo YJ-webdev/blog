@@ -60,9 +60,9 @@ export const DropDownMenu = ({
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={'/saved-posts'} className="flex items-center">
+              <Link href={'/bookmarked'} className="flex items-center">
                 <Bookmark className="mr-3 h-4 w-4" />
-                Saved Posts
+                Bookmarked
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="my-0" />
