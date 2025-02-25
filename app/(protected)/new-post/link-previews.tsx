@@ -89,15 +89,20 @@ const LinkPreviews = () => {
       <Button variant="secondary" className="mb-10  hidden" type="submit">
         Add open graph
       </Button>
-
-      <div className="grid grid-cols-1 sm:flex gap-5 justify-between w-full h-full">
-        {links.map((link, index) => {
-          if (typeof link === 'string') {
-            return <SimpleLinkPreview key={index} url={link} />;
-          } else {
-            return <LinkPreview key={index} preview={link} />;
-          }
-        })}
+      <div className="flex flex-col">
+        <div className="grid grid-cols-1 sm:flex gap-5 justify-between w-full h-full">
+          {links.map((link, index) => {
+            if (typeof link === 'string') {
+              return <SimpleLinkPreview key={index} url={link} />;
+            } else {
+              return <LinkPreview key={index} preview={link} />;
+            }
+          })}
+        </div>
+        <p className="text-xs text-center mt-4 text-muted-foreground">
+          이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를
+          제공받습니다.
+        </p>
       </div>
     </form>
   );
