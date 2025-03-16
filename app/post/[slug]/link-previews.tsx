@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LinkPreview, { LinkViewProps } from './link-preview';
 import { getPreview } from '@/app/actions/preview';
 import SimpleLinkPreview from './simple-link-preview';
@@ -18,6 +18,7 @@ function getLargestFavicon(favicons: string[]): string {
   })[0];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformResponse(res: any, url: string): LinkViewProps {
   return {
     title: 'title' in res ? res.title : null,
@@ -36,11 +37,30 @@ function normalizeUrl(url: string): string {
   return url;
 }
 
-const LinkPreviews = () => {
+interface LinkPreviewsProps {
+  postId: string;
+}
+
+const LinkPreviews = ({ postId }: LinkPreviewsProps) => {
   const [url, setUrl] = useState('');
   const [links, setLinks] = useState<Array<LinkViewProps | string>>([]);
 
   const [error, setError] = useState<string | null>(null);
+
+  // Load links from localStorage when postId changes
+  useEffect(() => {
+    const storedLinks = localStorage.getItem(`links_${postId}`);
+    if (storedLinks) {
+      setLinks(JSON.parse(storedLinks));
+    }
+  }, [postId]);
+
+  // Save links to localStorage
+  useEffect(() => {
+    if (links.length > 0) {
+      localStorage.setItem(`links_${postId}`, JSON.stringify(links));
+    }
+  }, [links, postId]);
 
   const getData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

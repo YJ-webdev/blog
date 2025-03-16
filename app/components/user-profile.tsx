@@ -3,7 +3,7 @@ import React from 'react';
 
 export const UserProfile = ({ firstLetter }: { firstLetter: string }) => {
   return (
-    <div className="relative w-10 h-10 rounded-full overflow-hidden">
+    <div className="relative w-10 h-10 z-[99999] rounded-full overflow-hidden">
       {/* Avatar Image */}
       <img
         src="https://avatar.vercel.sh/rauchg?rounded=60"

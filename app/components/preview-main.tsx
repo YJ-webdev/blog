@@ -33,7 +33,7 @@ export const PreviewMain = ({
         />
       </div>
 
-      <div className="w-full h-fit flex flex-col text-primary group-hover:text-zinc-700 dark:group-hover:text-zinc-300 ">
+      <div className="w-full h-fit flex flex-col text-primary group-hover:text-black dark:group-hover:text-white">
         <div className="flex justify-between items-start">
           <h3 className="w-full text-lg font-semibold">{title}</h3>{' '}
           <p className="text-xs italic min-w-fit text-end">

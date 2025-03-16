@@ -14,7 +14,7 @@ import '@blocknote/mantine/style.css';
 import { useEffect, useMemo, useState } from 'react';
 
 interface EditorProps {
-  initialContent?: string;
+  postId: string;
   editable?: boolean;
 }
 
@@ -32,18 +32,20 @@ async function uploadFile(file: File) {
   );
 }
 
-async function saveToStorage(jsonBlocks: Block[]) {
-  localStorage.setItem('editorContent', JSON.stringify(jsonBlocks));
+async function saveToStorage(postId: string, jsonBlocks: Block[]) {
+  const key = `editorContent_${postId}`; // Unique key for each postId
+  localStorage.setItem(key, JSON.stringify(jsonBlocks));
 }
 
-async function loadFromStorage() {
-  const storageString = localStorage.getItem('editorContent');
+async function loadFromStorage(postId: string) {
+  const key = `editorContent_${postId}`; // Unique key for each postId
+  const storageString = localStorage.getItem(key);
   return storageString
     ? (JSON.parse(storageString) as PartialBlock[])
     : undefined;
 }
 
-export default function Editor({ editable }: EditorProps) {
+export default function Editor({ editable, postId }: EditorProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const [initialContent, setInitialContent] = useState<
@@ -71,10 +73,10 @@ export default function Editor({ editable }: EditorProps) {
   }, []);
 
   useEffect(() => {
-    loadFromStorage().then((content) => {
+    loadFromStorage(postId).then((content) => {
       setInitialContent(content);
     });
-  }, []);
+  }, [postId]); // Make sure to load the content based on the postId
 
   const editor = useMemo(() => {
     if (initialContent === 'loading') {
@@ -96,7 +98,7 @@ export default function Editor({ editable }: EditorProps) {
   }
 
   const onChange = () => {
-    saveToStorage(editor.document);
+    saveToStorage(postId, editor.document); // Save content for the specific postId
   };
 
   return (

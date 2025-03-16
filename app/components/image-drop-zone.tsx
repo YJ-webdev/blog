@@ -5,28 +5,36 @@ import { useDropzone } from 'react-dropzone';
 import { ImageIcon, Trash } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export const ImageDropZone = () => {
+export const ImageDropZone = ({ postId }: { postId: string }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
+  // Unique localStorage key based on postId
+  const imageKey = `uploadedImage_${postId}`;
+
   useEffect(() => {
-    const storedImage = localStorage.getItem('uploadedImage');
+    // Get the stored image from localStorage for this postId
+    const storedImage = localStorage.getItem(imageKey);
     if (storedImage) {
       setPreview(storedImage);
     }
-  }, []);
+  }, [imageKey]); // Re-run when postId changes
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64Image = reader.result as string;
-        setPreview(base64Image);
-        localStorage.setItem('uploadedImage', base64Image); // Save to localStorage
-      };
-    }
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64Image = reader.result as string;
+          setPreview(base64Image);
+          // Save the image to localStorage with a unique key for the postId
+          localStorage.setItem(imageKey, base64Image);
+        };
+      }
+    },
+    [imageKey],
+  ); // Dependency on imageKey
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -38,7 +46,8 @@ export const ImageDropZone = () => {
   const removeImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     setPreview(null);
-    localStorage.removeItem('uploadedImage'); // Remove from localStorage
+    // Remove from localStorage for the specific postId
+    localStorage.removeItem(imageKey);
   };
 
   // Cleanup preview URL on component unmount
@@ -51,7 +60,7 @@ export const ImageDropZone = () => {
   return (
     <div
       {...getRootProps()}
-      className="relative w-full md:h-96 h-72 cursor-pointer"
+      className="relative w-full md:h-96 h-72 cursor-pointer my-5"
     >
       <input {...getInputProps()} />
 
@@ -81,7 +90,7 @@ export const ImageDropZone = () => {
       {preview && (
         <div
           onClick={removeImage}
-          className="absolute top-4 right-5 rounded-full w-10 h-10 flex items-center justify-center text-white  hover:bg-stone-800/30 bg-stone-300/60 cursor-pointer"
+          className="absolute top-4 right-5 rounded-full w-10 h-10 flex items-center justify-center text-white hover:bg-stone-800/30 bg-stone-300/60 cursor-pointer"
         >
           <Trash className="w-5 h-5" />
         </div>

@@ -64,10 +64,10 @@ model VerificationToken {
 
 model Post {
   id          String    @id @default(cuid())
-  slug        String    @unique
-  title       String
-  image       String
-  content     String    @db.Text
+  slug        String?   @unique
+  title       String?
+  image       String?
+  content     String?   @db.Text
   tags        String[]
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String

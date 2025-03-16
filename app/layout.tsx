@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 import Footer from './components/footer';
 import Nav from './components/nav';
@@ -33,6 +34,7 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen max-w-[1000px] mx-auto px-[1rem]">
             <Nav />
             <main className="flex-1">{children}</main>
+            <Toaster />
             <Footer />
           </div>
         </ThemeProvider>

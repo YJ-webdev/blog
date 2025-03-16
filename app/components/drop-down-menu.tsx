@@ -20,6 +20,9 @@ import { handleSignOut } from '../actions/auth';
 import { Session } from 'next-auth';
 import { cn } from '@/lib/utils';
 import { ShortCut } from './short-cut';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { createPost } from '../actions/post';
 
 interface DropDownMenuProps {
   initials: string;
@@ -32,6 +35,18 @@ export const DropDownMenu = ({
   session,
   openLoginDialog,
 }: DropDownMenuProps) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleCreatePost = async () => {
+    startTransition(async () => {
+      const post = await createPost();
+      if (post) {
+        router.push(`/post/${post.id}`);
+      }
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-transparent">
@@ -47,11 +62,11 @@ export const DropDownMenu = ({
       >
         {session && session.user && (
           <>
-            <DropdownMenuItem asChild>
-              <Link href={'/new-post'} className="flex items-center">
-                <PencilLine className="mr-3 h-4 w-4" />
+            <DropdownMenuItem onClick={handleCreatePost} disabled={isPending}>
+              <div className="flex items-center">
+                <PencilLine className="mr-5 h-4 w-4" />
                 Write Post
-              </Link>
+              </div>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={'/my-posts'} className="flex items-center">

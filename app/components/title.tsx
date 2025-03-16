@@ -19,7 +19,7 @@ export const Title = () => {
     <h1 className="font-bold md:text-6xl text-5xl flex-1">
       {pathname === '/about'
         ? 'About.'
-        : pathname === '/new-post'
+        : pathname.startsWith('/post/') && pathname.length > 6
           ? ''
           : slug
             ? formatSlug(slug)

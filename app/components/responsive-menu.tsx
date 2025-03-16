@@ -60,7 +60,9 @@ export const ResponsiveMenu = ({
           <div className="hidden items-center gap-4 md:flex text-[14px]">
             <Link href={'/'}>Post</Link>
             <Link href={'/about'}>About</Link>
-            <p onClick={openLoginDialog}>Login</p>
+            <p className="cursor-pointer" onClick={openLoginDialog}>
+              Login
+            </p>
             <ModeToggle />
           </div>
           <div className="flex md:hidden items-center">

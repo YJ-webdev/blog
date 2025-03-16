@@ -24,7 +24,7 @@ export const Preview = ({
         />
       </div>
 
-      <div className="flex flex-col group-hover:text-zinc-700 dark:group-hover:text-zinc-300 ">
+      <div className="flex flex-col group-hover:text-black dark:group-hover:text-white">
         <div className="flex flex-col  justify-between items-start">
           <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
         </div>
