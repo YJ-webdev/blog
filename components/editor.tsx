@@ -82,12 +82,13 @@ export default function Editor({
   useEffect(() => {
     if (initialContent) {
       setContent(JSON.parse(initialContent));
-    } else {
+    }
+    if (editable && !initialContent) {
       loadFromStorage(postId).then((content) => {
         setContent(content);
       });
     }
-  }, [postId, initialContent]);
+  }, [postId, initialContent, editable]);
 
   const editor = useMemo(() => {
     if (content === 'loading') {

@@ -16,6 +16,7 @@ type SelectedPost = {
   authorId: string;
   tags: string[];
   links: string[];
+  published: boolean;
 };
 
 interface ClientPageProps {
@@ -52,20 +53,22 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
     title.trim() !== '' && isContentValid && imageUrl !== null;
 
   useEffect(() => {
+    if (!isEditable) return;
     const timeoutId = setTimeout(
       () => localStorage.setItem(titleKey, title),
       300,
     );
     return () => clearTimeout(timeoutId);
-  }, [title, titleKey]);
+  }, [title, titleKey, isEditable]);
 
   useEffect(() => {
+    if (!isEditable) return;
     const timeoutId = setTimeout(
       () => localStorage.setItem(`postContent_${post.id}`, content),
       1000,
     );
     return () => clearTimeout(timeoutId);
-  }, [content, post.id]);
+  }, [content, post.id, isEditable]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -137,7 +140,11 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
           className="fixed bottom-5 right-5"
           disabled={!isFormValid || isSubmitting}
         >
-          {isSubmitting ? 'Publishing...' : 'Publish this Post'}
+          {isSubmitting
+            ? 'Publishing...'
+            : post.published === false
+              ? 'Publish this Post'
+              : 'Update & Publish'}
         </Button>
       )}
     </form>

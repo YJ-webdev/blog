@@ -119,8 +119,8 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
           })}
         </div>
         <p className="text-xs text-center mt-4 text-muted-foreground mb-10">
-          이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를
-          제공받습니다.
+          This post is part of the Coupang Partners program, and a certain
+          commission is provided as a result.
         </p>
       </div>
     </div>

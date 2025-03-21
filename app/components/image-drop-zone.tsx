@@ -50,6 +50,7 @@ export const ImageDropZone = ({
   };
 
   const handleClick = () => {
+    if (!isEditable) return;
     if (fileInputRef.current) {
       fileInputRef.current.click(); // Trigger click on file input when div is clicked
     }

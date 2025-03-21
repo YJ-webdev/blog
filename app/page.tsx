@@ -3,7 +3,7 @@ import { PreviewMain } from './components/preview-main';
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-1 gap-7 mt-6 md:grid-cols-2 ">
+    <div className="grid grid-cols-1 gap-7 mt-6 md:grid-cols-2 mb-20">
       <div className="col-span-1 md:col-span-2">
         <PreviewMain
           slug="the-impact-of-digital-transformation-on-modern-businesses"
