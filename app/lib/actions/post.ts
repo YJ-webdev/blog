@@ -4,6 +4,12 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
 
+// import { createClient } from '@supabase/supabase-js';
+
+// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 export async function getPosts() {
   const posts = await prisma.post.findMany({
     where: {
@@ -24,6 +30,24 @@ export async function getPost(id: string) {
   });
   return post;
 }
+
+export const getPostById = async (postId: string) => {
+  const post = await prisma.post.findUnique({
+    where: {
+      id: postId,
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      image: true,
+      authorId: true,
+      tags: true,
+      links: true,
+    },
+  });
+  return post;
+};
 
 export async function createPost() {
   const user = await currentUser();
@@ -55,21 +79,33 @@ export async function createPost() {
   return newPost; // Return the new post
 }
 
-export async function publishPost(postId: string) {
+export async function publishPost(formData: FormData): Promise<void> {
   const user = await currentUser();
-  if (!user) return redirect('/login');
+  if (!user) throw new Error('User not authenticated');
+
+  const id = formData.get('id') as string;
+  const title = formData.get('title') as string;
+  const image = formData.get('image') as string | null;
+  // const content = formData.get('content') as string;
+
+  if (!id || !title) {
+    throw new Error('Required fields are missing');
+  }
+
+  console.log('Updating post:', { id, title, image });
 
   const post = await prisma.post.findUnique({
-    where: { id: postId },
+    where: { id },
+    select: { authorId: true },
   });
 
   if (!post || post.authorId !== user.id) {
-    throw new Error('Unauthorized action');
+    return console.log('User is not authorized to edit this post');
   }
 
-  return await prisma.post.update({
-    where: { id: postId },
-    data: { published: true },
+  await prisma.post.update({
+    where: { id },
+    data: { title, image: image ?? undefined, published: true },
   });
 }
 

@@ -68,6 +68,7 @@ model Post {
   title       String?
   image       String?
   content     String?   @db.Text
+  links       String[]
   tags        String[]
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String

@@ -14,8 +14,10 @@ import '@blocknote/mantine/style.css';
 import { useEffect, useMemo, useState } from 'react';
 
 interface EditorProps {
-  postId: string;
   editable?: boolean;
+  postId: string;
+  initialContent?: string;
+  onContentChange: (content: string) => void;
 }
 
 async function uploadFile(file: File) {
@@ -45,10 +47,14 @@ async function loadFromStorage(postId: string) {
     : undefined;
 }
 
-export default function Editor({ editable, postId }: EditorProps) {
+export default function Editor({
+  editable,
+  postId,
+  initialContent,
+  onContentChange,
+}: EditorProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
-  const [initialContent, setInitialContent] = useState<
+  const [content, setContent] = useState<
     PartialBlock[] | undefined | 'loading'
   >('loading');
 
@@ -73,33 +79,50 @@ export default function Editor({ editable, postId }: EditorProps) {
   }, []);
 
   useEffect(() => {
-    loadFromStorage(postId).then((content) => {
-      setInitialContent(content);
-    });
-  }, [postId]); // Make sure to load the content based on the postId
+    if (initialContent) {
+      setContent(JSON.parse(initialContent));
+    } else {
+      loadFromStorage(postId).then((content) => {
+        setContent(content);
+      });
+    }
+  }, [postId, initialContent]);
 
   const editor = useMemo(() => {
-    if (initialContent === 'loading') {
+    if (content === 'loading') {
       return undefined;
     }
+
     return BlockNoteEditor.create({
       domAttributes: {
         block: {
           class: 'blocknote-block',
         },
       },
-      initialContent,
+      initialContent: content,
       uploadFile,
     });
-  }, [initialContent]);
+  }, [content]);
+
+  let saveTimeout: NodeJS.Timeout | null = null;
+
+  const onChange = () => {
+    if (editor) {
+      if (saveTimeout) {
+        clearTimeout(saveTimeout);
+      }
+
+      saveTimeout = setTimeout(() => {
+        const jsonBlocks = editor.document;
+        saveToStorage(postId, jsonBlocks);
+        onContentChange(JSON.stringify(jsonBlocks));
+      }, 10000);
+    }
+  };
 
   if (editor === undefined) {
     return 'Loading content...';
   }
-
-  const onChange = () => {
-    saveToStorage(postId, editor.document); // Save content for the specific postId
-  };
 
   return (
     <div className="flex flex-col w-full">
@@ -120,7 +143,6 @@ export default function Editor({ editable, postId }: EditorProps) {
                   <FormattingToolbar>
                     <FileCaptionButton key="fileCaptionButton" />
                     <FileReplaceButton key="replaceFileButton" />
-
                     <TextAlignButton
                       textAlignment="left"
                       key="textAlignLeftButton"
@@ -133,8 +155,6 @@ export default function Editor({ editable, postId }: EditorProps) {
                       textAlignment="right"
                       key="textAlignRightButton"
                     />
-
-                    {/* <CreateLinkButton /> */}
                   </FormattingToolbar>
                 );
               }

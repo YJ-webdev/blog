@@ -42,11 +42,6 @@ export const ResponsiveMenu = ({
     <>
       {session && session.user ? (
         <div className="items-center gap-6 flex">
-          {/* {pathname !== '/new-post' && (
-            <Link href="/new-post" className="hidden md:flex">
-              Write your post
-            </Link>
-          )} */}
           <div className="flex items-center">
             <DropDownMenu
               session={session}
@@ -57,8 +52,8 @@ export const ResponsiveMenu = ({
         </div>
       ) : (
         <>
-          <div className="hidden items-center gap-4 md:flex text-[14px]">
-            <Link href={'/'}>Post</Link>
+          <div className="z-[99999] hidden items-center gap-4 md:flex text-[14px]">
+            <Link href={'/'}>Home</Link>
             <Link href={'/about'}>About</Link>
             <p className="cursor-pointer" onClick={openLoginDialog}>
               Login

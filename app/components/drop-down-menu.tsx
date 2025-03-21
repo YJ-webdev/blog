@@ -16,13 +16,13 @@ import {
   MenuIcon,
   UserRoundPlus,
 } from 'lucide-react';
-import { handleSignOut } from '../actions/auth';
+import { handleSignOut } from '../lib/actions/auth';
 import { Session } from 'next-auth';
 import { cn } from '@/lib/utils';
 import { ShortCut } from './short-cut';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { createPost } from '../actions/post';
+import { createPost } from '../lib/actions/post';
 
 interface DropDownMenuProps {
   initials: string;
@@ -65,7 +65,7 @@ export const DropDownMenu = ({
             <DropdownMenuItem onClick={handleCreatePost} disabled={isPending}>
               <div className="flex items-center">
                 <PencilLine className="mr-5 h-4 w-4" />
-                Write Post
+                Write new post
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>

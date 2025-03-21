@@ -1,4 +1,4 @@
-import { handleSignIn } from '@/app/actions/auth';
+import { handleSignIn } from '@/app/lib/actions/auth';
 import { FcGoogle } from 'react-icons/fc';
 
 export default function GoogleSignIn() {

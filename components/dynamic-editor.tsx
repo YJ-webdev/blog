@@ -6,9 +6,24 @@ import dynamic from 'next/dynamic';
 const Editor = dynamic(() => import('./editor'), { ssr: false });
 
 interface EditorWrapperProps {
-  postId: string; // The postId passed from the parent component
+  editable?: boolean;
+  postId: string;
+  initialContent?: string;
+  onContentChange: (content: string) => void;
 }
 
-export default function EditorWrapper({ postId }: EditorWrapperProps) {
-  return <Editor postId={postId} />; // Pass the postId to the Editor component
+export default function EditorWrapper({
+  editable,
+  postId,
+  initialContent,
+  onContentChange,
+}: EditorWrapperProps) {
+  return (
+    <Editor
+      editable={editable}
+      postId={postId}
+      initialContent={initialContent}
+      onContentChange={onContentChange}
+    />
+  );
 }
