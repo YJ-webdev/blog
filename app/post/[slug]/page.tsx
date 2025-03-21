@@ -10,7 +10,7 @@ export default async function SlugPage(props: { params: { slug: string } }) {
   const userId = (await getCurrentUser()) ?? ''; // ✅ Ensure userId is always a string
   const post = await getPostById(slug);
 
-  if (post === null) {
+  if (post === null || (post.authorId !== userId && post.published === false)) {
     return redirect('/not-found');
   }
 

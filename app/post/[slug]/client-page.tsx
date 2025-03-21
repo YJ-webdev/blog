@@ -36,7 +36,20 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
-  const isFormValid = title.trim() !== '' && imageUrl !== null;
+
+  const parsedContent =
+    typeof content === 'string' ? JSON.parse(content || '[]') : content;
+
+  const isContentValid =
+    Array.isArray(parsedContent) &&
+    parsedContent.some(
+      (block) =>
+        (block.content && block.content.length > 0) ||
+        (block.children && block.children.length > 0),
+    );
+
+  const isFormValid =
+    title.trim() !== '' && isContentValid && imageUrl !== null;
 
   useEffect(() => {
     const timeoutId = setTimeout(
@@ -49,16 +62,21 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
   useEffect(() => {
     const timeoutId = setTimeout(
       () => localStorage.setItem(`postContent_${post.id}`, content),
-      10000,
+      1000,
     );
     return () => clearTimeout(timeoutId);
   }, [content, post.id]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
+
+    if (!isFormValid) {
+      return toast.error('Please fill in all required fields');
+    }
 
     try {
+      setIsSubmitting(true);
+
       const formData = new FormData();
       formData.append('id', post.id);
       formData.append('title', title);
@@ -81,48 +99,47 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
+    <form onSubmit={handleSubmit} className="w-full flex flex-col">
       <input type="hidden" name="id" value={post.id} />
       <input type="hidden" name="title" value={title} />
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="image" value={imageUrl ?? ''} />
 
-      <div className="relative">
-        <TextareaAutosize
-          placeholder="Untitled"
-          autoFocus
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full resize-none h-fit overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
-          disabled={!isEditable}
-        />
+      <TextareaAutosize
+        placeholder="Untitled"
+        autoFocus
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+        disabled={!isEditable}
+        spellCheck={false}
+      />
 
-        <ImageDropZone
-          imageUrl={imageUrl}
-          setImageUrl={setImageUrl}
-          isEditable={isEditable}
-          imageKey={imageKey}
-        />
+      <ImageDropZone
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+        isEditable={isEditable}
+        imageKey={imageKey}
+      />
 
-        <EditorWrapper
-          postId={post.id}
-          editable={isEditable}
-          initialContent={content}
-          onContentChange={setContent}
-        />
+      <EditorWrapper
+        postId={post.id}
+        editable={isEditable}
+        initialContent={content}
+        onContentChange={setContent}
+      />
 
-        <LinkPreviews isEditable={isEditable} postId={post.id} />
+      <LinkPreviews isEditable={isEditable} postId={post.id} />
 
-        {isEditable && (
-          <Button
-            type="submit"
-            className="fixed bottom-5 right-5"
-            disabled={!isFormValid || isSubmitting}
-          >
-            {isSubmitting ? 'Publishing...' : 'Publish this Post'}
-          </Button>
-        )}
-      </div>
+      {isEditable && (
+        <Button
+          type="submit"
+          className="fixed bottom-5 right-5"
+          disabled={!isFormValid || isSubmitting}
+        >
+          {isSubmitting ? 'Publishing...' : 'Publish this Post'}
+        </Button>
+      )}
     </form>
   );
 };

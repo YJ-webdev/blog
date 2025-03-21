@@ -44,6 +44,7 @@ export const getPostById = async (postId: string) => {
       authorId: true,
       tags: true,
       links: true,
+      published: true,
     },
   });
   return post;

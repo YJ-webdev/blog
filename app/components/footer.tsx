@@ -5,11 +5,11 @@ import { ShortCut } from './short-cut';
 export default async function Footer() {
   const session = await auth();
   return (
-    <footer className="relative">
-      <p className="text-muted-foreground md:text-sm text-xs text-center pt-10 pb-5">
+    <footer className="relative h-10">
+      <p className="text-muted-foreground md:text-sm text-xs text-center">
         All rights reserved @2025
       </p>
-      <div className="absolute bottom-5 right-[1rem]">
+      <div className="absolute bottom-[1rem] right-[1rem]">
         {session?.user ? <ModeToggle /> : <ShortCut />}
       </div>
     </footer>

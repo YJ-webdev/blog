@@ -90,24 +90,21 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
   return (
     <div className="w-full max-w-[750px] mx-auto flex flex-col items-center">
       {isEditable && (
-        <div className="flex w-full gap-5">
-          <Input
-            value={url}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUrl(e.target.value)
-            }
-            placeholder="Enter a URL to preview"
-            autoFocus={false}
-          />
-          {error && <p className="text-red-500">{error}</p>}{' '}
-          <Button
-            variant="secondary"
-            className="mb-10"
-            type="button"
-            onClick={getData}
-          >
-            Add open graph
-          </Button>
+        <div className="flex flex-col mb-5">
+          <div className="flex w-full gap-5">
+            <Input
+              value={url}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUrl(e.target.value)
+              }
+              placeholder="Enter a URL to preview"
+              autoFocus={false}
+            />
+            <Button variant="secondary" type="button" onClick={getData}>
+              Add open graph
+            </Button>
+          </div>
+          {error && <p className="text-red-500 text-center">{error}</p>}
         </div>
       )}
 

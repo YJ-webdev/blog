@@ -16,7 +16,7 @@ export const Title = () => {
   };
 
   return (
-    <div className="flex-1 mt-5">
+    <div className="mt-5">
       {pathname === '/about' ? (
         <h1 className="font-bold md:text-6xl text-5xl">About. </h1>
       ) : pathname.startsWith('/post/') && pathname.length > 6 ? (
