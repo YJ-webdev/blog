@@ -49,7 +49,7 @@ export const DropDownMenu = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="outline-transparent">
+      <DropdownMenuTrigger className="outline-transparent z-[99999]">
         {session && session.user ? (
           <UserProfile firstLetter={initials} />
         ) : (

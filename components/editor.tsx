@@ -116,7 +116,7 @@ export default function Editor({
         const jsonBlocks = editor.document;
         saveToStorage(postId, jsonBlocks);
         onContentChange(JSON.stringify(jsonBlocks));
-      }, 10000);
+      }, 1000);
     }
   };
 
@@ -126,7 +126,7 @@ export default function Editor({
 
   return (
     <div className="flex flex-col w-full">
-      <div className="-mx-[54px] -translate-y-2 z-50">
+      <div className="md:-mx-[54px] md:-translate-y-2 z-50">
         <BlockNoteView
           editor={editor}
           editable={editable}

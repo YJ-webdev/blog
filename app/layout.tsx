@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 
 import Footer from './components/footer';
+import { Title } from './components/title';
 import Nav from './components/nav';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
@@ -31,8 +32,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Nav />
           <div className="flex flex-col min-h-screen max-w-[1000px] mx-auto px-[1rem]">
-            <Nav />
+            <Title />
             <main className="flex-1">{children}</main>
             <Toaster />
             <Footer />

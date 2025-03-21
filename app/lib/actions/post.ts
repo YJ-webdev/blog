@@ -86,13 +86,11 @@ export async function publishPost(formData: FormData): Promise<void> {
   const id = formData.get('id') as string;
   const title = formData.get('title') as string;
   const image = formData.get('image') as string | null;
-  // const content = formData.get('content') as string;
+  const content = formData.get('content') as string;
 
-  if (!id || !title) {
+  if (!id || !title || !content) {
     throw new Error('Required fields are missing');
   }
-
-  console.log('Updating post:', { id, title, image });
 
   const post = await prisma.post.findUnique({
     where: { id },
@@ -105,7 +103,7 @@ export async function publishPost(formData: FormData): Promise<void> {
 
   await prisma.post.update({
     where: { id },
-    data: { title, image: image ?? undefined, published: true },
+    data: { title, image: image ?? undefined, content, published: true },
   });
 }
 

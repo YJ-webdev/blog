@@ -1,5 +1,4 @@
 import { auth } from '@/auth';
-import { Title } from './title';
 import { ResponsiveMenu } from './responsive-menu';
 
 export default async function Nav() {
@@ -13,12 +12,8 @@ export default async function Nav() {
       : nameParts[0].charAt(0).toUpperCase();
 
   return (
-    <nav className="flex justify-between items-start pt-8 md:pt-10 pb-5">
-      <Title />
-
-      <div className="flex justify-end items-center gap-x-4 text-[15px]">
-        <ResponsiveMenu initials={initials} session={session} />
-      </div>
+    <nav className="fixed right-5 top-5 z-[99999]">
+      <ResponsiveMenu initials={initials} session={session} />
     </nav>
   );
 }

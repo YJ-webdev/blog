@@ -1,13 +1,10 @@
 'use client';
 
-// import { NotebookPen } from 'lucide-react';
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { DropDownMenu } from './drop-down-menu';
 
-// import { usePathname } from 'next/navigation';
 import { Session } from 'next-auth';
-import { ModeToggle } from './mode-toggle';
+
 import { LoginDialog } from './(auth)/login-dialog';
 
 export const ResponsiveMenu = ({
@@ -52,15 +49,7 @@ export const ResponsiveMenu = ({
         </div>
       ) : (
         <>
-          <div className="z-[99999] hidden items-center gap-4 md:flex text-[14px]">
-            <Link href={'/'}>Home</Link>
-            <Link href={'/about'}>About</Link>
-            <p className="cursor-pointer" onClick={openLoginDialog}>
-              Login
-            </p>
-            <ModeToggle />
-          </div>
-          <div className="flex md:hidden items-center">
+          <div className="items-center gap-4 md:flex text-[14px]">
             <DropDownMenu
               session={session}
               initials={initials}
