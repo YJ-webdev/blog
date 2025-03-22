@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import React, { useEffect, useState } from 'react';
 import LinkPreview, { LinkViewProps } from './link-preview';
 import { getPreview } from '@/app/lib/actions/preview';
-import SimpleLinkPreview from './simple-link-preview';
+
+import { Link, TriangleAlert } from 'lucide-react';
 
 function getLargestFavicon(favicons: string[]): string {
   return favicons.sort((a: string, b: string) => {
@@ -30,8 +31,19 @@ function transformResponse(res: any, url: string): LinkViewProps {
   };
 }
 
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 function normalizeUrl(url: string): string {
-  if (!/^https?:\/\//i.test(url)) {
+  if (isValidUrl(url) === false) {
+    return url; // Return null or the original string if it's invalid
+  } else if (!/^https?:\/\//i.test(url)) {
     return 'https://' + url;
   }
   return url;
@@ -66,11 +78,16 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
   }, [links, postId]);
 
   const getData = async () => {
-    if (!url.trim()) {
+    if (!url.trim() || !isValidUrl(url)) {
       setError('Please enter a valid URL.');
+
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setError(null);
+      }, 3000); // 3000ms = 3 seconds
+
       return;
     }
-    setError(null);
 
     const normalizedUrl = normalizeUrl(url);
     setUrl('');
@@ -91,20 +108,36 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
     <div className="w-full mx-auto flex flex-col items-center">
       {isEditable && (
         <div className="flex flex-col w-full mb-5">
-          <div className="flex w-full gap-5">
+          <div className="flex w-full">
             <Input
+              className="border-none bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l"
               value={url}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setUrl(e.target.value)
               }
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault(); // Prevent form submission
+                  getData(); // Call the function manually (optional)
+                }
+              }}
               placeholder="Enter a URL to preview"
               autoFocus={false}
             />
-            <Button variant="secondary" type="button" onClick={getData}>
-              Add open graph
+            <Button
+              className="rounded-none rounded-r bg-zinc-100 dark:bg-zinc-800 text-zinc-800 hover:text-zinc-500 hover:bg-slate-100 dark:text-slate-300 hover:dark:text-slate-100"
+              type="button"
+              onClick={getData}
+            >
+              <Link /> Add link
             </Button>
           </div>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <p className="flex items-center justify-center w-full text-center mt-2 text-sm">
+              <TriangleAlert size={16} className="mr-2" />
+              {error}
+            </p>
+          )}
         </div>
       )}
 
@@ -112,7 +145,7 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
         <div className="grid grid-cols-1 sm:flex gap-5 justify-between w-full h-full">
           {links.map((link, index) => {
             if (typeof link === 'string') {
-              return <SimpleLinkPreview key={index} url={link} />;
+              return;
             } else {
               return <LinkPreview key={index} preview={link} />;
             }
