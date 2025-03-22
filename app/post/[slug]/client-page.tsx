@@ -27,6 +27,7 @@ interface ClientPageProps {
 export const ClientPage = ({ post, userId }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
+
   const [title, setTitle] = useState(
     () => localStorage.getItem(titleKey) ?? post.title ?? '',
   );
@@ -34,6 +35,8 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
     () => localStorage.getItem(imageKey) ?? post.image ?? '',
   );
   const [content, setContent] = useState(post.content || '');
+  // const [links, setLinks] = useState(post.links || []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
@@ -60,15 +63,6 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
     );
     return () => clearTimeout(timeoutId);
   }, [title, titleKey, isEditable]);
-
-  useEffect(() => {
-    if (!isEditable) return;
-    const timeoutId = setTimeout(
-      () => localStorage.setItem(`postContent_${post.id}`, content),
-      1000,
-    );
-    return () => clearTimeout(timeoutId);
-  }, [content, post.id, isEditable]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

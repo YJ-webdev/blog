@@ -11,8 +11,10 @@ import { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { ContentLoading } from '@/app/components/content-loading';
+import { debounce } from 'lodash';
 
 interface EditorProps {
   editable?: boolean;
@@ -20,6 +22,12 @@ interface EditorProps {
   initialContent?: string;
   onContentChange: (content: string) => void;
 }
+
+type TextCursorPosition = {
+  block: Block;
+  prevBlock: Block | undefined;
+  nextBlock: Block | undefined;
+};
 
 async function uploadFile(file: File) {
   const body = new FormData();
@@ -35,9 +43,14 @@ async function uploadFile(file: File) {
   );
 }
 
-async function saveToStorage(postId: string, jsonBlocks: Block[]) {
+async function saveToStorage(
+  postId: string,
+  jsonBlocks: Block[],
+  onContentChange: (content: string) => void,
+) {
   const key = `editorContent_${postId}`; // Unique key for each postId
   localStorage.setItem(key, JSON.stringify(jsonBlocks));
+  onContentChange(JSON.stringify(jsonBlocks));
 }
 
 async function loadFromStorage(postId: string) {
@@ -58,6 +71,8 @@ export default function Editor({
   const [content, setContent] = useState<
     PartialBlock[] | undefined | 'loading'
   >('loading');
+  const editorRef = useRef<BlockNoteEditor | null>(null);
+  const cursorPositionRef = useRef<TextCursorPosition | null>(null); // To store cursor position
 
   useEffect(() => {
     const currentTheme = document.documentElement.classList.contains('dark')
@@ -80,13 +95,13 @@ export default function Editor({
   }, []);
 
   useEffect(() => {
-    if (initialContent) {
-      setContent(JSON.parse(initialContent));
-    }
-    if (editable && !initialContent) {
+    if (editable) {
       loadFromStorage(postId).then((content) => {
         setContent(content);
       });
+    }
+    if (!editable && initialContent) {
+      setContent(JSON.parse(initialContent));
     }
   }, [postId, initialContent, editable]);
 
@@ -95,35 +110,53 @@ export default function Editor({
       return undefined;
     }
 
-    return BlockNoteEditor.create({
-      domAttributes: {
-        block: {
-          class: 'blocknote-block',
+    if (!editorRef.current) {
+      editorRef.current = BlockNoteEditor.create({
+        domAttributes: {
+          block: {
+            class: 'blocknote-block',
+          },
         },
-      },
-      initialContent: content,
-      uploadFile,
-    });
+        initialContent: content,
+        uploadFile,
+      });
+    }
+
+    return editorRef.current;
   }, [content]);
 
-  let saveTimeout: NodeJS.Timeout | null = null;
+  const debouncedSave = useCallback(
+    debounce((jsonBlocks: Block[]) => {
+      saveToStorage(postId, jsonBlocks, onContentChange);
+    }, 1000),
+    [postId, onContentChange],
+  );
 
   const onChange = () => {
     if (editor) {
-      if (saveTimeout) {
-        clearTimeout(saveTimeout);
-      }
+      // Save the current cursor position
+      cursorPositionRef.current = editor.getTextCursorPosition();
 
-      saveTimeout = setTimeout(() => {
-        const jsonBlocks = editor.document;
-        saveToStorage(postId, jsonBlocks);
-        onContentChange(JSON.stringify(jsonBlocks));
-      }, 1000);
+      const jsonBlocks = editor.document;
+      debouncedSave(jsonBlocks);
     }
   };
 
+  useEffect(() => {
+    return () => {
+      debouncedSave.cancel();
+    };
+  }, [debouncedSave]);
+
+  useEffect(() => {
+    if (cursorPositionRef.current && editor) {
+      // After saving content, restore the cursor position
+      editor.setTextCursorPosition(cursorPositionRef.current.block, 'end');
+    }
+  }, [content, editor]);
+
   if (editor === undefined) {
-    return 'Loading content...';
+    return <ContentLoading />;
   }
 
   return (

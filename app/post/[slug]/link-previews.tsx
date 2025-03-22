@@ -88,9 +88,9 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
   };
 
   return (
-    <div className="w-full max-w-[750px] mx-auto flex flex-col items-center">
+    <div className="w-full mx-auto flex flex-col items-center">
       {isEditable && (
-        <div className="flex flex-col mb-5">
+        <div className="flex flex-col w-full mb-5">
           <div className="flex w-full gap-5">
             <Input
               value={url}
