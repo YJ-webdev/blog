@@ -3,12 +3,26 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
+import { Link } from '@prisma/client';
 
 // import { createClient } from '@supabase/supabase-js';
 
 // const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 // const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export async function getLinksbyPostId(postId: string) {
+  const links = await prisma.link.findMany({
+    where: {
+      postId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 3,
+  });
+  return links;
+}
 
 export async function getPosts() {
   const posts = await prisma.post.findMany({
@@ -88,6 +102,7 @@ export async function publishPost(formData: FormData): Promise<void> {
   const title = formData.get('title') as string;
   const image = formData.get('image') as string | null;
   const content = formData.get('content') as string;
+  const linksString = formData.get('links') as string | null;
 
   if (!id || !title || !content) {
     throw new Error('Required fields are missing');
@@ -95,16 +110,51 @@ export async function publishPost(formData: FormData): Promise<void> {
 
   const post = await prisma.post.findUnique({
     where: { id },
-    select: { authorId: true },
+    select: { authorId: true, links: true },
   });
 
   if (!post || post.authorId !== user.id) {
     return console.log('User is not authorized to edit this post');
   }
 
+  const links: Link[] = linksString ? JSON.parse(linksString) : [];
+
+  const currentLinks = post.links;
+
+  if (currentLinks.length >= 3) {
+    const excessLinks = currentLinks.length - 3;
+    await prisma.link.deleteMany({
+      where: {
+        id: {
+          in: currentLinks.slice(0, excessLinks).map((link) => link.id),
+        },
+      },
+    });
+  }
+
+  const linkData = links.map((link) => ({
+    url: link.url,
+    title: link.title,
+    description: link.description,
+    image: link.image,
+    siteName: link.siteName,
+    favicon: link.favicon,
+    postId: id,
+  }));
+
+  await prisma.link.createMany({
+    data: linkData,
+  });
+
+  // Update the post with new data
   await prisma.post.update({
     where: { id },
-    data: { title, image: image ?? undefined, content, published: true },
+    data: {
+      title,
+      image: image ?? undefined,
+      content,
+      published: true,
+    },
   });
 }
 

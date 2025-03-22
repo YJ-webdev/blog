@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 const Editor = dynamic(() => import('./editor'), { ssr: false });
 
 interface EditorWrapperProps {
-  editable?: boolean;
+  editable: boolean;
   postId: string;
   initialContent?: string;
   onContentChange: (content: string) => void;

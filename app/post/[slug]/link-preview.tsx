@@ -8,17 +8,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
+import { Link as LinkType } from '@prisma/client';
 
-export interface LinkViewProps {
-  title: string | null;
-  description: string | null;
-  image: string | null;
-  url: string | null;
-  siteName: string | null;
-  favicon: string | null;
-}
-
-const LinkPreview: React.FC<{ preview: LinkViewProps }> = ({ preview }) => {
+const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
   return (
     <Link
       href={preview.url!}
@@ -26,7 +18,7 @@ const LinkPreview: React.FC<{ preview: LinkViewProps }> = ({ preview }) => {
       rel="noopener noreferrer"
       className="text-primary border hover:underline rounded-lg w-full overflow-hidden sm:hover:shadow-xl transition-all duration-150 ease-linear"
     >
-      <Card className="border-none shadow-none">
+      <Card className="border-none h-full shadow-none">
         {preview.image && (
           <div className="relative aspect-video">
             <Image

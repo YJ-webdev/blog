@@ -4,23 +4,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import React, { useEffect, useState } from 'react';
-import LinkPreview, { LinkViewProps } from './link-preview';
+import LinkPreview from './link-preview';
 import { getPreview } from '@/app/lib/actions/preview';
 
-import { Link, TriangleAlert } from 'lucide-react';
+import { LinkIcon, Loader2, TriangleAlert } from 'lucide-react';
+import { Link } from '@prisma/client';
 
 function getLargestFavicon(favicons: string[]): string {
-  return favicons.sort((a: string, b: string) => {
-    const matchA = a.match(/favicon-(\d+)/);
-    const matchB = b.match(/favicon-(\d+)/);
-    const sizeA = matchA ? parseInt(matchA[1]) : 0;
-    const sizeB = matchB ? parseInt(matchB[1]) : 0;
+  if (!favicons.length) return '';
+
+  return favicons.sort((a, b) => {
+    const sizeA = parseInt(a.match(/favicon-(\d+)/)?.[1] ?? '0', 10);
+    const sizeB = parseInt(b.match(/favicon-(\d+)/)?.[1] ?? '0', 10);
     return sizeB - sizeA;
   })[0];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function transformResponse(res: any, url: string): LinkViewProps {
+function transformResponse(res: any, url: string) {
   return {
     title: 'title' in res ? res.title : null,
     description: 'description' in res ? res.description : null,
@@ -41,32 +42,50 @@ const isValidUrl = (url: string) => {
 };
 
 function normalizeUrl(url: string): string {
-  if (isValidUrl(url) === false) {
-    return url; // Return null or the original string if it's invalid
-  } else if (!/^https?:\/\//i.test(url)) {
-    return 'https://' + url;
-  }
-  return url;
+  const trimmedUrl = url.trim();
+  if (!isValidUrl(trimmedUrl)) return trimmedUrl;
+
+  return /^https?:\/\//i.test(trimmedUrl)
+    ? trimmedUrl
+    : `https://${trimmedUrl}`;
 }
 
 interface LinkPreviewsProps {
   postId: string;
   isEditable: boolean;
-  setOpenGraph?: React.Dispatch<React.SetStateAction<string[]>>;
-  openGraph?: string[];
+  setAdLinks: React.Dispatch<React.SetStateAction<Array<Link>>>;
+  postLinks: Link[];
 }
 
-const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
+const LinkPreviews = ({
+  postId,
+  isEditable,
+  setAdLinks,
+  postLinks,
+}: LinkPreviewsProps) => {
   const [url, setUrl] = useState('');
-  const [links, setLinks] = useState<Array<LinkViewProps | string>>([]);
-
+  const [links, setLinks] = useState<Array<Link | string>>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load links from localStorage when postId changes
+  // Fetch links from the localStorage
   useEffect(() => {
+    if (!postId) return;
+
     const storedLinks = localStorage.getItem(`links_${postId}`);
     if (storedLinks) {
-      setLinks(JSON.parse(storedLinks));
+      const parsedLinks: Link[] = JSON.parse(storedLinks);
+
+      setAdLinks((prevLinks) => {
+        const sortedLinks = [...parsedLinks].sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+        const areSame =
+          JSON.stringify(prevLinks) === JSON.stringify(sortedLinks);
+
+        return areSame ? prevLinks : sortedLinks;
+      });
     }
   }, [postId]);
 
@@ -78,43 +97,74 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
   }, [links, postId]);
 
   const getData = async () => {
-    if (!url.trim() || !isValidUrl(url)) {
+    const trimmedUrl = url.trim();
+
+    if (!trimmedUrl || !isValidUrl(trimmedUrl)) {
       setError('Please enter a valid URL.');
-
-      // Clear the error message after 3 seconds
-      setTimeout(() => {
-        setError(null);
-      }, 3000); // 3000ms = 3 seconds
-
+      setTimeout(() => setError(null), 3000);
       return;
     }
 
-    const normalizedUrl = normalizeUrl(url);
+    setLoading(true);
     setUrl('');
 
-    const res = await getPreview(normalizedUrl);
-    console.log(res);
+    try {
+      const normalizedUrl = normalizeUrl(url);
 
-    if (typeof res === 'string') {
-      setLinks((prevLinks) => [res, ...prevLinks].slice(0, 3));
-      return;
+      if (
+        links.some(
+          (link) => typeof link !== 'string' && link.url === normalizedUrl,
+        )
+      ) {
+        setError('This link is already added.');
+        setTimeout(() => setError(null), 3000);
+        return;
+      }
+
+      const res = await getPreview(normalizedUrl);
+      const linkPreview =
+        typeof res === 'string' ? res : transformResponse(res, normalizedUrl);
+
+      // Update links state for localStorage
+      setLinks((prevLinks) => {
+        const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
+        return newLinks;
+      });
+
+      // Update adLinks state for prisma
+      setAdLinks?.((prevLinks: Link[]) => {
+        const newLinks: Link[] = [
+          {
+            id: crypto.randomUUID(),
+            postId,
+            url: normalizedUrl,
+            ...linkPreview,
+          },
+          ...prevLinks,
+        ].slice(0, 3);
+        return newLinks;
+      });
+    } catch {
+      setError('Failed to fetch preview. Try again.');
+      setTimeout(() => setError(null), 2000);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const linkPreview = transformResponse(res, normalizedUrl);
-    setLinks((prevLinks) => [linkPreview, ...prevLinks].slice(0, 3));
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(e.target.value);
   };
 
   return (
-    <div className="w-full mx-auto flex flex-col items-center">
+    <div className="w-full mx-auto flex flex-col items-center mb-10">
       {isEditable && (
         <div className="flex flex-col w-full mb-5">
           <div className="flex w-full">
             <Input
               className="border-none bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l"
               value={url}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setUrl(e.target.value)
-              }
+              onChange={handleUrlChange}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault(); // Prevent form submission
@@ -125,15 +175,22 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
               autoFocus={false}
             />
             <Button
-              className="rounded-none rounded-r bg-zinc-100 dark:bg-zinc-800 text-zinc-800 hover:text-zinc-500 hover:bg-slate-100 dark:text-slate-300 hover:dark:text-slate-100"
+              className="rounded-none rounded-r bg-zinc-100 dark:bg-zinc-800 text-zinc-800 hover:text-zinc-500 hover:bg-zinc-100 dark:text-slate-300 hover:dark:text-slate-100 disabled:opacity-100 disabled:text-zinc-500"
               type="button"
               onClick={getData}
+              disabled={loading}
             >
-              <Link /> Add link
+              {loading ? (
+                <Loader2 className="animate-spin self-center" />
+              ) : (
+                <>
+                  <LinkIcon /> Add link
+                </>
+              )}
             </Button>
           </div>
           {error && (
-            <p className="flex items-center justify-center w-full text-center mt-2 text-sm">
+            <p className="flex items-center justify-center w-full text-center mt-2 text-sm text-muted-foreground">
               <TriangleAlert size={16} className="mr-2" />
               {error}
             </p>
@@ -143,13 +200,19 @@ const LinkPreviews = ({ postId, isEditable }: LinkPreviewsProps) => {
 
       <div className="flex flex-col max-w-[750px]">
         <div className="grid grid-cols-1 sm:flex gap-5 justify-between w-full h-full">
-          {links.map((link, index) => {
-            if (typeof link === 'string') {
-              return;
-            } else {
-              return <LinkPreview key={index} preview={link} />;
-            }
-          })}
+          {isEditable && links.length > 0
+            ? Array.isArray(links) &&
+              links.map((link, index) =>
+                typeof link !== 'string' ? (
+                  <LinkPreview key={index} preview={link} />
+                ) : null,
+              )
+            : Array.isArray(postLinks) &&
+              postLinks.map((postLink, index) =>
+                typeof postLink !== 'string' ? (
+                  <LinkPreview key={index} preview={postLink} />
+                ) : null,
+              )}
         </div>
         <p className="text-xs text-center mt-4 text-muted-foreground mb-10">
           This post is part of the Coupang Partners program, and a certain

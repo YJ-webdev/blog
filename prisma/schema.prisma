@@ -68,7 +68,7 @@ model Post {
   title       String?
   image       String?
   content     String?   @db.Text
-  links       String[]
+  links       Link[]
   tags        String[]
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String
@@ -77,4 +77,21 @@ model Post {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Link {
+  id          String  @id @default(uuid())
+  title       String?
+  description String?
+  favicon     String?
+  image       String?
+  siteName    String?
+  url         String
+  postId      String
+  post        Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([url])
+  @@index([postId])
 }

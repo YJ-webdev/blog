@@ -7,6 +7,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import LinkPreviews from './link-previews';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { Link } from '@prisma/client';
 
 type SelectedPost = {
   id: string;
@@ -15,16 +16,16 @@ type SelectedPost = {
   image: string | null;
   authorId: string;
   tags: string[];
-  links: string[];
   published: boolean;
 };
 
 interface ClientPageProps {
   post: SelectedPost;
   userId: string;
+  postLinks?: Link[];
 }
 
-export const ClientPage = ({ post, userId }: ClientPageProps) => {
+export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
 
@@ -34,15 +35,16 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
   const [imageUrl, setImageUrl] = useState(
     () => localStorage.getItem(imageKey) ?? post.image ?? '',
   );
+  const [adLinks, setAdLinks] = useState<Array<Link | string>>([]);
   const [content, setContent] = useState(post.content || '');
-  // const [links, setLinks] = useState(post.links || []);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
-
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
+
+  // const parsedLinks =
+  //   typeof post.links === 'string' ? JSON.parse(post.links) : post.links;
 
   const isContentValid =
     Array.isArray(parsedContent) &&
@@ -64,6 +66,17 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
     return () => clearTimeout(timeoutId);
   }, [title, titleKey, isEditable]);
 
+  const gatherFormData = () => {
+    const formData = new FormData();
+    formData.append('id', post.id);
+    formData.append('title', title);
+    formData.append('content', content);
+    if (imageUrl) formData.append('image', imageUrl);
+    formData.append('links', JSON.stringify(adLinks));
+
+    return formData;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -73,15 +86,7 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
 
     try {
       setIsSubmitting(true);
-
-      const formData = new FormData();
-      formData.append('id', post.id);
-      formData.append('title', title);
-      formData.append('content', content);
-      if (imageUrl) {
-        formData.append('image', imageUrl);
-      }
-
+      const formData = gatherFormData();
       await fetch('/api/post', {
         method: 'POST',
         body: formData,
@@ -101,6 +106,7 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
       <input type="hidden" name="title" value={title} />
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="image" value={imageUrl ?? ''} />
+      <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
 
       <TextareaAutosize
         placeholder="Untitled"
@@ -126,12 +132,17 @@ export const ClientPage = ({ post, userId }: ClientPageProps) => {
         onContentChange={setContent}
       />
 
-      <LinkPreviews isEditable={isEditable} postId={post.id} />
+      <LinkPreviews
+        isEditable={isEditable}
+        postId={post.id}
+        setAdLinks={setAdLinks as React.Dispatch<React.SetStateAction<Link[]>>}
+        postLinks={postLinks as Link[]}
+      />
 
       {isEditable && (
         <Button
           type="submit"
-          className="fixed bottom-5 right-5"
+          className="fixed bottom-5 right-5 z-[99999]"
           disabled={!isFormValid || isSubmitting}
         >
           {isSubmitting
