@@ -7,7 +7,7 @@ export default async function Footer() {
       <p className="text-muted-foreground md:text-sm text-xs text-center">
         All rights reserved @2025
       </p>
-      <div className="absolute bottom-[1rem] right-[1rem]">
+      <div className="absolute bottom-[1rem] left-[1rem]">
         <ModeToggle />
       </div>
     </footer>

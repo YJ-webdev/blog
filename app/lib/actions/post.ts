@@ -119,19 +119,6 @@ export async function publishPost(formData: FormData): Promise<void> {
 
   const links: Link[] = linksString ? JSON.parse(linksString) : [];
 
-  const currentLinks = post.links;
-
-  if (currentLinks.length >= 3) {
-    const excessLinks = currentLinks.length - 3;
-    await prisma.link.deleteMany({
-      where: {
-        id: {
-          in: currentLinks.slice(0, excessLinks).map((link) => link.id),
-        },
-      },
-    });
-  }
-
   const linkData = links.map((link) => ({
     url: link.url,
     title: link.title,

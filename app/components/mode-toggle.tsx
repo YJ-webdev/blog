@@ -17,10 +17,10 @@ export function ModeToggle() {
     return null; // Prevents rendering the toggle on the server-side
   }
 
-  const isDarkMode = theme === 'dark';
+  const isDarkMode = theme === 'light';
 
   const toggleTheme = () => {
-    setTheme(isDarkMode ? 'light' : 'dark');
+    setTheme(isDarkMode ? 'dark' : 'light');
   };
 
   return (

@@ -76,7 +76,8 @@ const LinkPreviews = ({
     if (storedLinks) {
       const parsedLinks: Link[] = JSON.parse(storedLinks);
 
-      setAdLinks((prevLinks) => {
+      setAdLinks(parsedLinks);
+      setLinks((prevLinks) => {
         const sortedLinks = [...parsedLinks].sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -87,7 +88,7 @@ const LinkPreviews = ({
         return areSame ? prevLinks : sortedLinks;
       });
     }
-  }, [postId]);
+  }, [postId, setAdLinks]);
 
   // Save links to localStorage
   useEffect(() => {

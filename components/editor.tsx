@@ -95,19 +95,27 @@ export default function Editor({
   }, []);
 
   useEffect(() => {
-    if (editable) {
-      loadFromStorage(postId).then((storedContent) => {
-        if (storedContent) {
+    const loadContent = async () => {
+      if (editable) {
+        const storedContent = await loadFromStorage(postId);
+
+        if (storedContent && storedContent.length > 0) {
           setContent(storedContent);
+        } else if (initialContent) {
+          setContent(JSON.parse(initialContent));
         } else {
-          setContent([]);
+          setContent([{ type: 'paragraph', content: '' }]); // Ensure at least one block
         }
-      });
-    } else {
-      if (initialContent) {
-        setContent(JSON.parse(initialContent));
+      } else {
+        if (initialContent) {
+          setContent(JSON.parse(initialContent));
+        } else {
+          setContent([{ type: 'paragraph', content: '' }]);
+        }
       }
-    }
+    };
+
+    loadContent();
   }, [postId, initialContent, editable]);
 
   const editor = useMemo(() => {
@@ -165,7 +173,7 @@ export default function Editor({
   }
 
   return (
-    <div className="flex flex-col w-full overflow-hidden md:overflow-visible mb-10">
+    <div className="flex flex-col w-full overflow-hidden md:overflow-visible">
       <div
         className={cn(
           'md:-mx-[54px] md:-translate-y-2 z-50',
