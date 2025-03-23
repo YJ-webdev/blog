@@ -37,7 +37,7 @@ const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
           </div>
         )}
         <CardHeader>
-          <CardTitle className="line-clamp-2 tracking-tight text-lg font-medium">
+          <CardTitle className="line-clamp-2 tracking-tight text-xl font-semibold">
             {preview.title}
           </CardTitle>
           {preview.siteName && (
@@ -57,7 +57,7 @@ const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
         </CardHeader>
         <CardContent>
           {preview.description && (
-            <p className="text-sm text-muted-foreground -mt-2 line-clamp-3 mb-2">
+            <p className="text-sm text-muted-foreground line-clamp-3 mb-2">
               {preview.description}
             </p>
           )}
