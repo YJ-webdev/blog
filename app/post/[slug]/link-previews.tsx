@@ -20,7 +20,6 @@ function getLargestFavicon(favicons: string[]): string {
   })[0];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformResponse(res: any, url: string) {
   return {
     title: 'title' in res ? res.title : null,
@@ -88,7 +87,7 @@ const LinkPreviews = ({
         return areSame ? prevLinks : sortedLinks;
       });
     }
-  }, [postId, setAdLinks]);
+  }, [postId, setAdLinks, setLinks]);
 
   // Save links to localStorage
   useEffect(() => {
@@ -101,7 +100,7 @@ const LinkPreviews = ({
     const trimmedUrl = url.trim();
 
     if (!trimmedUrl || !isValidUrl(trimmedUrl)) {
-      setError('Please enter a valid URL.');
+      setError('Please enter a valid URL');
       setTimeout(() => setError(null), 3000);
       return;
     }
@@ -117,7 +116,7 @@ const LinkPreviews = ({
           (link) => typeof link !== 'string' && link.url === normalizedUrl,
         )
       ) {
-        setError('This link is already added.');
+        setError('This link is already added');
         setTimeout(() => setError(null), 3000);
         return;
       }
@@ -127,24 +126,33 @@ const LinkPreviews = ({
         typeof res === 'string' ? res : transformResponse(res, normalizedUrl);
 
       // Update links state for localStorage
-      setLinks((prevLinks) => {
-        const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
-        return newLinks;
-      });
 
-      // Update adLinks state for prisma
-      setAdLinks?.((prevLinks: Link[]) => {
-        const newLinks: Link[] = [
-          {
-            id: crypto.randomUUID(),
-            postId,
-            url: normalizedUrl,
-            ...linkPreview,
-          },
-          ...prevLinks,
-        ].slice(0, 3);
-        return newLinks;
-      });
+      if (typeof linkPreview === 'string') {
+        setError(
+          'Open Graph data is not found or blocked by the website. Try later.',
+        );
+        setTimeout(() => setError(null), 5000);
+        return;
+      } else {
+        setLinks((prevLinks) => {
+          const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
+          return newLinks;
+        });
+
+        // Update adLinks state for prisma
+        setAdLinks?.((prevLinks: Link[]) => {
+          const newLinks: Link[] = [
+            {
+              id: crypto.randomUUID(),
+              postId,
+              url: normalizedUrl,
+              ...linkPreview,
+            },
+            ...prevLinks,
+          ].slice(0, 3);
+          return newLinks;
+        });
+      }
     } catch {
       setError('Failed to fetch preview. Try again.');
       setTimeout(() => setError(null), 2000);
@@ -190,12 +198,15 @@ const LinkPreviews = ({
               )}
             </Button>
           </div>
-          {error && (
-            <p className="flex items-center justify-center w-full text-center mt-2 text-sm text-muted-foreground">
-              <TriangleAlert size={16} className="mr-2" />
-              {error}
-            </p>
-          )}
+
+          <div className="flex items-center h-4 justify-center text-center mt-1 text-sm font-normal text-muted-foreground dark:text-amber-300">
+            {error && (
+              <>
+                <TriangleAlert size={16} strokeWidth={2} className="mr-2" />
+                {error}{' '}
+              </>
+            )}
+          </div>
         </div>
       )}
 
@@ -206,14 +217,14 @@ const LinkPreviews = ({
               links.map((link, index) =>
                 typeof link !== 'string' ? (
                   <LinkPreview key={index} preview={link} />
-                ) : null,
+                ) : (
+                  link
+                ),
               )
             : Array.isArray(postLinks) &&
-              postLinks.map((postLink, index) =>
-                typeof postLink !== 'string' ? (
-                  <LinkPreview key={index} preview={postLink} />
-                ) : null,
-              )}
+              postLinks.map((postLink, index) => (
+                <LinkPreview key={index} preview={postLink} />
+              ))}
         </div>
         <p className="text-xs text-center mt-4 text-muted-foreground mb-10">
           This post is part of the Coupang Partners program, and a certain

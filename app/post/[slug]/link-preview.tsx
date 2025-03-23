@@ -9,6 +9,13 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import { Link as LinkType } from '@prisma/client';
+import { Noto_Sans_KR } from 'next/font/google';
+
+const notoSansKR = Noto_Sans_KR({
+  subsets: ['latin'], // Ensure Korean characters load
+  weight: ['400', '500', '600', '700'], // Adjust weights as needed
+  variable: '--font-noto-sans-kr', // Define a CSS variable
+});
 
 const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
   return (
@@ -16,7 +23,7 @@ const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
       href={preview.url!}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-primary border hover:underline rounded-lg w-full overflow-hidden sm:hover:shadow-xl transition-all duration-150 ease-linear"
+      className={`${notoSansKR.className} text-primary border hover:underline rounded-lg w-full overflow-hidden sm:hover:shadow-xl transition-all duration-150 ease-linear`}
     >
       <Card className="border-none h-full shadow-none">
         {preview.image && (
@@ -30,7 +37,7 @@ const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
           </div>
         )}
         <CardHeader>
-          <CardTitle className="line-clamp-2 tracking-tight text-lg">
+          <CardTitle className="line-clamp-2 tracking-tight text-lg font-medium">
             {preview.title}
           </CardTitle>
           {preview.siteName && (

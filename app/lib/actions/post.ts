@@ -1,5 +1,6 @@
 'use server';
 
+import { Noto_Sans_KR } from 'next/font/google';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
@@ -119,19 +120,25 @@ export async function publishPost(formData: FormData): Promise<void> {
 
   const links: Link[] = linksString ? JSON.parse(linksString) : [];
 
-  const linkData = links.map((link) => ({
-    url: link.url,
-    title: link.title,
-    description: link.description,
-    image: link.image,
-    siteName: link.siteName,
-    favicon: link.favicon,
-    postId: id,
-  }));
+  if (links.length === 3) {
+    await prisma.link.deleteMany({
+      where: { postId: id },
+    });
 
-  await prisma.link.createMany({
-    data: linkData,
-  });
+    const linkData = links.map((link) => ({
+      url: link.url,
+      title: link.title,
+      description: link.description,
+      image: link.image,
+      siteName: link.siteName,
+      favicon: link.favicon,
+      postId: id,
+    }));
+
+    await prisma.link.createMany({
+      data: linkData,
+    });
+  }
 
   // Update the post with new data
   await prisma.post.update({
