@@ -109,7 +109,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
       <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
 
       <TextareaAutosize
-        placeholder="Untitled"
+        placeholder="제목"
         autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
@@ -142,15 +142,15 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
       {isEditable && (
         <Button
           type="submit"
-          className="fixed bottom-5 right-5 z-[99999] disabled:opacity-100"
+          className="fixed bottom-5 right-5 z-[99999]"
           disabled={!isFormValid || isSubmitting}
           onClick={(event) => event.stopPropagation()}
         >
           {isSubmitting
-            ? 'Publishing...'
+            ? '게시중...'
             : post.published === false
-              ? 'Publish this Post'
-              : 'Update & Publish'}
+              ? '게시하기'
+              : '수정 완료 및 게시'}
         </Button>
       )}
     </form>

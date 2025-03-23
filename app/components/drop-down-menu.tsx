@@ -65,19 +65,18 @@ export const DropDownMenu = ({
             <DropdownMenuItem onClick={handleCreatePost} disabled={isPending}>
               <div className="flex items-center">
                 <PencilLine className="mr-5 h-4 w-4" />
-                Write new post
+                작성하기
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={'/my-posts'} className="flex items-center">
-                <List className="mr-3 h-4 w-4" />
-                My Posts
+                <List className="mr-3 h-4 w-4" />내 포스트
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={'/bookmarked'} className="flex items-center">
                 <Bookmark className="mr-3 h-4 w-4" />
-                Bookmarked
+                북마크
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="my-0" />
@@ -95,7 +94,7 @@ export const DropDownMenu = ({
             )}
           >
             <House className="mr-3 h-4 w-4" />
-            Home
+            홈으로 가기
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -109,7 +108,7 @@ export const DropDownMenu = ({
             )}
           >
             <div className="mr-3 h-4 w-4" />
-            About Bravura
+            사이트 소개
           </Link>
         </DropdownMenuItem>
 
@@ -120,7 +119,7 @@ export const DropDownMenu = ({
             className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
           >
             <UserRoundMinus className="mr-3 h-4 w-4e " />
-            Log out
+            로그아웃
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem
@@ -128,7 +127,7 @@ export const DropDownMenu = ({
             onClick={openLoginDialog}
           >
             <UserRoundPlus className="mr-3 h-4 w-4" />
-            <div className="flex gap-6">Log in</div>
+            <div className="flex gap-6">로그인</div>
             <ShortCut />
           </DropdownMenuItem>
         )}

@@ -1,147 +1,63 @@
 export default function About() {
   return (
-    <section className="max-w-[750px] mx-auto dark:text-muted-foreground">
-      <h1 className="py-5">
-        Welcome to <strong className="text-primary">Bravura</strong> –{' '}
-        <span className="italic font-light">A Journey of Excellence</span>
-      </h1>
-      <p>
-        At Bravura, we believe in the art of excellence and the brilliance of
-        living with purpose, passion, and ambition. Our blog is not just a
-        collection of articles; it’s a celebration of life’s most exciting,
-        thought-provoking, and innovative pursuits. Whether you&apos;re
-        passionate about travel, economy, health, DIY projects, or the latest
-        trends, Bravura is here to bring you quality content that’s carefully
-        curated, thoughtfully crafted, and expertly presented.
-      </p>
-
-      <h2 className="section-heading">Why Bravura?</h2>
-      <p>
-        The word <em>Bravura</em> itself speaks volumes about what we strive to
-        create here. In music and the arts, bravura is the term used to describe
-        a performance that&apos;s executed with exceptional skill, flair, and a
-        bold sense of confidence. We wanted to bring that same energy to this
-        blog. Every post, article, and piece of content you find here is
-        designed to be a masterpiece in its own right, showcasing not just
-        information but a level of craftsmanship that elevates the topics we
-        explore.
-      </p>
-      <p>
-        This blog is for the bold, the curious, the daring, and the
-        dreamers—those who aren&apos;t afraid to ask tough questions, explore
-        new horizons, and challenge the status quo. It&apos;s for anyone who
-        seeks excellence in everything they do and who understands that true
-        brilliance isn&apos;t just about perfection; it&apos;s about pushing
-        boundaries, embracing new perspectives, and taking risks.
-      </p>
-
-      <h2 className="section-heading">Our Mission</h2>
-      <p>
-        At Bravura, our mission is to inspire and empower our readers with
-        knowledge, creativity, and innovation. We want to provide a platform
-        where ideas are shared with confidence and where content is always
-        delivered with the highest standard. No matter your interests,
-        you&apos;ll find something here that speaks to you. From immersive
-        travel stories to insightful economic trends, transformative health
-        advice, DIY innovations, and everything in between, Bravura aims to
-        cover it all with precision, depth, and a unique perspective.
-      </p>
-
-      <h2 className="section-heading">What to Expect</h2>
-      <p>
-        Each piece of content on Bravura is crafted with one goal in mind: to
-        inform, inspire, and engage. Here&apos;s a glimpse of what you can
-        expect when you dive into our blog:
-      </p>
-
-      <ul className="pt-5 pb-2 list-disc pl-5 space-y-4">
-        <li>
-          Travel{' '}
-          <p className="font-light">
-            Discover the world through the eyes of bold explorers. Our travel
-            content goes beyond the typical tourist attractions; we dig deeper,
-            uncover hidden gems, and bring you stories of adventure, culture,
-            and unforgettable experiences.
-          </p>
-        </li>
-
-        <li>
-          Economy & Trends{' '}
-          <p className="font-light">
-            Stay ahead of the curve with our in-depth analysis of global
-            economic shifts, emerging trends, and the latest innovations.
-            Bravura covers everything from market shifts to futuristic
-            technologies and societal trends, providing you with the knowledge
-            to understand how the world is changing.
-          </p>
-        </li>
-
-        <li>
-          Health & Wellness{' '}
-          <p className="font-light">
-            Achieving excellence in life means taking care of your mind and
-            body. Our health and wellness section focuses on holistic approaches
-            to well-being, offering advice on fitness, mental health, nutrition,
-            and lifestyle choices that promote a balanced and thriving life.
-          </p>
-        </li>
-
-        <li>
-          DIY & Creativity{' '}
-          <p className="font-light">
-            Whether you&apos;re a seasoned DIY enthusiast or just starting, our
-            creative content empowers you to unlock your inner maker. From home
-            improvement projects to sustainable living tips, we provide
-            practical, step-by-step guides to help you create the life and
-            environment you envision.
-          </p>
-        </li>
-
-        <li>
-          Lifestyle & Personal Growth{' '}
-          <p className="font-light">
-            At Bravura, we believe that true excellence is about constant growth
-            and self-improvement. Our lifestyle content covers everything from
-            productivity hacks to personal development strategies, giving you
-            the tools to lead a life that is both fulfilling and impactful.
-          </p>
-        </li>
-      </ul>
-
-      <h2 className="section-heading">Our Promise to You</h2>
-      <p>
-        Bravura is more than just a blog—it&apos;s a community of like-minded
-        individuals who are dedicated to living life with passion and purpose.
-        Whether you&apos;re here for the latest trends or deep dive insights
-        into a subject, we promise to always bring you content that is not just
-        informative, but transformative. We want every article, every post, and
-        every piece of content to inspire you to take action and embrace
-        excellence in your own life.
-      </p>
-      <p>
-        Our team of writers, experts, and contributors bring their knowledge,
-        creativity, and diverse experiences to the table. With every topic we
-        explore, we approach it with the same commitment to excellence that
-        defines the word Bravura. We believe that when knowledge is shared with
-        care, it can ignite change, spark new ideas, and lead to real
-        transformation.
-      </p>
-
-      <h2 className="section-heading">Join Us on Our Journey</h2>
-      <p>
-        At Bravura, we&apos;re just getting started. The world is full of
-        endless opportunities to learn, grow, and make an impact, and we&apos;re
-        here to guide you through it all. So, whether you&apos;re looking to
-        fuel your wanderlust, gain a deeper understanding of the world&apos;s
-        economy, live a healthier life, or create something beautiful,
-        you&apos;ve come to the right place.
-      </p>
-      <p>
-        We invite you to join us on this exciting journey of exploration,
-        learning, and personal growth. Here at Bravura, we believe that
-        excellence is not a destination but a continuous journey—and we&apos;re
-        thrilled to have you along for the ride.
-      </p>
-    </section>
+    <div className="mt-10 mb-20">
+      <section className="max-w-[750px] mx-auto dark:text-muted-foreground">
+        <h1 className="py-5">
+          <strong className="text-primary">
+            &quot;2025년 주목해야할 트렌드&quot;
+          </strong>
+          에 오신 것을 환영합니다 –{' '}
+          <span className="italic font-light">탁월함을 향한 여정</span>
+        </h1>
+        <p>
+          저희 블로그는 단순한 기사 모음이 아닌, 삶에서 가장 흥미롭고 혁신적인
+          추구들을 담은 공간입니다.
+        </p>
+        <h2 className="section-heading">우리의 미션</h2>
+        <p>
+          2025년 주목해야할 트렌드의 목표는 독자들에게 지식과 창의성, 혁신을
+          통해 영감을 주는 것입니다. 모든 콘텐츠는 신뢰할 수 있는 정보와 깊이
+          있는 분석을 제공하며, 여러분의 삶에 긍정적인 영향을 미칠 수 있기를
+          바랍니다.
+        </p>
+        <h2 className="section-heading">기대할 수 있는 콘텐츠</h2>
+        <p>
+          2025년 주목해야할 트렌드에서는 여행, 경제, 건강, DIY 프로젝트 등
+          다양한 분야의 콘텐츠를 만나실 수 있습니다. 각 주제는 정확하고 신뢰성
+          있는 정보로 제공되며, 새로운 관점을 제시합니다.
+        </p>
+        <ul className="pt-5 pb-2 list-disc pl-5 space-y-4">
+          <li>여행: 숨겨진 보석 같은 여행지를 소개합니다.</li>
+          <li>경제 & 트렌드: 세계 경제의 변화를 심도 있게 분석합니다.</li>
+          <li>
+            건강 & 웰빙: 피트니스, 정신 건강, 영양 등 삶의 질을 향상시키는 팁을
+            제공합니다.
+          </li>
+          <li>
+            DIY & 창의성: 창의적인 프로젝트와 지속 가능한 생활 팁을 다룹니다.
+          </li>
+          <li>
+            라이프스타일 & 개인 성장: 생산성 팁과 자기 개발 전략을 공유합니다.
+          </li>
+        </ul>
+        <h2 className="section-heading">우리의 여정에 함께하세요</h2>
+        <p>
+          2025년 주목해야할 트렌드는 이제 시작입니다. 세상은 배울 기회, 성장할
+          기회로 가득 차 있습니다. 우리는 여러분이 그 여정을 함께할 수 있도록
+          돕고자 합니다. 여행에 대한 갈망을 불태우고, 세상을 이해하고, 건강한
+          삶을 살고자 한다면, 2025년 주목해야할 트렌드에서 모든 것을 찾을 수
+          있습니다.
+        </p>
+        <br />
+        <h2 className="section-heading">추구하고자 하는 콘텐츠</h2>
+        <p>
+          우리는 열정과 목적을 가지고 살아가는 사람들의 커뮤니티를 지향합니다.
+          정보 제공에 그치지 않고, 삶의 변화를 이끌어내는 콘텐츠를 제공합니다.
+          모든 사진은 Unsplash에서 제공된 이미지입니다. 각 사진의 저작권은 해당
+          작가에게 귀속됩니다. 이 사이트는 개인 블로그로, 포스팅은 사실에
+          근거하여 작성되었습니다.{' '}
+        </p>
+      </section>
+    </div>
   );
 }

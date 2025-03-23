@@ -17,14 +17,14 @@ export const Title = () => {
 
   return (
     <div className="mt-5">
-      {pathname === '/about' ? (
-        <h1 className="font-bold md:text-6xl text-5xl">About. </h1>
-      ) : pathname.startsWith('/post/') && pathname.length > 6 ? (
+      {pathname.startsWith('/post/') && pathname.length > 6 ? (
         ''
       ) : slug ? (
         formatSlug(slug)
       ) : (
-        <h1 className="font-bold md:text-6xl text-5xl">Bravura.</h1>
+        <h1 className="font-bold md:text-6xl text-5xl">
+          2025년 주목해야할 트렌드.
+        </h1>
       )}
     </div>
   );

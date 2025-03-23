@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import LinkPreview from './link-preview';
 import { getPreview } from '@/app/lib/actions/preview';
 
-import { LinkIcon, Loader2, TriangleAlert } from 'lucide-react';
+import { LinkIcon, Loader2 } from 'lucide-react';
 import { Link } from '@prisma/client';
 
 function getLargestFavicon(favicons: string[]): string {
@@ -180,7 +180,7 @@ const LinkPreviews = ({
                   getData(); // Call the function manually (optional)
                 }
               }}
-              placeholder="Enter a URL to preview"
+              placeholder="URL을 입력하세요."
               autoFocus={false}
             />
             <Button
@@ -190,28 +190,29 @@ const LinkPreviews = ({
               disabled={loading}
             >
               {loading ? (
-                <Loader2 className="animate-spin self-center" />
+                <Loader2 className="animate-spin self-center " />
               ) : (
-                <>
-                  <LinkIcon /> Add link
-                </>
+                <p className="flex items-center justify-center gap-2">
+                  <LinkIcon /> 입력
+                </p>
               )}
             </Button>
           </div>
 
-          <div className="flex items-center h-4 justify-center text-center mt-1 text-sm font-normal text-muted-foreground dark:text-amber-300">
-            {error && (
-              <>
-                <TriangleAlert size={16} strokeWidth={2} className="mr-2" />
-                {error}{' '}
-              </>
-            )}
-          </div>
+          <p className="flex items-center h-2 pt-2 justify-center text-center mt-1 text-xs font-normal">
+            {error && <>{error}</>}
+          </p>
         </div>
       )}
 
-      <div className="flex flex-col max-w-[750px]">
-        <div className="grid grid-cols-1 sm:flex gap-5 justify-between w-full h-full">
+      <div className="flex flex-col max-w-[750px] mb-10 gap-y-5">
+        {postLinks.length > 0 && (
+          <p className="text-xs text-center mt-4 text-muted-foreground">
+            이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의
+            수수료를 제공받습니다.
+          </p>
+        )}
+        <div className="flex sm:flex gap-5 justify-between w-full h-full">
           {isEditable && links.length > 0
             ? Array.isArray(links) &&
               links.map((link, index) =>
@@ -226,10 +227,6 @@ const LinkPreviews = ({
                 <LinkPreview key={index} preview={postLink} />
               ))}
         </div>
-        <p className="text-xs text-center mt-4 text-muted-foreground mb-10">
-          This post is part of the Coupang Partners program, and a certain
-          commission is provided as a result.
-        </p>
       </div>
     </div>
   );

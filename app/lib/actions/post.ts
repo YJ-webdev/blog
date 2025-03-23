@@ -1,6 +1,5 @@
 'use server';
 
-import { Noto_Sans_KR } from 'next/font/google';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
@@ -29,6 +28,15 @@ export async function getPosts() {
   const posts = await prisma.post.findMany({
     where: {
       published: true,
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      image: true,
+      authorId: true,
+      tags: true,
+      createdAt: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -120,7 +128,7 @@ export async function publishPost(formData: FormData): Promise<void> {
 
   const links: Link[] = linksString ? JSON.parse(linksString) : [];
 
-  if (links.length === 3) {
+  if (links.length > 0) {
     await prisma.link.deleteMany({
       where: { postId: id },
     });
