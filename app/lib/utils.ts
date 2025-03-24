@@ -1,5 +1,4 @@
 import { Block } from '@blocknote/core';
-import { Post } from '@prisma/client';
 
 export const formatDateWithoutYear = (
   dateString: string | Date,
@@ -14,10 +13,10 @@ export const extractText = (content: string): string => {
   let contentBlocks: Block[] = [];
 
   try {
-    contentBlocks = JSON.parse(content) as Block[]; // Parse content string to Block[]
+    contentBlocks = JSON.parse(content) as Block[];
   } catch (error) {
     console.error('Error parsing content:', error);
-    return ''; // Return empty string if parsing fails
+    return '';
   }
 
   const firstParagraph = contentBlocks.find(
@@ -26,9 +25,17 @@ export const extractText = (content: string): string => {
 
   if (firstParagraph) {
     return firstParagraph.content
-      .map((subItem) => (subItem.type === 'text' ? subItem.text : '')) // Extract text
-      .join(''); // Join text if there are multiple parts
+      .map((subItem) => (subItem.type === 'text' ? subItem.text : ''))
+      .join('');
   }
 
-  return ''; // Return empty string if no paragraph is found
+  return '';
 };
+
+export const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');

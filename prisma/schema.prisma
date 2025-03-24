@@ -15,12 +15,11 @@ model User {
   name          String?
   image         String?
   password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   accounts      Account[]
-  sessions      Session[]
   posts         Post[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sessions      Session[]
 }
 
 model Account {
@@ -35,11 +34,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -48,10 +45,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -67,20 +63,19 @@ model Post {
   slug        String?   @unique
   title       String?
   image       String?
-  content     String?
-  links       Link[]
   tags        String[]
-  author      User      @relation(fields: [authorId], references: [id])
   authorId    String
   published   Boolean   @default(false)
-  publishedAt DateTime? @db.Timestamptz
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  publishedAt DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  content     String?
+  links       Link[]
+  author      User      @relation(fields: [authorId], references: [id])
 }
 
 model Link {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String?
   description String?
   favicon     String?
@@ -88,9 +83,8 @@ model Link {
   siteName    String?
   url         String
   postId      String
-  post        Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([url])
   @@index([postId])

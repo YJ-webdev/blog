@@ -9,7 +9,7 @@ import { UserProfile } from './user-profile';
 import Link from 'next/link';
 import {
   List,
-  Bookmark,
+  // Bookmark,
   UserRoundMinus,
   PencilLine,
   House,
@@ -42,7 +42,7 @@ export const DropDownMenu = ({
     startTransition(async () => {
       const post = await createPost();
       if (post) {
-        router.push(`/post/${post.id}`);
+        router.push(`/post/${post.slug}`);
       }
     });
   };
@@ -60,28 +60,24 @@ export const DropDownMenu = ({
         align="end"
         className="w-48 mt-2 flex flex-col gap-1"
       >
-        {session && session.user && (
-          <>
-            <DropdownMenuItem onClick={handleCreatePost} disabled={isPending}>
-              <div className="flex items-center">
-                <PencilLine className="mr-5 h-4 w-4" />
-                작성하기
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={'/my-posts'} className="flex items-center">
-                <List className="mr-3 h-4 w-4" />내 포스트
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={'/bookmarked'} className="flex items-center">
-                <Bookmark className="mr-3 h-4 w-4" />
-                북마크
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="my-0" />
-          </>
-        )}
+        <DropdownMenuItem onClick={handleCreatePost} disabled={isPending}>
+          <div className="flex items-center">
+            <PencilLine className="mr-5 h-4 w-4" />
+            작성하기
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={'/my-posts'} className="flex items-center">
+            <List className="mr-3 h-4 w-4" />내 포스트
+          </Link>
+        </DropdownMenuItem>
+        {/* <DropdownMenuItem asChild>
+          <Link href={'/bookmarked'} className="flex items-center">
+            <Bookmark className="mr-3 h-4 w-4" />
+            북마크
+          </Link>
+        </DropdownMenuItem> */}
+        <DropdownMenuSeparator className="my-0" />
 
         <DropdownMenuItem asChild>
           <Link

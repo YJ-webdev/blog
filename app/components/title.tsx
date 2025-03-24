@@ -17,9 +17,7 @@ export const Title = () => {
 
   return (
     <div className="mt-5">
-      {pathname.startsWith('/post/') && pathname.length > 6 ? (
-        ''
-      ) : slug ? (
+      {slug ? (
         formatSlug(slug)
       ) : (
         <h1 className="font-bold md:text-6xl text-5xl">

@@ -6,6 +6,9 @@ import { DropDownMenu } from './drop-down-menu';
 import { Session } from 'next-auth';
 
 import { LoginDialog } from './(auth)/login-dialog';
+import { HomeIcon } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export const ResponsiveMenu = ({
   initials,
@@ -35,6 +38,7 @@ export const ResponsiveMenu = ({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const pathname = usePathname();
   return (
     <>
       {session && session.user ? (
@@ -49,13 +53,11 @@ export const ResponsiveMenu = ({
         </div>
       ) : (
         <>
-          <div className="items-center gap-4 md:flex text-[14px]">
-            <DropDownMenu
-              session={session}
-              initials={initials}
-              openLoginDialog={openLoginDialog}
-            />
-          </div>
+          {pathname !== '/' && (
+            <Link href={'/'} className="items-center gap-4 md:flex text-[14px]">
+              <HomeIcon size={24} strokeWidth={1.5} />
+            </Link>
+          )}
 
           <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
         </>

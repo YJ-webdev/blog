@@ -4,7 +4,7 @@ import { PostPreviewType } from '../lib/types';
 import { formatDateWithoutYear } from '../lib/utils';
 
 export const PostPreviewCard = ({
-  id,
+  slug,
   title,
   image,
   content,
@@ -12,7 +12,7 @@ export const PostPreviewCard = ({
 }: PostPreviewType) => {
   return (
     <Link
-      href={`/post/${id}`}
+      href={`/post/${slug}`}
       className="flex flex-col gap-4 w-full h-[400px] hover:cursor-pointer group relative"
     >
       <div className="relative h-full w-full">

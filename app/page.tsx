@@ -18,7 +18,7 @@ export default async function Home() {
   return (
     <div className="grid grid-cols-1 gap-7 mt-6 md:grid-cols-2 mb-20">
       <PostPreviewMain
-        id={mainPost.id}
+        slug={mainPost.slug ?? ''}
         title={mainPost.title!}
         content={processedFirstPostContent}
         image={mainPost.image!}
@@ -30,8 +30,8 @@ export default async function Home() {
 
         return (
           <PostPreviewCard
-            key={post.id}
-            id={post.id}
+            key={post.slug}
+            slug={post.slug ?? ''}
             title={post.title!}
             content={processedContent} // Pass extracted content
             image={post.image!}

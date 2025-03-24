@@ -8,10 +8,12 @@ import LinkPreviews from './link-previews';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Link } from '@prisma/client';
+import { slugify } from '@/app/lib/utils';
 
 type SelectedPost = {
   id: string;
   title: string | null;
+  slug?: string | null;
   content: string | null;
   image: string | null;
   authorId: string;
@@ -28,6 +30,7 @@ interface ClientPageProps {
 export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
+  const slugKey = `postSlug_${post.id}`;
 
   const [title, setTitle] = useState(
     () => localStorage.getItem(titleKey) ?? post.title ?? '',
@@ -37,14 +40,14 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
   );
   const [adLinks, setAdLinks] = useState<Array<Link | string>>([]);
   const [content, setContent] = useState(post.content || '');
+  const [slug, setSlug] = useState(
+    localStorage.getItem(slugKey) || post.slug || '',
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
-
-  // const parsedLinks =
-  //   typeof post.links === 'string' ? JSON.parse(post.links) : post.links;
 
   const isContentValid =
     Array.isArray(parsedContent) &&
@@ -54,22 +57,25 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
         (block.children && block.children.length > 0),
     );
 
-  const isFormValid =
-    title.trim() !== '' && isContentValid && imageUrl !== null;
+  const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
 
   useEffect(() => {
     if (!isEditable) return;
-    const timeoutId = setTimeout(
-      () => localStorage.setItem(titleKey, title),
-      300,
-    );
+
+    setSlug(slugify(title));
+
+    const timeoutId = setTimeout(() => {
+      localStorage.setItem(titleKey, title);
+      localStorage.setItem(slugKey, slug);
+    }, 300);
     return () => clearTimeout(timeoutId);
-  }, [title, titleKey, isEditable]);
+  }, [title, titleKey, isEditable, slug, slugKey]);
 
   const gatherFormData = () => {
     const formData = new FormData();
     formData.append('id', post.id);
     formData.append('title', title);
+    formData.append('slug', slug);
     formData.append('content', content);
     if (imageUrl) formData.append('image', imageUrl);
     formData.append('links', JSON.stringify(adLinks));
@@ -104,19 +110,24 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
     <form onSubmit={handleSubmit} className="w-full flex flex-col">
       <input type="hidden" name="id" value={post.id} />
       <input type="hidden" name="title" value={title} />
+      <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="image" value={imageUrl ?? ''} />
       <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
 
-      <TextareaAutosize
-        placeholder="제목"
-        autoFocus
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
-        disabled={!isEditable}
-        spellCheck={false}
-      />
+      {isEditable && (
+        <TextareaAutosize
+          placeholder="제목"
+          autoFocus
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+          className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+          disabled={!isEditable}
+          spellCheck={false}
+        />
+      )}
 
       <ImageDropZone
         imageUrl={imageUrl}

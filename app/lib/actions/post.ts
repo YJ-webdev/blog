@@ -31,6 +31,7 @@ export async function getPosts() {
     },
     select: {
       id: true,
+      slug: true,
       title: true,
       content: true,
       image: true,
@@ -54,11 +55,10 @@ export async function getPost(id: string) {
   return post;
 }
 
-export const getPostById = async (postId: string) => {
+export const getPostBySlug = async (slug: string) => {
+  const decodedSlug = decodeURIComponent(slug);
   const post = await prisma.post.findUnique({
-    where: {
-      id: postId,
-    },
+    where: { slug: decodedSlug },
     select: {
       id: true,
       title: true,
@@ -82,7 +82,9 @@ export async function createPost() {
     where: {
       authorId: user.id,
       published: false,
+      slug: 'new-post',
     },
+
     orderBy: {
       createdAt: 'desc',
     },
@@ -95,8 +97,8 @@ export async function createPost() {
   const newPost = await prisma.post.create({
     data: {
       authorId: user.id,
+      slug: 'new-post',
       published: false,
-      tags: [],
     },
   });
 
@@ -109,11 +111,12 @@ export async function publishPost(formData: FormData): Promise<void> {
 
   const id = formData.get('id') as string;
   const title = formData.get('title') as string;
+  const slug = formData.get('slug') as string;
   const image = formData.get('image') as string | null;
   const content = formData.get('content') as string;
   const linksString = formData.get('links') as string | null;
 
-  if (!id || !title || !content) {
+  if (!id || !title || !content || !slug) {
     throw new Error('Required fields are missing');
   }
 
@@ -148,11 +151,11 @@ export async function publishPost(formData: FormData): Promise<void> {
     });
   }
 
-  // Update the post with new data
   await prisma.post.update({
     where: { id },
     data: {
       title,
+      slug,
       image: image ?? undefined,
       content,
       published: true,

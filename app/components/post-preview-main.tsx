@@ -2,7 +2,7 @@ import { PostPreviewType } from '../lib/types';
 import PostPreviewCard from './post-preview-card';
 
 export const PostPreviewMain = ({
-  id,
+  slug,
   title,
   image,
   content,
@@ -11,7 +11,7 @@ export const PostPreviewMain = ({
   return (
     <div className="col-span-1 md:col-span-2 mb-5">
       <PostPreviewCard
-        id={id}
+        slug={slug}
         title={title}
         image={image}
         content={content}
