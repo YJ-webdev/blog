@@ -212,7 +212,7 @@ const LinkPreviews = ({
             수수료를 제공받습니다.
           </p>
         )}
-        <div className="flex sm:flex gap-5 justify-between w-full h-full">
+        <div className="grid grid-cols-1 md:flex gap-5 justify-between w-full h-full">
           {isEditable && links.length > 0
             ? Array.isArray(links) &&
               links.map((link, index) =>
