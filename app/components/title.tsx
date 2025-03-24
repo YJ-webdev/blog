@@ -20,7 +20,13 @@ export const Title = () => {
       {' '}
       {slug !== 'new-post' && (
         <h1 className="font-bold md:text-6xl text-5xl">
-          {slug ? formatSlug(slug) : <>2025년 주목해야할 트렌드.</>}
+          {slug ? (
+            formatSlug(slug)
+          ) : pathname === '/my-posts' ? (
+            <>내 포스트</>
+          ) : (
+            <>레인지 저널.</>
+          )}
         </h1>
       )}
     </div>

@@ -1,3 +1,6 @@
+import PostPreviewCard from '@/app/components/post-preview-card';
+import { getPostByUserId } from '@/app/lib/actions/post';
+import { extractText } from '@/app/lib/utils';
 import { auth } from '@/auth';
 import { List } from 'lucide-react';
 import { redirect } from 'next/navigation';
@@ -9,10 +12,29 @@ export default async function MyPostsPage() {
     return redirect('/');
   }
 
+  const userId = session?.user?.id;
+  const posts = await getPostByUserId(userId!);
+
   return (
-    <div className="flex items-center gap-2 mt-5">
+    <div className="flex items-center gap-2 mt-5 mb-16">
       <List size={20} className="" />
-      My Posts
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {posts.map((post) => {
+          const processedContent = post.content
+            ? extractText(post.content)
+            : '';
+          return (
+            <PostPreviewCard
+              key={post.slug}
+              slug={post.slug!}
+              title={post.title!}
+              content={processedContent}
+              image={post.image!}
+              createdAt={post.createdAt}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

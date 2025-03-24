@@ -74,7 +74,7 @@ body {
 
 @layer components {
   .section-heading {
-    @apply relative mt-5 mb-2 inline-block text-primary dark:text-primary before:absolute before:left-0 before:right-0 before:bottom-0 before:-z-10 before:rounded-full before:bg-lime-100 before:dark:bg-sky-800 before:h-[16px] before:translate-y-1 before:-translate-x-3;
+    @apply relative mt-5 mb-2 inline-block text-primary dark:text-primary before:absolute before:left-0 before:right-0 before:bottom-0 before:-z-10 before:rounded-full before:bg-yellow-100 before:dark:bg-sky-800 before:h-[16px] before:translate-y-1 before:-translate-x-3;
   }
 }
 

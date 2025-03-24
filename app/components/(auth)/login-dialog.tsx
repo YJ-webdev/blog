@@ -27,7 +27,7 @@ export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
             <CardHeader>
               <DialogTitle>
                 <CardTitle className="font-medium text-lg text-center">
-                  Log in to 2025년 주목해야할 트렌드.!
+                  Log in to 레인지 저널.!
                 </CardTitle>
               </DialogTitle>
               <CardDescription className="text-center tracking-tight">
@@ -45,9 +45,9 @@ export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
               <GithubSignIn />
             </CardContent>
             <CardFooter className="text-xs text-muted-foreground">
-              By continuing, 2025년 주목해야할 트렌드. will receive ongoing
-              access to the information you share and OAuth provider will record
-              when 2025년 주목해야할 트렌드. accesses it
+              By continuing, 레인지 저널. will receive ongoing access to the
+              information you share and OAuth provider will record when 레인지
+              저널. accesses it
             </CardFooter>
           </Card>
         </DialogContent>

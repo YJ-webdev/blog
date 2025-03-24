@@ -6,7 +6,7 @@ export const PostPreviewMain = ({
   title,
   image,
   content,
-  publishedAt,
+  createdAt,
 }: PostPreviewType) => {
   return (
     <div className="col-span-1 md:col-span-2 mb-5">
@@ -15,7 +15,7 @@ export const PostPreviewMain = ({
         title={title}
         image={image}
         content={content}
-        publishedAt={publishedAt}
+        createdAt={createdAt}
       />
     </div>
   );

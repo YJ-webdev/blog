@@ -22,7 +22,7 @@ export default async function Home() {
         title={mainPost.title!}
         content={processedFirstPostContent}
         image={mainPost.image!}
-        publishedAt={mainPost.createdAt}
+        createdAt={mainPost.createdAt!}
       />
 
       {otherPosts.map((post) => {
@@ -35,7 +35,7 @@ export default async function Home() {
             title={post.title!}
             content={processedContent} // Pass extracted content
             image={post.image!}
-            publishedAt={post.createdAt}
+            createdAt={post.createdAt!}
           />
         );
       })}

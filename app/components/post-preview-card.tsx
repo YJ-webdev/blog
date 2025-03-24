@@ -8,7 +8,7 @@ export const PostPreviewCard = ({
   title,
   image,
   content,
-  publishedAt,
+  createdAt,
 }: PostPreviewType) => {
   return (
     <Link
@@ -27,7 +27,7 @@ export const PostPreviewCard = ({
         <div className="flex justify-between items-start">
           <h3 className="w-full text-lg font-semibold line-clamp-1">{title}</h3>
           <p className="text-xs text-end min-w-fit">
-            {formatDateWithoutYear(publishedAt)}
+            {formatDateWithoutYear(createdAt)}
           </p>
         </div>
         <p className="text-sm overflow-hidden">{content}</p>

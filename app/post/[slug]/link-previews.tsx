@@ -166,7 +166,7 @@ const LinkPreviews = ({
   };
 
   return (
-    <div className="w-full mx-auto flex flex-col items-center mb-10">
+    <div className="w-full mx-auto flex flex-col items-center mb-5">
       {isEditable && (
         <div className="flex flex-col w-full mb-5">
           <div className="flex w-full">
@@ -205,13 +205,7 @@ const LinkPreviews = ({
         </div>
       )}
 
-      <div className="flex flex-col max-w-[750px] mb-10 gap-y-5">
-        {postLinks.length > 0 && (
-          <p className="text-xs text-center mt-4 text-muted-foreground">
-            이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의
-            수수료를 제공받습니다.
-          </p>
-        )}
+      <div className="flex flex-col max-w-[750px] gap-y-5">
         <div className="grid grid-cols-1 md:flex gap-5 justify-between w-full h-full">
           {isEditable && links.length > 0
             ? Array.isArray(links) &&

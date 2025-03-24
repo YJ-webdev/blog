@@ -74,6 +74,28 @@ export const getPostBySlug = async (slug: string) => {
   return post;
 };
 
+export const getPostByUserId = async (userId: string) => {
+  const post = await prisma.post.findMany({
+    where: {
+      authorId: userId,
+      published: true,
+    },
+    select: {
+      slug: true,
+      title: true,
+      content: true,
+      image: true,
+      tags: true,
+      links: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+  return post;
+};
+
 export async function createPost() {
   const user = await currentUser();
 
@@ -133,10 +155,6 @@ export async function publishPost(formData: FormData): Promise<void> {
   const links: Link[] = linksString ? JSON.parse(linksString) : [];
 
   if (links.length > 0) {
-    await prisma.link.deleteMany({
-      where: { postId: id },
-    });
-
     const linkData = links.map((link) => ({
       url: link.url,
       title: link.title,
@@ -149,6 +167,25 @@ export async function publishPost(formData: FormData): Promise<void> {
 
     await prisma.link.createMany({
       data: linkData,
+    });
+  }
+
+  if (links.length > 0 && post.links.length + links.length > 3) {
+    const deductingAmount = post.links.length + links.length - 3;
+
+    // Fetch the oldest links that need to be deleted
+    const oldLinks = await prisma.link.findMany({
+      where: { postId: id },
+      orderBy: { createdAt: 'asc' },
+      take: deductingAmount,
+      select: { id: true }, // Only fetch IDs to minimize data transfer
+    });
+
+    // Delete the fetched links
+    await prisma.link.deleteMany({
+      where: {
+        id: { in: oldLinks.map((link) => link.id) },
+      },
     });
   }
 

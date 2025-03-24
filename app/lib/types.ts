@@ -3,5 +3,5 @@ export type PostPreviewType = {
   title: string;
   image: string;
   content: string;
-  publishedAt: Date;
+  createdAt: Date;
 };

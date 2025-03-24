@@ -1,14 +1,13 @@
 import { Block } from '@blocknote/core';
 
 export const formatDateWithoutYear = (
-  dateString: string | Date,
+  dateString: Date,
   locale: string = 'locale',
 ) => {
   const date = new Date(dateString);
   return date.toLocaleDateString(locale, { month: 'long', day: 'numeric' });
 };
 
-// Function to process content and extract text from the first paragraph
 export const extractText = (content: string): string => {
   let contentBlocks: Block[] = [];
 
