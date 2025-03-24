@@ -115,7 +115,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
       <input type="hidden" name="image" value={imageUrl ?? ''} />
       <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
 
-      {isEditable && (
+      {isEditable && post.title === null && (
         <TextareaAutosize
           placeholder="제목"
           autoFocus

@@ -17,11 +17,10 @@ export const Title = () => {
 
   return (
     <div className="mt-5">
-      {slug ? (
-        formatSlug(slug)
-      ) : (
+      {' '}
+      {slug !== 'new-post' && (
         <h1 className="font-bold md:text-6xl text-5xl">
-          2025년 주목해야할 트렌드.
+          {slug ? formatSlug(slug) : <>2025년 주목해야할 트렌드.</>}
         </h1>
       )}
     </div>
