@@ -26,6 +26,8 @@ const menuItems = [
   { name: '자기개발', href: '/logout' },
   { name: '금융', href: '/logout' },
   { name: '음악', href: '/logout' },
+  { name: '신화', href: '/logout' },
+  { name: '미스테리', href: '/logout' },
 ];
 
 export const SideMenu = () => {

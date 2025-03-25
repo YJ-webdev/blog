@@ -16,7 +16,7 @@ export default async function Home() {
     : '';
 
   return (
-    <div className="grid grid-cols-1 gap-7 mt-6 md:grid-cols-2 mb-20">
+    <div className="flex flex-col gap-7 mt-5 w-full">
       <PostPreviewMain
         slug={mainPost.slug ?? ''}
         title={mainPost.title!}
@@ -24,21 +24,24 @@ export default async function Home() {
         image={mainPost.image!}
         createdAt={mainPost.createdAt!}
       />
+      <div className="grid grid-cols-1 gap-7 md:grid-cols-2 mb-20">
+        {otherPosts.map((post) => {
+          const processedContent = post.content
+            ? extractText(post.content)
+            : '';
 
-      {otherPosts.map((post) => {
-        const processedContent = post.content ? extractText(post.content) : '';
-
-        return (
-          <PostPreviewCard
-            key={post.slug}
-            slug={post.slug ?? ''}
-            title={post.title!}
-            content={processedContent} // Pass extracted content
-            image={post.image!}
-            createdAt={post.createdAt!}
-          />
-        );
-      })}
+          return (
+            <PostPreviewCard
+              key={post.slug}
+              slug={post.slug ?? ''}
+              title={post.title!}
+              content={processedContent} // Pass extracted content
+              image={post.image!}
+              createdAt={post.createdAt!}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

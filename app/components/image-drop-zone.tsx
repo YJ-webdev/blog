@@ -87,17 +87,17 @@ export const ImageDropZone = ({
       <div
         className={cn(
           'absolute top-0 left-0 w-full h-full bg-transparent flex items-center justify-center',
-          imageUrl
-            ? ''
-            : 'border-2 rounded-lg border-dashed border-primary/50 dark:border-white/25',
+          imageUrl ??
+            'border-2 rounded-lg border-dashed border-primary/50 dark:border-white/25',
         )}
       >
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt="Image Preview"
+            height={200}
+            width={700}
             className="w-full h-full object-cover"
-            layout="fill" // Ensure image covers the div area
             objectFit="cover" // Maintain aspect ratio and cover the area
           />
         ) : (
