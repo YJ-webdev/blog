@@ -20,7 +20,7 @@ export default async function SlugPage({
   const links = await getLinksbyPostId(post.id);
 
   return (
-    <div className="max-w-[750px] mx-auto flex flex-col gap-5">
+    <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
       <ClientOnly>
         <ClientPage post={post} userId={userId} postLinks={links} />
       </ClientOnly>

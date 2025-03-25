@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SideMenu } from './components/side-menu';
-import { Title } from './components/title';
+import { SideMenu } from './side-menu';
+import { Title } from './title';
 import { Toaster } from 'sonner';
-import Footer from './components/footer';
+import Footer from './footer';
 import { cn } from '@/lib/utils';
 import { PanelLeft, PanelLeftDashed } from 'lucide-react';
 
@@ -38,7 +38,7 @@ export const ClientPage = ({ children }: { children: React.ReactNode }) => {
       <SideMenu />
       <div
         className={cn(
-          'z-[10] bg-white dark:bg-[#1f1f1f] flex flex-col min-h-screen mx-auto px-[1rem] transition-all ease-in-out duration-300',
+          'z-[10] bg-white dark:bg-[#1f1f1f] flex flex-col min-h-screen mx-auto transition-all ease-in-out duration-300',
           open ? 'translate-x-[120px]' : 'w-full',
         )}
       >

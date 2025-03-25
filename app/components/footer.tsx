@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="relative h-50 flex flex-col items-center gap-2 mb-5">
+    <footer className="relative px-4 h-50 flex flex-col items-center gap-2 mb-5">
       <div className="w-full lg:w-2/3 mx-aut0 mb-2 mt-5 dark:bg-[#1f1f1f]">
         <iframe
           src="https://coupa.ng/chFqOC"

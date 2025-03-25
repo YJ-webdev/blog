@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
-import { ClientPage } from './client-page';
+import { ClientPage } from './components/client-page';
 import './globals.css';
 
 import Nav from './components/nav';

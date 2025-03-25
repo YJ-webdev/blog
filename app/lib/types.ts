@@ -7,4 +7,6 @@ export type PostPreviewType = {
   id?: string;
   tags?: string[];
   authorId?: string;
+  bookmarkedBy?: boolean;
+  myPosts?: boolean;
 };

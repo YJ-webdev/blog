@@ -69,6 +69,7 @@ export const getPostBySlug = async (slug: string) => {
       tags: true,
       links: true,
       published: true,
+      bookmarkedBy: true,
     },
   });
   return post;
@@ -87,6 +88,7 @@ export const getPostByUserId = async (userId: string) => {
       image: true,
       tags: true,
       links: true,
+      bookmarkedBy: true,
       createdAt: true,
     },
     orderBy: {
@@ -94,6 +96,33 @@ export const getPostByUserId = async (userId: string) => {
     },
   });
   return post;
+};
+
+export const getPostsByTag = async (tag: string) => {
+  const posts = await prisma.post.findMany({
+    where: {
+      tags: {
+        has: tag,
+      },
+      published: true,
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      image: true,
+      authorId: true,
+      tags: true,
+      links: true,
+      slug: true,
+      bookmarkedBy: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+  return posts;
 };
 
 export async function createPost() {

@@ -9,25 +9,26 @@ import { SearchIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { PostPreviewType } from '../lib/types';
+import Link from 'next/link';
 
 const menuItems = [
-  { name: '종교', href: '/' },
-  { name: '요리', href: '/about' },
-  { name: '다이어트', href: '/logout' },
-  { name: '운동', href: '/logout' },
-  { name: '건강', href: '/logout' },
-  { name: '웰빙', href: '/logout' },
-  { name: '여행', href: '/logout' },
-  { name: '라이프스타일', href: '/logout' },
-  { name: 'DIY', href: '/logout' },
-  { name: '문화생활', href: '/logout' },
-  { name: '사회', href: '/logout' },
-  { name: '역사', href: '/logout' },
-  { name: '자기개발', href: '/logout' },
-  { name: '금융', href: '/logout' },
-  { name: '음악', href: '/logout' },
-  { name: '신화', href: '/logout' },
-  { name: '미스테리', href: '/logout' },
+  { name: '종교', href: `/tag/종교` },
+  { name: '요리', href: '/tag/요리' },
+  { name: '다이어트', href: '/tag/다이어트' },
+  { name: '운동', href: '/tag/운동' },
+  { name: '건강', href: '/tag/건강' },
+  { name: '웰빙', href: '/tag/웰빙' },
+  { name: '여행', href: '/tag/여행' },
+  { name: '라이프스타일', href: '/tag/라이프스타일' },
+  { name: 'DIY', href: '/tag/DIY' },
+  { name: '문화생활', href: '/tag/문화생활' },
+  { name: '사회', href: '/tag/사회' },
+  { name: '역사', href: '/tag/역사' },
+  { name: '자기개발', href: '/tag/자기개발' },
+  { name: '금융', href: '/tag/금융' },
+  { name: '음악', href: '/tag/음악' },
+  { name: '신화', href: '/tag/신화' },
+  { name: '미스테리', href: '/tag/미스테리' },
 ];
 
 export const SideMenu = () => {
@@ -66,7 +67,8 @@ export const SideMenu = () => {
             <div className="flex w-full gap-2 flex-wrap">
               {menuItems.map((item) => {
                 return (
-                  <div
+                  <Link
+                    href={item.href}
                     key={item.name}
                     className={cn(
                       'w-fit text-nowrap rounded-full bg-white dark:bg-[#1f1f1f] p-2 flex flex-wrap cursor-pointer transition-all duration-100',
@@ -86,7 +88,7 @@ export const SideMenu = () => {
                     >
                       {item.name}
                     </p>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
@@ -97,7 +99,8 @@ export const SideMenu = () => {
             <div className="flex w-full gap-4 flex-wrap">
               {posts.map((post) => {
                 return (
-                  <div
+                  <Link
+                    href={`/post/${post.slug}`}
                     key={post.title}
                     className={cn(
                       'w-fit flex flex-col cursor-pointer transition-all duration-100 hover:underline',
@@ -115,7 +118,7 @@ export const SideMenu = () => {
                     >
                       {post.title}
                     </p>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

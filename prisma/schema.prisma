@@ -9,17 +9,19 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String     @id @default(cuid())
+  email         String     @unique
   emailVerified DateTime?
   name          String?
   image         String?
   password      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
   posts         Post[]
+  bookmarks     Bookmark[]
+  accounts      Account[]
   sessions      Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -59,18 +61,23 @@ model VerificationToken {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  slug      String?  @unique
-  title     String?
-  image     String?
-  tags      String[]
-  authorId  String
-  published Boolean  @default(false)
+  id           String     @id @default(cuid())
+  title        String?
+  slug         String?
+  image        String?
+  content      String?
+  tags         String[]
+  links        Link[]
+  authorId     String
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  bookmarkedBy Bookmark[]
+
+  published Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  content   String?
-  links     Link[]
-  author    User     @relation(fields: [authorId], references: [id])
+
+  @@unique([slug], map: "unique_slug") // Custom name for the unique index
 }
 
 model Link {
@@ -87,4 +94,15 @@ model Link {
 
   @@index([url])
   @@index([postId])
+}
+
+model Bookmark {
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId]) // Ensures a user can only bookmark a post once
 }

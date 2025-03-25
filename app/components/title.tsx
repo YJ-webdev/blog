@@ -16,7 +16,7 @@ export const Title = () => {
   };
 
   return (
-    <div className="mt-5 bg-white dark:bg-[#1f1f1f] max-w-[1000px] mx-auto w-full">
+    <div className="mt-5 px-4 bg-white dark:bg-[#1f1f1f] max-w-[1000px] mx-auto w-full">
       {slug !== 'new-post' && (
         <h1 className="font-bold md:text-6xl text-5xl">
           {slug ? (
