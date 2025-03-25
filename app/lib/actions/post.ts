@@ -115,7 +115,6 @@ export const getPostsByTag = async (tag: string) => {
       tags: true,
       links: true,
       slug: true,
-      bookmarkedBy: true,
       createdAt: true,
     },
     orderBy: {

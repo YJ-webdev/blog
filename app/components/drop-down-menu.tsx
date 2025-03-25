@@ -9,7 +9,7 @@ import { UserProfile } from './user-profile';
 import Link from 'next/link';
 import {
   List,
-  Bookmark,
+  // Bookmark,
   UserRoundMinus,
   PencilLine,
   House,
@@ -71,12 +71,12 @@ export const DropDownMenu = ({
             <List className="mr-3 h-4 w-4" />내 포스트
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Link href={'/bookmarked'} className="flex items-center">
             <Bookmark className="mr-3 h-4 w-4" />
             북마크
           </Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
 
         <DropdownMenuItem asChild>
           <Link href={'/'} className="flex items-center cursor-pointer">
