@@ -17,23 +17,24 @@ export const ClientPage = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex relative">
-      <button
+      <div
         className={cn(
-          'z-[9999] fixed top-0 h-12 left-0 transition-all ease-in-out hover:text-primary',
+          'z-[9999] fixed top-0 h-14 left-0 transition-all ease-in-out hover:text-primary',
           open ? 'w-[270px] bg-zinc-100 dark:bg-zinc-800' : '',
         )}
-        onClick={() => handleClick()}
       >
-        {open ? (
-          <PanelLeftDashed className="m-5" strokeWidth={1.5} size={26} />
-        ) : (
-          <PanelLeft
-            className="bg-zinc-100 m-5 dark:bg-zinc-800"
-            strokeWidth={1.5}
-            size={26}
-          />
-        )}
-      </button>
+        <button className="fixed top-5 left-5" onClick={() => handleClick()}>
+          {open ? (
+            <PanelLeftDashed className="" strokeWidth={1.5} size={26} />
+          ) : (
+            <PanelLeft
+              className="bg-zinc-100  dark:bg-zinc-800"
+              strokeWidth={1.5}
+              size={26}
+            />
+          )}
+        </button>
+      </div>
       <SideMenu />
       <div
         className={cn(
