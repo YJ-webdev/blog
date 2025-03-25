@@ -13,14 +13,15 @@ export const PostPreviewCard = ({
   return (
     <Link
       href={`/post/${slug}`}
-      className="flex flex-col gap-4 w-full h-[400px] hover:cursor-pointer group relative"
+      className="flex flex-col gap-4 w-full hover:cursor-pointer group relative"
     >
-      <div className="relative h-full w-full">
+      <div className="">
         <Image
-          src={image}
+          src={image || ''}
           alt="Preview"
-          fill
-          className="object-cover transition-all duration-300 group-hover:filter group-hover:brightness-110"
+          height={200}
+          width={700}
+          className="object-cover h-80 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
         />
       </div>
       <div className="flex flex-col text-primary group-hover:text-black dark:group-hover:text-white gap-y-2">

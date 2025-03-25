@@ -24,11 +24,17 @@ export function ModeToggle() {
   };
 
   return (
-    <button onClick={toggleTheme}>
+    <button onClick={toggleTheme} className="m-5">
       {isDarkMode ? (
-        <Sun className="h-[1rem] w-[1rem] transition-all dark:rotate-0 dark:scale-100" />
+        <Sun
+          className="transition-all dark:rotate-0 dark:scale-100"
+          size={20}
+        />
       ) : (
-        <Moon className="h-[1rem] w-[1rem] transition-all dark:rotate-0 dark:scale-100" />
+        <Moon
+          className=" transition-all dark:rotate-0 dark:scale-100"
+          size={20}
+        />
       )}
     </button>
   );

@@ -166,7 +166,7 @@ const LinkPreviews = ({
   };
 
   return (
-    <div className="w-full mx-auto flex flex-col items-center mb-5">
+    <div className="w-full mx-auto flex flex-col items-center mb-5 z-[99999]">
       {isEditable && (
         <div className="flex flex-col w-full mb-5">
           <div className="flex w-full">

@@ -18,7 +18,7 @@ export default async function MyPostsPage() {
   return (
     <div className="flex items-center gap-2 mt-5 mb-16">
       <List size={20} className="" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {posts.map((post) => {
           const processedContent = post.content
             ? extractText(post.content)

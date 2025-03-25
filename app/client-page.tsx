@@ -1,0 +1,51 @@
+'use client';
+
+import React, { useState } from 'react';
+import { SideMenu } from './components/side-menu';
+import { Title } from './components/title';
+import { Toaster } from 'sonner';
+import Footer from './components/footer';
+import { cn } from '@/lib/utils';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+
+export const ClientPage = ({ children }: { children: React.ReactNode }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  return (
+    <div className="flex relative">
+      <button
+        className={cn(
+          'z-[9999] fixed top-0 h-12 left-0 transition-all ease-in-out hover:text-primary',
+          open ? 'w-[270px] bg-zinc-100 dark:bg-zinc-800' : '',
+        )}
+        onClick={() => handleClick()}
+      >
+        {open ? (
+          <PanelLeftClose className="m-5" strokeWidth={1.5} size={26} />
+        ) : (
+          <PanelLeftOpen
+            className="bg-zinc-100 m-5 dark:bg-zinc-800"
+            strokeWidth={1.5}
+            size={26}
+          />
+        )}
+      </button>
+      <SideMenu />
+      <div
+        className={cn(
+          'z-[10] bg-white dark:bg-[#1f1f1f] flex flex-col min-h-screen mx-auto px-[1rem] transition-all ease-in-out duration-300',
+          open ? 'translate-x-[120px]' : 'w-full',
+        )}
+      >
+        <Title />
+        <main className={cn('flex-1 max-w-[1000px] mx-auto')}>{children}</main>
+        <Toaster />
+        <Footer />
+      </div>
+    </div>
+  );
+};
