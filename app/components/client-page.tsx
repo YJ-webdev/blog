@@ -27,11 +27,7 @@ export const ClientPage = ({ children }: { children: React.ReactNode }) => {
           {open ? (
             <PanelLeftDashed className="" strokeWidth={1.5} size={26} />
           ) : (
-            <PanelLeft
-              className="bg-zinc-100  dark:bg-zinc-800"
-              strokeWidth={1.5}
-              size={26}
-            />
+            <PanelLeft className="" strokeWidth={1.5} size={26} />
           )}
         </button>
       </div>
