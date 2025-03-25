@@ -9,6 +9,7 @@ import { getPreview } from '@/app/lib/actions/preview';
 
 import { LinkIcon, Loader2 } from 'lucide-react';
 import { Link } from '@prisma/client';
+import { AffiliateLink } from '@/app/components/affiliate-link';
 
 function getLargestFavicon(favicons: string[]): string {
   if (!favicons.length) return '';
@@ -166,9 +167,9 @@ const LinkPreviews = ({
   };
 
   return (
-    <div className="w-full mx-auto flex flex-col items-center mb-5">
-      {isEditable && (
-        <div className="flex flex-col w-full mb-5">
+    <div className="w-full mx-auto flex flex-col items-center mb-10">
+      {isEditable ? (
+        <div className="flex flex-col w-full">
           <div className="flex w-full">
             <Input
               className="border-none bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l"
@@ -199,10 +200,14 @@ const LinkPreviews = ({
             </Button>
           </div>
 
-          <p className="flex items-center h-2 pt-2 justify-center text-center mt-1 text-xs font-normal">
-            {error && <>{error}</>}
-          </p>
+          {error && (
+            <p className="flex items-center h-2 pt-2 justify-center text-center mt-1 text-xs font-normal">
+              <>{error}</>
+            </p>
+          )}
         </div>
+      ) : (
+        <AffiliateLink />
       )}
 
       <div className="flex flex-col max-w-[750px] gap-y-5">
@@ -222,6 +227,10 @@ const LinkPreviews = ({
               ))}
         </div>
       </div>
+      <p className="text-xs text-center text-muted-foreground mt-4">
+        이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를
+        제공받습니다.
+      </p>
     </div>
   );
 };
