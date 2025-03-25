@@ -87,8 +87,9 @@ export const ImageDropZone = ({
       <div
         className={cn(
           'absolute top-0 left-0 w-full h-full bg-transparent flex items-center justify-center',
-          imageUrl ??
-            'border-2 rounded-lg border-dashed border-primary/50 dark:border-white/25',
+          imageUrl
+            ? ''
+            : 'border-2 rounded-lg border-dashed border-primary/50 dark:border-white/25',
         )}
       >
         {imageUrl ? (

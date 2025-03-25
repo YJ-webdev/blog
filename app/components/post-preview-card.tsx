@@ -21,13 +21,13 @@ export const PostPreviewCard = ({
           alt="Preview"
           height={200}
           width={700}
-          className="object-cover h-80 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
+          className="object-cover h-60 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
         />
       </div>
       <div className="flex flex-col text-primary group-hover:text-black dark:group-hover:text-white gap-y-2">
         <div className="flex justify-between items-start">
           <h3 className="w-full text-lg font-semibold line-clamp-1">{title}</h3>
-          <p className="text-xs text-end min-w-fit">
+          <p className="text-xs font-light text-end min-w-fit">
             {formatDateWithoutYear(createdAt)}
           </p>
         </div>

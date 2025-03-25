@@ -9,7 +9,7 @@ import { UserProfile } from './user-profile';
 import Link from 'next/link';
 import {
   List,
-  // Bookmark,
+  Bookmark,
   UserRoundMinus,
   PencilLine,
   House,
@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { handleSignOut } from '../lib/actions/auth';
 import { Session } from 'next-auth';
-import { cn } from '@/lib/utils';
+
 import { ShortCut } from './short-cut';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -71,29 +71,20 @@ export const DropDownMenu = ({
             <List className="mr-3 h-4 w-4" />내 포스트
           </Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild>
           <Link href={'/bookmarked'} className="flex items-center">
             <Bookmark className="mr-3 h-4 w-4" />
             북마크
           </Link>
-        </DropdownMenuItem> */}
-        <DropdownMenuSeparator className="my-0" />
+        </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link
-            href={'/'}
-            className={cn(
-              'flex items-center cursor-pointer',
-              session && session.user
-                ? 'text-muted-foreground'
-                : 'text-primary',
-            )}
-          >
+          <Link href={'/'} className="flex items-center cursor-pointer">
             <House className="mr-3 h-4 w-4" />
             홈으로 가기
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Link
             href={'/about'}
             className={cn(
@@ -106,7 +97,7 @@ export const DropDownMenu = ({
             <div className="mr-3 h-4 w-4" />
             사이트 소개
           </Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
 
         <DropdownMenuSeparator className="my-0" />
         {session && session.user ? (
