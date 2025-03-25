@@ -23,8 +23,8 @@ export const PostPreviewMain = ({
           />
         </div>{' '}
         <div className="flex flex-col h-80 gap-2 w-1/5 tracking-normal">
-          <p className="text-sm">{content}</p>
-          <p className="w-full text-xs/ text-end">
+          <p className="text-sm/relaxed">{content}</p>
+          <p className="w-full text-xs text-end">
             {formatDateWithoutYear(createdAt)}
           </p>
         </div>
