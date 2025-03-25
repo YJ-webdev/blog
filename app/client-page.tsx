@@ -6,7 +6,7 @@ import { Title } from './components/title';
 import { Toaster } from 'sonner';
 import Footer from './components/footer';
 import { cn } from '@/lib/utils';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { PanelLeft, PanelLeftDashed } from 'lucide-react';
 
 export const ClientPage = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -25,9 +25,9 @@ export const ClientPage = ({ children }: { children: React.ReactNode }) => {
         onClick={() => handleClick()}
       >
         {open ? (
-          <PanelLeftClose className="m-5" strokeWidth={1.5} size={26} />
+          <PanelLeftDashed className="m-5" strokeWidth={1.5} size={26} />
         ) : (
-          <PanelLeftOpen
+          <PanelLeft
             className="bg-zinc-100 m-5 dark:bg-zinc-800"
             strokeWidth={1.5}
             size={26}

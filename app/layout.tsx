@@ -30,7 +30,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {' '}
           <Nav />
           <ClientPage> {children}</ClientPage>
         </ThemeProvider>
