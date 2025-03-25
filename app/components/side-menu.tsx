@@ -59,8 +59,8 @@ export const SideMenu = () => {
           <Input className="border-none" />
           <SearchIcon className="w-5 h-5 z-[9999] absolute top-[10px] right-3 cursor-pointer" />
 
-          <div className="flex flex-col gap-1 w-full">
-            <p className="font-semibold mb-2 text-sm">키워드</p>
+          <div className="flex flex-col gap-2 w-full">
+            <p className="font-semibold mb-2">키워드</p>
             <div className="flex w-full gap-2 flex-wrap">
               {menuItems.map((item) => {
                 return (
@@ -76,7 +76,7 @@ export const SideMenu = () => {
                   >
                     <p
                       className={cn(
-                        'text-xs  hover:text-muted-foreground transition-all duration-100',
+                        'text-sm  hover:text-muted-foreground transition-all duration-100',
                         selectedTag === item.name
                           ? ' text-white dark:text-black font-semibold'
                           : '',
@@ -90,8 +90,8 @@ export const SideMenu = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1 w-full">
-            <p className="font-semibold mb-2 text-sm">떠오르는 기사</p>
+          <div className="flex flex-col gap-2 mt-2 w-full">
+            <p className="font-semibold mb-2">떠오르는 기사</p>
             <div className="flex w-full gap-4 flex-wrap">
               {posts.map((post) => {
                 return (
@@ -105,7 +105,7 @@ export const SideMenu = () => {
                   >
                     <p
                       className={cn(
-                        'line-clamp-1  text-xs  hover:text-muted-foreground transition-all duration-100',
+                        'line-clamp-1  text-sm  hover:text-muted-foreground transition-all duration-100',
                         selectedPost === post
                           ? ' font-semibold'
                           : 'font-normal',
