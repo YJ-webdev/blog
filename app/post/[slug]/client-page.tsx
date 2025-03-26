@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Link } from '@prisma/client';
 import { slugify } from '@/app/lib/utils';
+import { CategorizeTags } from '@/app/components/categorize-tags';
 
 type SelectedPost = {
   id: string;
@@ -142,6 +143,8 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
         initialContent={content}
         onContentChange={setContent}
       />
+
+      <CategorizeTags />
 
       <LinkPreviews
         isEditable={isEditable}

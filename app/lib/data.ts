@@ -16,4 +16,5 @@ export const items = [
   { name: '음악', href: '/tag/음악' },
   { name: '신화', href: '/tag/신화' },
   { name: '미스테리', href: '/tag/미스테리' },
+  { name: '경제', href: '/tag/경제' },
 ];
