@@ -1,6 +1,6 @@
 export const items = [
   { name: '종교', href: `/tag/종교` },
-  { name: '요리', href: '/tag/요리' },
+  { name: '음식', href: '/tag/음식' },
   { name: '다이어트', href: '/tag/다이어트' },
   { name: '운동', href: '/tag/운동' },
   { name: '건강', href: '/tag/건강' },

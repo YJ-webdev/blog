@@ -16,8 +16,11 @@ import { items } from '../lib/data';
 import { PostPreviewType } from '../lib/types';
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { open, setOpen, toggleSidebar } = useSidebar();
 
@@ -43,21 +46,29 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
             </kbd>
           </div>
         </SidebarHeader>
+
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel className="ml-1">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ml-2">
                 {items.map((item) => (
-                  <div
+                  <Link
                     key={item.name}
-                    className="rounded-full bg-muted border p-2 w-fit"
+                    href={item.href}
+                    onClick={() => setSelectedTag(item.name)}
+                    className={cn(
+                      'rounded-full bg-muted border p-2 w-fit hover:bg-primary/10 hover:text-zinc-600 dark:hover:bg-zinc-800',
+                      selectedTag === item.name &&
+                        'bg-black text-white dark:bg-white dark:text-black border-none',
+                    )}
                   >
                     {item.name}
-                  </div>
+                  </Link>
                 ))}
               </div>
             </SidebarGroupContent>
+
             <SidebarGroupLabel className="mt-3 ml-1">
               떠오르는 기사
             </SidebarGroupLabel>
