@@ -26,7 +26,7 @@ export const CategorizeTags = () => {
         <div
           key={item.name}
           className={cn(
-            'w-fit py-2 px-3 rounded-full bg-muted text-sm cursor-pointer',
+            'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-sm cursor-pointer',
             selectedTags.includes(item.name) && 'bg-primary text-white',
           )}
           onClick={() => toggleTag(item.name)}

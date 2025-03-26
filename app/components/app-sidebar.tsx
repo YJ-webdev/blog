@@ -58,7 +58,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
                     href={item.href}
                     onClick={() => setSelectedTag(item.name)}
                     className={cn(
-                      'rounded-full bg-muted border p-2 w-fit hover:bg-primary/10 hover:text-zinc-600 dark:hover:bg-zinc-800',
+                      'rounded-full shadow-sm bg-muted py-2 px-3 w-fit hover:bg-primary/10 hover:text-zinc-600 dark:hover:bg-zinc-800',
                       selectedTag === item.name &&
                         'bg-black text-white dark:bg-white dark:text-black border-none',
                     )}
@@ -69,7 +69,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
               </div>
             </SidebarGroupContent>
 
-            <SidebarGroupLabel className="mt-3 ml-1">
+            <SidebarGroupLabel className="mt-5 ml-1">
               떠오르는 기사
             </SidebarGroupLabel>
             <SidebarGroupContent>
