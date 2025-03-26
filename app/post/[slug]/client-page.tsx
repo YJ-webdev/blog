@@ -153,7 +153,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
       {isEditable && (
         <Button
           type="submit"
-          className="fixed bottom-5 right-5 z-[99999]"
+          className="fixed bottom-5 right-5"
           disabled={!isFormValid || isSubmitting}
           onClick={(event) => event.stopPropagation()}
         >

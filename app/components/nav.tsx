@@ -12,7 +12,7 @@ export default async function Nav() {
       : nameParts[0].charAt(0).toUpperCase();
 
   return (
-    <nav className="fixed right-5 top-5 z-[99999]">
+    <nav className="fixed right-5 top-4 z-20">
       <ResponsiveMenu initials={initials} session={session} />
     </nav>
   );

@@ -185,7 +185,7 @@ const LinkPreviews = ({
               autoFocus={false}
             />
             <Button
-              className="rounded-none rounded-r bg-zinc-100 dark:bg-zinc-800 text-zinc-800 hover:text-zinc-500 hover:bg-zinc-100 dark:text-slate-300 hover:dark:text-slate-100 disabled:opacity-100 disabled:text-zinc-500"
+              className="rounded-none rounded-r bg-zinc-100 dark:bg-zinc-800 text-primary hover:text-zinc-500 hover:bg-zinc-100  hover:dark:text-slate-100 disabled:opacity-100 disabled:text-zinc-500"
               type="button"
               onClick={getData}
               disabled={loading}
