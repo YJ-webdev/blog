@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+// import { Badge } from '@/components/ui/badge';
 
 export const CategorizeTags = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -21,40 +22,47 @@ export const CategorizeTags = () => {
   };
 
   return (
-    <div className="w-full flex flex-wrap gap-2 mt-2 mb-10">
-      {items.map((item) => (
-        <div
-          key={item.name}
-          className={cn(
-            'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-sm cursor-pointer',
-            selectedTags.includes(item.name) && 'bg-primary text-white',
-          )}
-          onClick={() => toggleTag(item.name)}
-        >
-          {item.name}
-        </div>
-      ))}
+    <div className="flex flex-col">
+      {/* <div className="my-2 flex flex-wrap gap-2">
+        <Badge variant="outline">문화생활</Badge>
+        <Badge variant="outline">음식</Badge>
+        <Badge variant="outline">미스</Badge>
+      </div> */}
+      <div className="w-full flex flex-wrap gap-2 mt-2 mb-10">
+        {items.map((item) => (
+          <div
+            key={item.name}
+            className={cn(
+              'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-sm cursor-pointer',
+              selectedTags.includes(item.name) && 'bg-primary text-white',
+            )}
+            onClick={() => toggleTag(item.name)}
+          >
+            {item.name}
+          </div>
+        ))}
 
-      <Popover>
-        <PopoverTrigger>
-          <Plus size={18} strokeWidth={1.5} className="m-2 cursor-pointer" />
-        </PopoverTrigger>
+        <Popover>
+          <PopoverTrigger>
+            <Plus size={18} strokeWidth={1.5} className="m-2 cursor-pointer" />
+          </PopoverTrigger>
 
-        <PopoverContent className="w-60">
-          <div className="grid gap-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                연관된 태그를 입력하세요.
-              </p>
-            </div>
-            <div className="grid gap-2">
-              <div className="flex flex-col items-center gap-4">
-                <Input id="width" className="w-full h-8" />
+          <PopoverContent className="w-60">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  연관된 태그를 입력하세요.
+                </p>
+              </div>
+              <div className="grid gap-2">
+                <div className="flex flex-col items-center gap-4">
+                  <Input id="width" className="w-full h-8" />
+                </div>
               </div>
             </div>
-          </div>
-        </PopoverContent>
-      </Popover>
+          </PopoverContent>
+        </Popover>
+      </div>
     </div>
   );
 };
