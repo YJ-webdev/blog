@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { timeAgo } from '../lib/utils';
 
 export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -40,7 +41,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
           >
             {open ? <PanelLeftDashed /> : null}
           </button>
-          <div className="w-full relative h-12">
+          <div className="w-full relative h-8">
             <kbd className="absolute top-4 right-2 text-end pointer-none inline-flex select-none items-center gap-1 px-1.5 text-xs font-medium text-muted-foreground">
               <span className="rounded border font-mono bg-muted px-1">
                 ctrl
@@ -61,7 +62,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
                     href={item.href}
                     onClick={() => setSelectedTag(item.name)}
                     className={cn(
-                      'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 hover:text-muted-foreground text-sm cursor-pointer active:scale-90  duration-300 ease-out transition-all',
+                      'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all',
                       selectedTag === item.name &&
                         'bg-primary text-white dark:text-black',
                     )}
@@ -76,22 +77,25 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
               떠오르는 기사
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <div className="flex flex-col gap-2 ml-3 mr-2">
-                <ul className="list-none space-y-3">
+              <div className="flex flex-col gap-2 ml-3 mr-1">
+                <ul className="list-none space-y-4">
                   {posts.slice(0, 10).map((post) => (
-                    <li key={post.id}>
-                      <Link href={`/post/${post.slug}`}>
-                        <p className="text-[15px] tracking-tight line-clamp-2 hover:underline">
+                    <li key={post.id} className="h-full w-full">
+                      <Link
+                        href={`/post/${post.slug}`}
+                        className="flex gap-2 items-stretch justify-between"
+                      >
+                        <span className="text-[14px] h-full flex-1 tracking-tight line-clamp-3 hover:underline postlists">
                           {post.title}
+                        </span>
+                        <p className="flex items-end w-fit text-right text-xs text-muted-foreground tracking-tighter">
+                          {timeAgo(post.createdAt)}
                         </p>
                       </Link>
                     </li>
                   ))}
                 </ul>
               </div>
-            </SidebarGroupContent>
-            <SidebarGroupContent>
-              <div className="min-h-10"></div>
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>

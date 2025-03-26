@@ -66,7 +66,7 @@ model Post {
   slug         String?
   image        String?
   content      String?
-  tags         String[]
+  tags         PostTag[]
   links        Link[]
   authorId     String
   author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -105,4 +105,20 @@ model Bookmark {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@id([userId, postId]) // Ensures a user can only bookmark a post once
+}
+
+model Tag {
+  id    Int       @id @default(autoincrement())
+  name  String
+  posts PostTag[]
+}
+
+model PostTag {
+  postId     String
+  tagId      Int
+  assignedAt DateTime @default(now())
+  Post       Post     @relation(fields: [postId], references: [id])
+  Tag        Tag      @relation(fields: [tagId], references: [id])
+
+  @@id([postId, tagId])
 }

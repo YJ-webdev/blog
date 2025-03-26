@@ -25,4 +25,8 @@ export const items = [
   { name: '컴퓨터', href: '/tag/컴퓨터' },
   { name: '프로그래밍', href: '/tag/프로그래밍' },
   { name: '쇼핑', href: '/tag/쇼핑' },
+  { name: '피부', href: '/tag/피부' },
+  { name: '헤어', href: '/tag/헤어' },
+  { name: '메이크업', href: '/tag/메이크업' },
+  { name: '동물', href: '/tag/동물' },
 ];

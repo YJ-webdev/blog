@@ -8,6 +8,43 @@ export const formatDateWithoutYear = (
   return date.toLocaleDateString(locale, { month: 'long', day: 'numeric' });
 };
 
+export function timeAgo(date: Date): string {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} sec${diffInSeconds === 1 ? '' : 's'}  `;
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} min${diffInMinutes === 1 ? '' : 's'}  `;
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return `${diffInHours}h  `;
+  }
+
+  const diffInDays = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  if (diffInDays < 30) {
+    return `${diffInDays} day${diffInDays === 1 ? '' : 's'}  `;
+  }
+
+  const diffInMonths = Math.floor(diffInDays / 30);
+  if (diffInMonths < 12) {
+    return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'}  `;
+  }
+
+  const diffInYears = Math.floor(diffInMonths / 12);
+  return `${diffInYears}y  `;
+}
+
+// Example Usage
+console.log(timeAgo(new Date('2025-03-24T05:32:47.517Z')));
+
 export const extractText = (content: string): string => {
   let contentBlocks: Block[] = [];
 
