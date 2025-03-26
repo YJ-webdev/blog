@@ -172,7 +172,7 @@ const LinkPreviews = ({
         <div className="flex flex-col w-full">
           <div className="flex w-full">
             <Input
-              className="border-none bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-lg"
+              className=" bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-sm"
               value={url}
               onChange={handleUrlChange}
               onKeyDown={(e) => {
@@ -181,11 +181,11 @@ const LinkPreviews = ({
                   getData(); // Call the function manually (optional)
                 }
               }}
-              placeholder="URL을 입력하세요."
+              placeholder="쿠팡 링크는 최소 3분에 한 번 텀을 주고 입력할 수 있습니다."
               autoFocus={false}
             />
             <Button
-              className="rounded-none rounded-r-lg bg-zinc-100 dark:bg-zinc-800 text-primary hover:text-zinc-500 hover:bg-zinc-100  hover:dark:text-slate-100 disabled:opacity-100 disabled:text-zinc-500"
+              className="rounded-none rounded-r-sm bg-zinc-100 dark:bg-zinc-800 text-primary hover:text-zinc-500 hover:bg-zinc-100  hover:dark:text-slate-100 disabled:opacity-100 disabled:text-zinc-500"
               type="button"
               onClick={getData}
               disabled={loading}
