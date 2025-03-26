@@ -177,11 +177,11 @@ const LinkPreviews = ({
               onChange={handleUrlChange}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  e.preventDefault(); // Prevent form submission
-                  getData(); // Call the function manually (optional)
+                  e.preventDefault();
+                  getData();
                 }
               }}
-              placeholder="쿠팡 링크는 최소 3분에 한 번 텀을 주고 입력할 수 있습니다."
+              placeholder="쿠팡 링크는 포스트당 하나만 입력할 수 있습니다."
               autoFocus={false}
             />
             <Button

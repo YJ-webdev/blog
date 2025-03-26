@@ -41,8 +41,11 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
             {open ? <PanelLeftDashed /> : null}
           </button>
           <div className="w-full relative h-12">
-            <kbd className="absolute top-3 right-2 text-end pointer-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground">
-              <span className="">ctrl</span> + b
+            <kbd className="absolute top-4 right-2 text-end pointer-none inline-flex select-none items-center gap-1 px-1.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded border font-mono bg-muted px-1">
+                ctrl
+              </span>{' '}
+              + B
             </kbd>
           </div>
         </SidebarHeader>
@@ -58,9 +61,9 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
                     href={item.href}
                     onClick={() => setSelectedTag(item.name)}
                     className={cn(
-                      'rounded-full shadow-sm bg-muted py-2 px-3 w-fit hover:bg-primary/10 hover:text-zinc-600 dark:hover:bg-zinc-800',
+                      'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 hover:text-muted-foreground text-sm cursor-pointer active:scale-90  duration-300 ease-out transition-all',
                       selectedTag === item.name &&
-                        'bg-black text-white dark:bg-white dark:text-black border-none',
+                        'bg-primary text-white dark:text-black',
                     )}
                   >
                     {item.name}

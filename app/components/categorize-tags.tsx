@@ -42,9 +42,9 @@ export const CategorizeTags = () => {
             <Plus size={18} strokeWidth={1.5} className="m-2 cursor-pointer" />
           </PopoverTrigger>
 
-          <PopoverContent className="rounded-lg w-60 p-5 dark:bg-zinc-100">
+          <PopoverContent className="rounded-lg w-60 px-5 pb-5 dark:bg-zinc-100">
             <div className="grid w-full">
-              <p className="text-xs text-muted-foreground w-full text-center">
+              <p className="text-xs text-zinc-500 w-full text-center">
                 직접 입력하기.
               </p>
 
@@ -55,7 +55,7 @@ export const CategorizeTags = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setValue(e.target.value);
                 }}
-                className="outline-none text-black border-b w-48 mx-auto mt-3 pb-[1px] mb-1 bg-transparent"
+                className="text-[15px] outline-none text-black border-b w-48 mx-auto mt-3 pb-[1px] mb-1 bg-transparent"
               />
             </div>
           </PopoverContent>
