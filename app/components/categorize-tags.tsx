@@ -15,9 +15,14 @@ export const CategorizeTags = () => {
   const [value, setValue] = useState('');
 
   const toggleTag = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
-    );
+    setSelectedTags((prev) => {
+      const updatedTags = prev.includes(tag)
+        ? prev.filter((t) => t !== tag) // Remove if already selected
+        : [...prev, tag]; // Add if not selected
+
+      console.log(updatedTags); // Logs the correct updated state
+      return updatedTags;
+    });
   };
 
   return (
