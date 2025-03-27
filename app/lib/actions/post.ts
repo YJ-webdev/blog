@@ -254,12 +254,11 @@ export async function getTagsByPostId(postId: string) {
   return tags;
 }
 
-export async function createTags(name: string) {
-  const tag = await prisma.tag.create({
-    data: {
-      name,
+export async function getAllTags() {
+  const tags = await prisma.tag.findMany({
+    orderBy: {
+      id: 'asc',
     },
   });
-
-  return tag;
+  return tags;
 }

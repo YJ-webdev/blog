@@ -2,6 +2,7 @@ import { ClientPage } from '@/app/post/[slug]/client-page';
 import { ClientOnly } from '@/app/components/client-only';
 import { getCurrentUser } from '@/app/lib/actions/auth';
 import {
+  getAllTags,
   getLinksbyPostId,
   getPostBySlug,
   getTagsByPostId,
@@ -24,6 +25,8 @@ export default async function SlugPage({
   const links = await getLinksbyPostId(post.id);
   const tags = await getTagsByPostId(post.id);
 
+  const tagsData = await getAllTags();
+
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
       <ClientOnly>
@@ -32,6 +35,7 @@ export default async function SlugPage({
           userId={userId}
           postLinks={links}
           savedTags={tags}
+          tagsData={tagsData}
         />
       </ClientOnly>
     </div>

@@ -16,6 +16,7 @@ interface ClientPageProps {
   userId: string;
   postLinks?: Link[];
   savedTags?: PostTag[];
+  tagsData: Tag[];
 }
 
 export const ClientPage = ({
@@ -23,6 +24,7 @@ export const ClientPage = ({
   userId,
   postLinks,
   savedTags,
+  tagsData,
 }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
@@ -131,14 +133,6 @@ export const ClientPage = ({
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col">
-      {/* <input type="hidden" name="id" value={post.id} />
-      <input type="hidden" name="title" value={title} />
-      <input type="hidden" name="slug" value={slug} />
-      <input type="hidden" name="content" value={content} />
-      <input type="hidden" name="image" value={imageUrl ?? ''} />
-      <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
-      <input type="hidden" name="tags" value={JSON.stringify(tags)} /> */}
-
       {isEditable && post.title === null && (
         <TextareaAutosize
           placeholder="제목"
@@ -175,6 +169,9 @@ export const ClientPage = ({
         setEnteredTags={setEnteredTags}
         enteredTags={enteredTags}
         selectedTags={selectedTags}
+        tagskey={tagsKey}
+        savedTags={savedTags}
+        tagsData={tagsData}
       />
 
       <LinkPreviews
