@@ -41,10 +41,6 @@ export const ClientPage = ({
     localStorage.getItem(slugKey) || post.slug || '',
   );
 
-  // const [tags, setTags] = useState<Tag[]>(
-  //   post.tags || localStorage.getItem(tagsKey) || [],
-  // );
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
@@ -143,7 +139,12 @@ export const ClientPage = ({
         onContentChange={setContent}
       />
 
-      <Tags tagsKey={tagsKey} isEditable={isEditable} tagsData={tagsData} />
+      <Tags
+        tagsKey={tagsKey}
+        isEditable={isEditable}
+        tagsData={tagsData}
+        postTags={post.tags}
+      />
 
       <LinkPreviews
         isEditable={isEditable}

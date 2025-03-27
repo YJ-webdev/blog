@@ -15,6 +15,7 @@ interface TagsProps {
   tagsKey: string;
   isEditable: boolean;
   tagsData: Tag[];
+  postTags?: Tag[];
 }
 
 export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
@@ -57,32 +58,15 @@ export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
     const isExistingTag = tagsData.some((item) => item.name === trimmedValue);
 
     if (!isDuplicate) {
-      // setEnteredTags([...enteredTags, valueInObject]);
       setEnteredTags((prevTags) =>
         prevTags.some((t) => t.name === trimmedValue)
           ? prevTags
           : [...prevTags, valueInObject],
       );
-
-      //   const uniqueTags = [
-      //     ...new Map(
-      //       [...selectedTags, ...enteredTags, valueInObject].map((tag) => [
-      //         tag.name,
-      //         tag,
-      //       ]),
-      //     ).values(),
-      //   ];
-      //   localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
     }
 
     if (isExistingTag) {
       setSelectedTags(selectedTags.filter((tag) => tag.name !== trimmedValue));
-      // setSelectedTags(
-      //   (prevTags) =>
-      //     prevTags.some((t) => t.name === valueInObject.name)
-      //       ? prevTags.filter((t) => t.name !== valueInObject.name) // Remove if exists
-      //       : [...prevTags, valueInObject], // Add if not exists
-      // );
     }
 
     setValue('');
@@ -93,14 +77,12 @@ export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
   };
 
   useEffect(() => {
-    if (selectedTags.length || enteredTags.length) {
-      const uniqueTags = [
-        ...new Map(
-          [...selectedTags, ...enteredTags].map((tag) => [tag.name, tag]),
-        ).values(),
-      ];
-      localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
-    }
+    const uniqueTags = [
+      ...new Map(
+        [...selectedTags, ...enteredTags].map((tag) => [tag.name, tag]),
+      ).values(),
+    ];
+    localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
   }, [selectedTags, enteredTags, tagsKey]);
 
   return (
