@@ -59,7 +59,7 @@ export const CategorizeTags = ({
   const handleAddTag = () => {
     const trimmedValue = value.trim();
 
-    if (trimmedValue.length >= 2) {
+    if (trimmedValue.length >= 1) {
       const isDuplicate = enteredTags.includes(trimmedValue);
       const isExistingTag = tagsData.some((item) => item.name === trimmedValue);
 
@@ -131,7 +131,7 @@ export const CategorizeTags = ({
                 <input
                   type="text"
                   value={value}
-                  minLength={3}
+                  minLength={2}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setValue(e.target.value);
                   }}

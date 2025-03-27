@@ -45,6 +45,7 @@ export const ClientPage = ({
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [enteredTags, setEnteredTags] = useState<string[]>([]);
+
   const [tags, setTags] = useState<Tag[]>(() => {
     const storedTags = localStorage.getItem(tagsKey);
     if (storedTags) {
