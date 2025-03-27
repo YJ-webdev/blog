@@ -149,20 +149,20 @@ export const CategorizeTags = ({
         </div>
       ) : (
         <div className="w-full flex flex-wrap gap-2 mt-2 mb-10">
-          {stringSavedTags.length > 0 ? (
-            stringSavedTags.map((item: string) => (
-              <button
-                type="button"
-                key={item}
-                disabled={!isEditable}
-                className="w-fit py-2 px-3 rounded-full bg-primary text-white dark:text-black text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all"
-              >
-                {item}
-              </button>
-            ))
-          ) : (
-            <p>No tags available</p>
-          )}
+          {tagsData?.map((item, index) => (
+            <button
+              type="button"
+              key={index}
+              disabled={!isEditable}
+              className={cn(
+                'bg-primary text-white dark:text-black w-fit py-2 px-3 rounded-full text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
+                !stringSavedTags.includes(item.id) && 'hidden',
+              )}
+              onClick={() => toggleTag(item.name)}
+            >
+              {item.name}
+            </button>
+          ))}
         </div>
       )}
     </div>
