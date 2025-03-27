@@ -1,3 +1,5 @@
+import { PostTag } from '@prisma/client';
+
 export type PostPreviewType = {
   slug: string | null;
   title: string | null;
@@ -5,7 +7,7 @@ export type PostPreviewType = {
   content: string | null;
   createdAt: Date;
   id?: string;
-  tags?: string[];
+  tags?: PostTag[];
   authorId?: string;
   bookmarkedBy?: boolean;
   myPosts?: boolean;
