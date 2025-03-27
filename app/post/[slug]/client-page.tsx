@@ -32,6 +32,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
   const slugKey = `postSlug_${post.id}`;
+  const tagsKey = `postTags_${post.id}`;
 
   const [title, setTitle] = useState(
     () => localStorage.getItem(titleKey) ?? post.title ?? '',
@@ -44,6 +45,10 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
   const [slug, setSlug] = useState(
     localStorage.getItem(slugKey) || post.slug || '',
   );
+  const [tags, setTags] = useState(
+    () => localStorage.getItem(tagsKey) || post.tags || [],
+  );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
@@ -80,6 +85,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
     formData.append('content', content);
     if (imageUrl) formData.append('image', imageUrl);
     formData.append('links', JSON.stringify(adLinks));
+    formData.append('tags', JSON.stringify(tags));
 
     return formData;
   };
@@ -115,6 +121,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="image" value={imageUrl ?? ''} />
       <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
+      <input type="hidden" name="tags" value={tags} />
 
       {isEditable && post.title === null && (
         <TextareaAutosize
@@ -144,7 +151,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
         onContentChange={setContent}
       />
 
-      <CategorizeTags />
+      <CategorizeTags setTags={setTags} />
 
       <LinkPreviews
         isEditable={isEditable}

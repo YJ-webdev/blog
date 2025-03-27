@@ -12,7 +12,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { items } from '../lib/data';
+import { dummyTags } from '../lib/data';
 import { PostPreviewType } from '../lib/types';
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
@@ -56,10 +56,10 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
             <SidebarGroupLabel className="ml-1">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ml-2">
-                {items.map((item) => (
+                {dummyTags.map((item) => (
                   <Link
                     key={item.name}
-                    href={item.href}
+                    href={`/tag/${item.name}`}
                     onClick={() => setSelectedTag(item.name)}
                     className={cn(
                       'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all',
@@ -85,7 +85,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
                         href={`/post/${post.slug}`}
                         className="flex gap-2 items-stretch justify-between"
                       >
-                        <span className="text-[14px] h-full flex-1 tracking-tight line-clamp-3 hover:underline postlists">
+                        <span className="text-[14px] h-full flex-1 tracking-tight line-clamp-3 postlists hover:underline">
                           {post.title}
                         </span>
                         <p className="flex items-end w-fit text-right text-xs text-muted-foreground tracking-tighter">

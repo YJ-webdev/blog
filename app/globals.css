@@ -177,3 +177,8 @@ body {
   border-left: 1px solid #333; /* Adjust thickness and color */
   padding-left: 10px; /* Space between line and text */
 }
+
+.dark .postlists {
+  border-left: 1px solid #ffffff; /* Adjust thickness and color */
+  padding-left: 10px; /* Space between line and text */
+}

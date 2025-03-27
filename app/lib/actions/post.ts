@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
-import { Link } from '@prisma/client';
+import { Link, Tag } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 // import { createClient } from '@supabase/supabase-js';
@@ -142,6 +142,7 @@ export async function publishPost(formData: FormData): Promise<void> {
   const image = formData.get('image') as string | null;
   const content = formData.get('content') as string;
   const linksString = formData.get('links') as string | null;
+  const tagsString = formData.get('tags') as string | null;
 
   if (!id || !title || !content || !slug) {
     throw new Error('Required fields are missing');
@@ -190,6 +191,20 @@ export async function publishPost(formData: FormData): Promise<void> {
       where: {
         id: { in: oldLinks.map((link) => link.id) },
       },
+    });
+  }
+
+  // create tags
+
+  const tags: Tag[] = tagsString ? JSON.parse(tagsString) : [];
+  if (tags.length > 0) {
+    const tagData = tags.map((tag) => ({
+      postId: id,
+      tagId: tag.id,
+    }));
+
+    await prisma.postTag.createMany({
+      data: tagData,
     });
   }
 
