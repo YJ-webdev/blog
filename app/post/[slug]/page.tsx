@@ -1,7 +1,11 @@
 import { ClientPage } from '@/app/post/[slug]/client-page';
 import { ClientOnly } from '@/app/components/client-only';
 import { getCurrentUser } from '@/app/lib/actions/auth';
-import { getLinksbyPostId, getPostBySlug } from '@/app/lib/actions/post';
+import {
+  getLinksbyPostId,
+  getPostBySlug,
+  getTagsByPostId,
+} from '@/app/lib/actions/post';
 import { redirect } from 'next/navigation';
 
 export default async function SlugPage({
@@ -18,11 +22,17 @@ export default async function SlugPage({
   }
 
   const links = await getLinksbyPostId(post.id);
+  const tags = await getTagsByPostId(post.id);
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
       <ClientOnly>
-        <ClientPage post={post} userId={userId} postLinks={links} />
+        <ClientPage
+          post={post}
+          userId={userId}
+          postLinks={links}
+          savedTags={tags}
+        />
       </ClientOnly>
     </div>
   );

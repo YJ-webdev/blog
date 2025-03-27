@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
-import { Link, Tag } from '@prisma/client';
+import { Link } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 // import { createClient } from '@supabase/supabase-js';
@@ -60,17 +60,6 @@ export const getPostBySlug = async (slug: string) => {
   const decodedSlug = decodeURIComponent(slug);
   const post = await prisma.post.findUnique({
     where: { slug: decodedSlug },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      image: true,
-      authorId: true,
-      tags: true,
-      links: true,
-      published: true,
-      bookmarkedBy: true,
-    },
   });
   return post;
 };
@@ -178,15 +167,13 @@ export async function publishPost(formData: FormData): Promise<void> {
   if (links.length > 0 && post.links.length + links.length > 3) {
     const deductingAmount = post.links.length + links.length - 3;
 
-    // Fetch the oldest links that need to be deleted
     const oldLinks = await prisma.link.findMany({
       where: { postId: id },
       orderBy: { createdAt: 'asc' },
       take: deductingAmount,
-      select: { id: true }, // Only fetch IDs to minimize data transfer
+      select: { id: true },
     });
 
-    // Delete the fetched links
     await prisma.link.deleteMany({
       where: {
         id: { in: oldLinks.map((link) => link.id) },
@@ -195,14 +182,30 @@ export async function publishPost(formData: FormData): Promise<void> {
   }
 
   // create tags
+  const tags = tagsString ? tagsString.split(',').map((tag) => tag.trim()) : [];
+  const uniqueTags = Array.from(new Set(tags));
 
-  const tags: Tag[] = tagsString ? JSON.parse(tagsString) : [];
-  if (tags.length > 0) {
-    const tagData = tags.map((tag) => ({
-      postId: id,
-      tagId: tag.id,
-    }));
+  if (uniqueTags.length > 0) {
+    const tagData = await Promise.all(
+      uniqueTags.map(async (tagName) => {
+        let tag = await prisma.tag.findFirst({
+          where: { name: tagName },
+        });
 
+        if (!tag) {
+          tag = await prisma.tag.create({
+            data: { name: tagName },
+          });
+        }
+
+        return {
+          postId: id,
+          tagId: tag.id,
+        };
+      }),
+    );
+
+    // Create the postTag associations
     await prisma.postTag.createMany({
       data: tagData,
     });
@@ -237,4 +240,13 @@ export async function deletePost(postId: string) {
   return await prisma.post.delete({
     where: { id: postId },
   });
+}
+
+export async function getTagsByPostId(postId: string) {
+  const tags = await prisma.postTag.findMany({
+    where: {
+      postId,
+    },
+  });
+  return tags;
 }

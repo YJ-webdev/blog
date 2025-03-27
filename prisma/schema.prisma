@@ -108,8 +108,9 @@ model Bookmark {
 }
 
 model Tag {
-  id    Int       @id @default(autoincrement())
-  name  String
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
   posts PostTag[]
 }
 

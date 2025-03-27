@@ -7,28 +7,23 @@ import TextareaAutosize from 'react-textarea-autosize';
 import LinkPreviews from './link-previews';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Link } from '@prisma/client';
+import { Link, Post, PostTag, Tag } from '@prisma/client';
 import { slugify } from '@/app/lib/utils';
 import { CategorizeTags } from '@/app/components/categorize-tags';
 
-type SelectedPost = {
-  id: string;
-  title: string | null;
-  slug?: string | null;
-  content: string | null;
-  image: string | null;
-  authorId: string;
-  tags: string[];
-  published: boolean;
-};
-
 interface ClientPageProps {
-  post: SelectedPost;
+  post: Post;
   userId: string;
   postLinks?: Link[];
+  savedTags?: PostTag[];
 }
 
-export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
+export const ClientPage = ({
+  post,
+  userId,
+  postLinks,
+  savedTags,
+}: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
   const slugKey = `postSlug_${post.id}`;
@@ -45,9 +40,14 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
   const [slug, setSlug] = useState(
     localStorage.getItem(slugKey) || post.slug || '',
   );
-  const [tags, setTags] = useState(
-    () => localStorage.getItem(tagsKey) || post.tags || [],
-  );
+  const [tags, setTags] = useState<Tag[]>(() => {
+    const storedTags = localStorage.getItem(tagsKey);
+    if (storedTags) {
+      return JSON.parse(storedTags);
+    }
+
+    return savedTags?.map((tag) => tag.tagId) || [];
+  });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -64,6 +64,12 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
     );
 
   const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
+
+  useEffect(() => {
+    if (tags.length > 0) {
+      localStorage.setItem(tagsKey, JSON.stringify(tags));
+    }
+  }, [tags, tagsKey]); // Store tags in localStorage whenever the tags state changes
 
   useEffect(() => {
     if (!isEditable) return;
@@ -121,7 +127,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="image" value={imageUrl ?? ''} />
       <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
-      <input type="hidden" name="tags" value={tags} />
+      <input type="hidden" name="tags" value={JSON.stringify(tags)} />
 
       {isEditable && post.title === null && (
         <TextareaAutosize
@@ -151,7 +157,7 @@ export const ClientPage = ({ post, userId, postLinks }: ClientPageProps) => {
         onContentChange={setContent}
       />
 
-      <CategorizeTags setTags={setTags} />
+      <CategorizeTags tagsKey={tagsKey} setTags={setTags} />
 
       <LinkPreviews
         isEditable={isEditable}

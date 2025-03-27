@@ -9,12 +9,14 @@ import {
 } from '@/components/ui/popover';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { Tag } from '@prisma/client';
 
 interface CategorizeTagsProps {
-  setTags: (tags: string[]) => void;
+  setTags: (tags: Tag[]) => void;
+  tagsKey: string;
 }
 
-export const CategorizeTags = ({ setTags }: CategorizeTagsProps) => {
+export const CategorizeTags = ({ setTags, tagsKey }: CategorizeTagsProps) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [enteredTags, setEnteredTags] = useState<string[]>([]);
   const [value, setValue] = useState('');
@@ -61,9 +63,13 @@ export const CategorizeTags = ({ setTags }: CategorizeTagsProps) => {
   };
 
   useEffect(() => {
-    const allTags = [...selectedTags, ...enteredTags];
+    // Merge the selected and entered tags
+    const allTags = [...selectedTags, ...enteredTags].map((tag) => String(tag));
+
+    // Update the state and store in localStorage
     setTags(allTags);
-  }, [selectedTags, enteredTags, setTags]);
+    localStorage.setItem(tagsKey, JSON.stringify(allTags));
+  }, [selectedTags, enteredTags]);
 
   return (
     <div className="flex flex-col">
