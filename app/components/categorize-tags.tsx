@@ -153,12 +153,11 @@ export const CategorizeTags = ({
             <button
               type="button"
               key={index}
-              disabled={!isEditable}
               className={cn(
                 'bg-primary text-white dark:text-black w-fit py-2 px-3 rounded-full text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
                 !stringSavedTags.includes(item.id) && 'hidden',
               )}
-              onClick={() => toggleTag(item.name)}
+              onClick={() => {}}
             >
               {item.name}
             </button>
