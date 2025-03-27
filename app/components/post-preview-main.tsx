@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { PostPreviewType } from '../lib/types';
 import Link from 'next/link';
 import { formatDateWithoutYear } from '../lib/utils';
+import { PostPreviewType } from '../lib/types';
 
 export const PostPreviewMain = ({
   slug,

@@ -8,7 +8,8 @@ import Nav from './components/nav';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
 import { cookies } from 'next/headers';
-import { getPosts } from './lib/actions/post';
+import { getTags } from './lib/actions/post';
+import { prisma } from '@/lib/prisma';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -25,7 +26,22 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'false';
 
-  const posts = await getPosts();
+  const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+    },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  const tags = await getTags();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -39,7 +55,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider defaultOpen={defaultOpen}>
-            <AppSidebar posts={posts} />
+            <AppSidebar posts={posts} tags={tags} />
             <main>
               <SidebarTrigger className="bg-transparent hover:bg-transparent w-fit" />
               <Nav />

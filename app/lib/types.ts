@@ -1,13 +1,15 @@
-import { PostTag } from '@prisma/client';
+import { Tag } from '@prisma/client';
 
-export type PostPreviewType = {
+export type SidebarPostType = {
   slug: string | null;
   title: string | null;
+  createdAt: Date;
+};
+
+export type PostPreviewType = SidebarPostType & {
   image: string | null;
   content: string | null;
-  createdAt: Date;
-  id?: string;
-  tags?: PostTag[];
+  tags?: Tag[];
   authorId?: string;
   bookmarkedBy?: boolean;
   myPosts?: boolean;

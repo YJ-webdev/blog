@@ -9,76 +9,99 @@ import {
 } from '@/components/ui/popover';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { PostTag, Tag } from '@prisma/client';
+import { Tag } from '@prisma/client';
 
-interface CategorizeTagsProps {
+interface TagsProps {
   tagsKey: string;
   isEditable: boolean;
-  setTags: (tags: Tag[]) => void;
-  setSelectedTags: (tags: string[]) => void;
-  setEnteredTags: (tags: string[]) => void;
-  enteredTags: string[];
-  selectedTags: string[];
-  savedTags?: PostTag[];
-  tagskey?: string;
   tagsData: Tag[];
 }
 
-export const CategorizeTags = ({
-  isEditable,
-  setTags,
-  setSelectedTags,
-  setEnteredTags,
-  enteredTags,
-  selectedTags,
-  tagsKey,
-  tagsData,
-}: CategorizeTagsProps) => {
+export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
   const [value, setValue] = useState('');
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [enteredTags, setEnteredTags] = useState<Tag[]>([]);
 
   const savedTags = localStorage.getItem(tagsKey);
   const stringSavedTags = savedTags ? JSON.parse(savedTags) : [];
 
-  const toggleTag = (tag: string) => {
-    const isEnteredTag = enteredTags.includes(tag);
+  const toggleTag = (tag: Tag) => {
+    const isEnteredTag = enteredTags.some((t) => t.name === tag.name);
+
+    if (isEnteredTag) {
+      setEnteredTags(enteredTags.filter((t) => t.name !== tag.name));
+
+      setSelectedTags((prevTags) =>
+        prevTags.some((t) => t.name === tag.name)
+          ? prevTags.filter((t) => t.name !== tag.name)
+          : [...prevTags, tag],
+      );
+    }
 
     if (!isEnteredTag) {
-      const updatedTags = selectedTags.includes(tag)
-        ? selectedTags.filter((t) => t !== tag) // Remove if already selected
-        : [...selectedTags, tag]; // Add if not selected
-
-      setSelectedTags(updatedTags); // Pass the updated array directly
+      setSelectedTags((prevTags) =>
+        prevTags.some((t) => t.name === tag.name)
+          ? prevTags.filter((t) => t.name !== tag.name)
+          : [...prevTags, tag],
+      );
     }
-  };
-
-  const removeTag = (tag: string) => {
-    const updatedTags = enteredTags.filter((t) => t !== tag);
-    setEnteredTags(updatedTags); // Pass the updated array directly
   };
 
   const handleAddTag = () => {
     const trimmedValue = value.trim();
+    if (!trimmedValue) return;
 
-    if (trimmedValue.length >= 1) {
-      const isDuplicate = enteredTags.includes(trimmedValue);
-      const isExistingTag = tagsData.some((item) => item.name === trimmedValue);
+    const valueInObject = { id: 1, name: trimmedValue };
 
-      if (!isDuplicate) {
-        setEnteredTags([...enteredTags, trimmedValue]); // Pass the updated array directly
-      }
+    const isDuplicate = enteredTags.some((item) => item.name === trimmedValue);
+    const isExistingTag = tagsData.some((item) => item.name === trimmedValue);
 
-      if (isExistingTag) {
-        setSelectedTags(selectedTags.filter((tag) => tag !== trimmedValue)); // Pass the updated array directly
-      }
+    if (!isDuplicate) {
+      // setEnteredTags([...enteredTags, valueInObject]);
+      setEnteredTags((prevTags) =>
+        prevTags.some((t) => t.name === trimmedValue)
+          ? prevTags
+          : [...prevTags, valueInObject],
+      );
+
+      //   const uniqueTags = [
+      //     ...new Map(
+      //       [...selectedTags, ...enteredTags, valueInObject].map((tag) => [
+      //         tag.name,
+      //         tag,
+      //       ]),
+      //     ).values(),
+      //   ];
+      //   localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
+    }
+
+    if (isExistingTag) {
+      setSelectedTags(selectedTags.filter((tag) => tag.name !== trimmedValue));
+      // setSelectedTags(
+      //   (prevTags) =>
+      //     prevTags.some((t) => t.name === valueInObject.name)
+      //       ? prevTags.filter((t) => t.name !== valueInObject.name) // Remove if exists
+      //       : [...prevTags, valueInObject], // Add if not exists
+      // );
     }
 
     setValue('');
   };
 
+  const removeTag = (tag: Tag) => {
+    setEnteredTags((prevTags) => prevTags.filter((t) => t.name !== tag.name));
+  };
+
   useEffect(() => {
-    const allTags = [...new Set([...selectedTags, ...enteredTags])];
-    setTags(allTags.map((tag) => ({ id: 1, name: tag })));
-  }, [selectedTags, enteredTags]);
+    if (selectedTags.length || enteredTags.length) {
+      const uniqueTags = [
+        ...new Map(
+          [...selectedTags, ...enteredTags].map((tag) => [tag.name, tag]),
+        ).values(),
+      ];
+      localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
+    }
+  }, [selectedTags, enteredTags, tagsKey]);
 
   return (
     <div className="flex flex-col">
@@ -91,25 +114,26 @@ export const CategorizeTags = ({
               disabled={!isEditable}
               className={cn(
                 'w-fit py-2 px-3 rounded-full bg-muted text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
-                selectedTags.includes(item.name) &&
+                selectedTags.some((tag) => tag.name === item.name) &&
                   'bg-primary text-white dark:text-black',
                 stringSavedTags.includes(item.id) &&
                   'bg-primary text-white dark:text-black',
               )}
-              onClick={() => toggleTag(item.name)}
+              onClick={() => toggleTag(item)}
             >
               {item.name}
             </button>
           ))}
+
           {enteredTags.map((enteredTag) => (
             <div
-              key={enteredTag}
+              key={enteredTag.name}
               className={cn(
                 'w-fit py-2 px-3 rounded-full hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all bg-primary text-white dark:text-black',
               )}
               onClick={() => removeTag(enteredTag)}
             >
-              {enteredTag}
+              {enteredTag.name}
             </div>
           ))}
 
@@ -161,6 +185,17 @@ export const CategorizeTags = ({
             >
               {item.name}
             </button>
+          ))}
+          {enteredTags.map((enteredTag) => (
+            <div
+              key={enteredTag.name}
+              className={cn(
+                'w-fit py-2 px-3 rounded-full hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all bg-primary text-white dark:text-black',
+              )}
+              onClick={() => removeTag(enteredTag)}
+            >
+              {enteredTag.name}
+            </div>
           ))}
         </div>
       )}

@@ -7,15 +7,14 @@ import TextareaAutosize from 'react-textarea-autosize';
 import LinkPreviews from './link-previews';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Link, Post, PostTag, Tag } from '@prisma/client';
+import { Link, Post, Tag } from '@prisma/client';
 import { slugify } from '@/app/lib/utils';
-import { CategorizeTags } from '@/app/components/categorize-tags';
+import { Tags } from '@/app/components/tags';
 
 interface ClientPageProps {
-  post: Post;
+  post: Post & { tags: Tag[] };
   userId: string;
   postLinks?: Link[];
-  savedTags?: PostTag[];
   tagsData: Tag[];
 }
 
@@ -23,7 +22,6 @@ export const ClientPage = ({
   post,
   userId,
   postLinks,
-  savedTags,
   tagsData,
 }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
@@ -43,17 +41,9 @@ export const ClientPage = ({
     localStorage.getItem(slugKey) || post.slug || '',
   );
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [enteredTags, setEnteredTags] = useState<string[]>([]);
-
-  const [tags, setTags] = useState<Tag[]>(() => {
-    const storedTags = localStorage.getItem(tagsKey);
-    if (storedTags) {
-      return JSON.parse(storedTags);
-    }
-
-    return savedTags?.map((tag) => tag.tagId) || [];
-  });
+  // const [tags, setTags] = useState<Tag[]>(
+  //   post.tags || localStorage.getItem(tagsKey) || [],
+  // );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -72,12 +62,6 @@ export const ClientPage = ({
   const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
 
   useEffect(() => {
-    if (tags.length > 0) {
-      localStorage.setItem(tagsKey, JSON.stringify(tags));
-    }
-  }, [tags, tagsKey]); // Store tags in localStorage whenever the tags state changes
-
-  useEffect(() => {
     if (!isEditable) return;
 
     setSlug(slugify(title));
@@ -91,14 +75,11 @@ export const ClientPage = ({
 
   const gatherFormData = () => {
     const formData = new FormData();
+    const savedTags = localStorage.getItem(tagsKey);
 
-    const formattedTags = [...selectedTags, ...enteredTags].map(
-      (tag, index) => ({
-        id: index + 1, // Temporary ID (Replace with actual logic if needed)
-        name: tag,
-      }),
-    );
-    formData.append('tags', JSON.stringify(formattedTags));
+    if (savedTags) {
+      formData.append('tags', savedTags); // Send as a string
+    }
     formData.append('id', post.id);
     formData.append('title', title);
     formData.append('slug', slug);
@@ -162,18 +143,7 @@ export const ClientPage = ({
         onContentChange={setContent}
       />
 
-      <CategorizeTags
-        tagsKey={tagsKey}
-        isEditable={isEditable}
-        setTags={setTags}
-        setSelectedTags={setSelectedTags}
-        setEnteredTags={setEnteredTags}
-        enteredTags={enteredTags}
-        selectedTags={selectedTags}
-        tagskey={tagsKey}
-        savedTags={savedTags}
-        tagsData={tagsData}
-      />
+      <Tags tagsKey={tagsKey} isEditable={isEditable} tagsData={tagsData} />
 
       <LinkPreviews
         isEditable={isEditable}

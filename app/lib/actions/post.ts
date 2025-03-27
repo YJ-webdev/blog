@@ -30,19 +30,6 @@ export async function getPosts() {
     where: {
       published: true,
     },
-    select: {
-      id: true,
-      slug: true,
-      title: true,
-      content: true,
-      image: true,
-      authorId: true,
-      tags: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
   });
   return posts;
 }
@@ -60,6 +47,9 @@ export const getPostBySlug = async (slug: string) => {
   const decodedSlug = decodeURIComponent(slug);
   const post = await prisma.post.findUnique({
     where: { slug: decodedSlug },
+    include: {
+      tags: true,
+    },
   });
   return post;
 };
@@ -131,7 +121,6 @@ export async function publishPost(formData: FormData): Promise<void> {
   const image = formData.get('image') as string | null;
   const content = formData.get('content') as string;
   const linksString = formData.get('links') as string | null;
-  const tagsString = formData.get('tags') as string | null;
 
   if (!id || !title || !content || !slug) {
     throw new Error('Required fields are missing');
@@ -182,37 +171,6 @@ export async function publishPost(formData: FormData): Promise<void> {
   }
 
   // create tags
-  const tags: { id?: number; name: string }[] = tagsString
-    ? JSON.parse(tagsString)
-    : [];
-
-  const uniqueTags = Array.from(new Set(tags.map((tag) => tag.name.trim())));
-
-  if (uniqueTags.length > 0) {
-    const tagData = await Promise.all(
-      uniqueTags.map(async (tagName) => {
-        let tag = await prisma.tag.findFirst({
-          where: { name: tagName },
-        });
-
-        if (!tag) {
-          tag = await prisma.tag.create({
-            data: { name: tagName },
-          });
-        }
-
-        return {
-          postId: id,
-          tagId: tag.id,
-        };
-      }),
-    );
-
-    // Create the postTag associations
-    await prisma.postTag.createMany({
-      data: tagData,
-    });
-  }
 
   await prisma.post.update({
     where: { id },
@@ -245,20 +203,7 @@ export async function deletePost(postId: string) {
   });
 }
 
-export async function getTagsByPostId(postId: string) {
-  const tags = await prisma.postTag.findMany({
-    where: {
-      postId,
-    },
-  });
-  return tags;
-}
-
-export async function getAllTags() {
-  const tags = await prisma.tag.findMany({
-    orderBy: {
-      id: 'asc',
-    },
-  });
+export async function getTags() {
+  const tags = await prisma.tag.findMany();
   return tags;
 }

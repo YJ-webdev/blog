@@ -1,13 +1,9 @@
 import { ClientPage } from '@/app/post/[slug]/client-page';
 import { ClientOnly } from '@/app/components/client-only';
 import { getCurrentUser } from '@/app/lib/actions/auth';
-import {
-  getAllTags,
-  getLinksbyPostId,
-  getPostBySlug,
-  getTagsByPostId,
-} from '@/app/lib/actions/post';
+import { getLinksbyPostId, getPostBySlug } from '@/app/lib/actions/post';
 import { redirect } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
 
 export default async function SlugPage({
   params,
@@ -17,15 +13,18 @@ export default async function SlugPage({
   const { slug } = await params;
   const userId = (await getCurrentUser()) ?? '';
   const post = await getPostBySlug(slug);
+  const data = await prisma.tag.findMany({
+    take: 12,
+    orderBy: {
+      id: 'asc',
+    },
+  });
 
   if (post === null || (post.authorId !== userId && post.published === false)) {
     return redirect('/not-found');
   }
 
   const links = await getLinksbyPostId(post.id);
-  const tags = await getTagsByPostId(post.id);
-
-  const tagsData = await getAllTags();
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
@@ -34,8 +33,7 @@ export default async function SlugPage({
           post={post}
           userId={userId}
           postLinks={links}
-          savedTags={tags}
-          tagsData={tagsData}
+          tagsData={data}
         />
       </ClientOnly>
     </div>

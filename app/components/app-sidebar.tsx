@@ -12,15 +12,21 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { dummyTags } from '../lib/data';
-import { PostPreviewType } from '../lib/types';
+
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { timeAgo } from '../lib/utils';
+import { Tag } from '@prisma/client';
+import { SidebarPostType } from '../lib/types';
 
-export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
+interface AppSidebarProps {
+  posts: SidebarPostType[];
+  tags: Tag[];
+}
+
+export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { open, setOpen, toggleSidebar } = useSidebar();
@@ -56,7 +62,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
             <SidebarGroupLabel className="ml-1">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ml-2">
-                {dummyTags.map((item) => (
+                {tags.map((item) => (
                   <Link
                     key={item.name}
                     href={`/tag/${item.name}`}
@@ -80,7 +86,7 @@ export function AppSidebar({ posts }: { posts: PostPreviewType[] }) {
               <div className="flex flex-col gap-2 ml-3 mr-1">
                 <ul className="list-none space-y-4">
                   {posts.slice(0, 10).map((post) => (
-                    <li key={post.id} className="h-full w-full">
+                    <li key={post.slug} className="h-full w-full">
                       <Link
                         href={`/post/${post.slug}`}
                         className="flex gap-2 items-stretch justify-between"

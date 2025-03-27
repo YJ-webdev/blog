@@ -1,11 +1,25 @@
 import { PostPreviewMain } from './components/post-preview-main';
-
-import { getPosts } from './lib/actions/post';
 import PostPreviewCard from './components/post-preview-card';
 import { extractText } from './lib/utils';
+import { prisma } from '@/lib/prisma';
 
 export default async function Home() {
-  const posts = await getPosts();
+  const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+    },
+    select: {
+      slug: true,
+      title: true,
+      content: true,
+      image: true,
+      tags: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
 
   if (!posts || posts.length === 0) return null;
 
