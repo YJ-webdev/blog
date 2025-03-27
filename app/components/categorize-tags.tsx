@@ -12,34 +12,40 @@ import { cn } from '@/lib/utils';
 import { Tag } from '@prisma/client';
 
 interface CategorizeTagsProps {
-  setTags: (tags: Tag[]) => void;
   tagsKey: string;
+  isEditable: boolean;
+  setTags: (tags: Tag[]) => void;
+  setSelectedTags: (tags: string[]) => void;
+  setEnteredTags: (tags: string[]) => void;
+  enteredTags: string[];
+  selectedTags: string[];
 }
 
-export const CategorizeTags = ({ setTags, tagsKey }: CategorizeTagsProps) => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [enteredTags, setEnteredTags] = useState<string[]>([]);
+export const CategorizeTags = ({
+  isEditable,
+  setTags,
+  setSelectedTags,
+  setEnteredTags,
+  enteredTags,
+  selectedTags,
+}: CategorizeTagsProps) => {
   const [value, setValue] = useState('');
 
   const toggleTag = (tag: string) => {
     const isEnteredTag = enteredTags.includes(tag);
 
     if (!isEnteredTag) {
-      setSelectedTags((prev) => {
-        const updatedTags = prev.includes(tag)
-          ? prev.filter((t) => t !== tag) // Remove if already selected
-          : [...prev, tag]; // Add if not selected
+      const updatedTags = selectedTags.includes(tag)
+        ? selectedTags.filter((t) => t !== tag) // Remove if already selected
+        : [...selectedTags, tag]; // Add if not selected
 
-        return updatedTags;
-      });
+      setSelectedTags(updatedTags); // Pass the updated array directly
     }
   };
 
   const removeTag = (tag: string) => {
-    setEnteredTags((prev) => {
-      const updatedTags = prev.filter((t) => t !== tag);
-      return updatedTags;
-    });
+    const updatedTags = enteredTags.filter((t) => t !== tag);
+    setEnteredTags(updatedTags); // Pass the updated array directly
   };
 
   const handleAddTag = () => {
@@ -52,10 +58,11 @@ export const CategorizeTags = ({ setTags, tagsKey }: CategorizeTagsProps) => {
       );
 
       if (!isDuplicate) {
-        setEnteredTags((prev) => [...prev, trimmedValue]);
+        setEnteredTags([...enteredTags, trimmedValue]); // Pass the updated array directly
       }
+
       if (isExistingTag) {
-        setSelectedTags((prev) => prev.filter((tag) => tag !== trimmedValue));
+        setSelectedTags(selectedTags.filter((tag) => tag !== trimmedValue)); // Pass the updated array directly
       }
     }
 
@@ -63,29 +70,27 @@ export const CategorizeTags = ({ setTags, tagsKey }: CategorizeTagsProps) => {
   };
 
   useEffect(() => {
-    // Merge the selected and entered tags
-    const allTags = [...selectedTags, ...enteredTags].map((tag) => String(tag));
-
-    // Update the state and store in localStorage
-    setTags(allTags);
-    localStorage.setItem(tagsKey, JSON.stringify(allTags));
+    const allTags = [...new Set([...selectedTags, ...enteredTags])];
+    setTags(allTags.map((tag) => ({ id: 1, name: tag })));
   }, [selectedTags, enteredTags]);
 
   return (
     <div className="flex flex-col">
       <div className="w-full flex flex-wrap gap-2 mt-2 mb-10">
         {dummyTags.map((item, index) => (
-          <div
+          <button
+            type="button"
             key={index}
+            disabled={!isEditable}
             className={cn(
-              'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all',
+              'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-[14px] active:scale-90  duration-300 ease-out transition-all',
               selectedTags.includes(item.name) &&
                 'bg-primary text-white dark:text-black',
             )}
             onClick={() => toggleTag(item.name)}
           >
             {item.name}
-          </div>
+          </button>
         ))}
 
         {enteredTags.map((enteredTag) => (

@@ -182,8 +182,11 @@ export async function publishPost(formData: FormData): Promise<void> {
   }
 
   // create tags
-  const tags = tagsString ? tagsString.split(',').map((tag) => tag.trim()) : [];
-  const uniqueTags = Array.from(new Set(tags));
+  const tags: { id?: number; name: string }[] = tagsString
+    ? JSON.parse(tagsString)
+    : [];
+
+  const uniqueTags = Array.from(new Set(tags.map((tag) => tag.name.trim())));
 
   if (uniqueTags.length > 0) {
     const tagData = await Promise.all(
@@ -249,4 +252,14 @@ export async function getTagsByPostId(postId: string) {
     },
   });
   return tags;
+}
+
+export async function createTags(name: string) {
+  const tag = await prisma.tag.create({
+    data: {
+      name,
+    },
+  });
+
+  return tag;
 }

@@ -40,6 +40,9 @@ export const ClientPage = ({
   const [slug, setSlug] = useState(
     localStorage.getItem(slugKey) || post.slug || '',
   );
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [enteredTags, setEnteredTags] = useState<string[]>([]);
   const [tags, setTags] = useState<Tag[]>(() => {
     const storedTags = localStorage.getItem(tagsKey);
     if (storedTags) {
@@ -85,13 +88,20 @@ export const ClientPage = ({
 
   const gatherFormData = () => {
     const formData = new FormData();
+
+    const formattedTags = [...selectedTags, ...enteredTags].map(
+      (tag, index) => ({
+        id: index + 1, // Temporary ID (Replace with actual logic if needed)
+        name: tag,
+      }),
+    );
+    formData.append('tags', JSON.stringify(formattedTags));
     formData.append('id', post.id);
     formData.append('title', title);
     formData.append('slug', slug);
     formData.append('content', content);
     if (imageUrl) formData.append('image', imageUrl);
     formData.append('links', JSON.stringify(adLinks));
-    formData.append('tags', JSON.stringify(tags));
 
     return formData;
   };
@@ -121,13 +131,13 @@ export const ClientPage = ({
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col">
-      <input type="hidden" name="id" value={post.id} />
+      {/* <input type="hidden" name="id" value={post.id} />
       <input type="hidden" name="title" value={title} />
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="image" value={imageUrl ?? ''} />
       <input type="hidden" name="links" value={JSON.stringify(adLinks)} />
-      <input type="hidden" name="tags" value={JSON.stringify(tags)} />
+      <input type="hidden" name="tags" value={JSON.stringify(tags)} /> */}
 
       {isEditable && post.title === null && (
         <TextareaAutosize
@@ -157,7 +167,15 @@ export const ClientPage = ({
         onContentChange={setContent}
       />
 
-      <CategorizeTags tagsKey={tagsKey} setTags={setTags} />
+      <CategorizeTags
+        tagsKey={tagsKey}
+        isEditable={isEditable}
+        setTags={setTags}
+        setSelectedTags={setSelectedTags}
+        setEnteredTags={setEnteredTags}
+        enteredTags={enteredTags}
+        selectedTags={selectedTags}
+      />
 
       <LinkPreviews
         isEditable={isEditable}
