@@ -81,12 +81,13 @@ export const getPostByUserId = async (userId: string) => {
 export const getPostsByTag = async (tag: string): Promise<Post[]> => {
   try {
     console.log('Searching for posts with tag:', tag); // Debugging the tag
+    const decodedTag = decodeURIComponent(tag);
 
     const posts = await prisma.post.findMany({
       where: {
         tags: {
           some: {
-            name: tag,
+            name: decodedTag,
           },
         },
         published: true,

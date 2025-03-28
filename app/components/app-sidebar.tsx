@@ -83,6 +83,8 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                     <li key={post.slug} className="h-full w-full">
                       <Link
                         href={`/post/${post.slug}`}
+                        // href={`/tag/${encodeURIComponent(item.name)}`}
+
                         className="flex gap-2 items-stretch justify-between"
                       >
                         <span className="text-[14px] h-full flex-1 tracking-tight line-clamp-3 postlists hover:underline">

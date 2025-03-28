@@ -10,25 +10,13 @@ export default async function TagPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
+
   const posts = await getPostsByTag(tag);
 
   if (!posts || posts.length === 0) return <p>no posts yet</p>;
 
-  // const [mainPost, ...otherPosts] = posts;
-
-  // const processedFirstPostContent = posts[0].content
-  //   ? extractText(posts[0].content)
-  //   : '';
-
   return (
     <div className="flex flex-col gap-7 mt-5 w-full">
-      {/* <PostPreviewMain
-        slug={mainPost.slug ?? ''}
-        title={mainPost.title!}
-        content={processedFirstPostContent}
-        image={mainPost.image!}
-        createdAt={mainPost.createdAt!}
-      /> */}
       <div className="grid grid-cols-1 mt-3 gap-10 sm:grid-cols-2 mb-20">
         {posts.map((post: PostPreviewType) => {
           const processedContent = post.content
