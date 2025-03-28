@@ -31,7 +31,6 @@ export default async function MyPostsPage() {
               content={processedContent}
               image={post.image!}
               createdAt={post.createdAt}
-              myPosts={true}
             />
           );
         })}
