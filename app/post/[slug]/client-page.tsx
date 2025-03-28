@@ -134,7 +134,7 @@ export const ClientPage = ({
               prevPost.id === post.id && 'hidden',
             )}
           >
-            <ArrowLeft strokeWidth={1.25} className="md:size-14 sm:size-10" />
+            <ArrowLeft strokeWidth={1} className="md:size-14 sm:size-10" />
           </button>
         </Link>
       )}
@@ -147,7 +147,7 @@ export const ClientPage = ({
               nextPost.published == false || (nextPost === post && 'hidden'),
             )}
           >
-            <ArrowRight strokeWidth={1.25} className="md:size-14 sm:size-10" />
+            <ArrowRight strokeWidth={1} className="md:size-14 sm:size-10" />
           </button>
         </Link>
       )}

@@ -36,7 +36,7 @@ export default async function RootLayout({
       createdAt: true,
     },
     orderBy: {
-      createdAt: 'asc',
+      createdAt: 'desc',
     },
   });
 

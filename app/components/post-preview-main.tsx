@@ -14,10 +14,10 @@ export const PostPreviewMain = ({
     <>
       <Link
         href={`/post/${slug}`}
-        className="hidden sm:grid grid-cols-1 gap-4 w-full p-4 group"
+        className="hidden sm:grid grid-cols-1 gap-4 w-full p-5 group"
       >
-        <div className="flex gap-6">
-          <div className="flex flex-col h-80 gap-2 flex-1">
+        <div className="flex gap-5">
+          <div className="flex flex-col h-80 gap-5 flex-1">
             <Image
               src={image || ''}
               alt={title || 'image-broken'}

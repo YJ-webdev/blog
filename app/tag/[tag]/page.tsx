@@ -16,8 +16,8 @@ export default async function TagPage({
   if (!posts || posts.length === 0) return <p>no posts yet</p>;
 
   return (
-    <div className="flex flex-col gap-7 mt-5 w-full">
-      <div className="grid grid-cols-1 mt-3 gap-10 sm:grid-cols-2 mb-20">
+    <div className="flex flex-col gap-7 w-full">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 mb-20">
         {posts.map((post: PostPreviewType) => {
           const processedContent = post.content
             ? extractText(post.content)
