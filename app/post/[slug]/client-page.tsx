@@ -41,6 +41,12 @@ export const ClientPage = ({
     localStorage.getItem(slugKey) || post.slug || '',
   );
 
+  const [tags, setTags] = useState<Tag[]>(() => {
+    const storedTags = localStorage.getItem(tagsKey);
+    const parsedTags = storedTags ? JSON.parse(storedTags) : post.tags || [];
+
+    return parsedTags;
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
@@ -74,7 +80,7 @@ export const ClientPage = ({
     const savedTags = localStorage.getItem(tagsKey);
 
     if (savedTags) {
-      formData.append('tags', savedTags); // Send as a string
+      formData.append('tags', savedTags);
     }
     formData.append('id', post.id);
     formData.append('title', title);
@@ -143,7 +149,8 @@ export const ClientPage = ({
         tagsKey={tagsKey}
         isEditable={isEditable}
         tagsData={tagsData}
-        postTags={post.tags}
+        tags={tags}
+        setTags={setTags}
       />
 
       <LinkPreviews

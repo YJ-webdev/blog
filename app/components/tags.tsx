@@ -15,12 +15,19 @@ interface TagsProps {
   tagsKey: string;
   isEditable: boolean;
   tagsData: Tag[];
-  postTags?: Tag[];
+  tags: Tag[];
+  setTags: React.Dispatch<React.SetStateAction<Tag[]>>;
 }
 
-export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
+export const Tags = ({
+  isEditable,
+  tagsKey,
+  tagsData,
+  tags,
+  // setTags,
+}: TagsProps) => {
   const [value, setValue] = useState('');
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(tags || []);
   const [enteredTags, setEnteredTags] = useState<Tag[]>([]);
 
   const savedTags = localStorage.getItem(tagsKey);
@@ -85,15 +92,34 @@ export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
     localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
   }, [selectedTags, enteredTags, tagsKey]);
 
+  const tagsnames = tags.map((tag) => tag.name);
+  const filteredTags = tagsData.filter((tag) => !tagsnames.includes(tag.name));
+
   return (
     <div className="flex flex-col">
       {isEditable ? (
-        <div className="w-full flex flex-wrap gap-2 mt-2 mb-10">
-          {tagsData?.map((item, index) => (
+        <div className="w-full flex flex-wrap gap-2 mt-2 mb-12">
+          {tags?.map((item) => (
             <button
               type="button"
-              key={index}
-              disabled={!isEditable}
+              key={item.name}
+              className={cn(
+                'w-fit py-2 px-3 rounded-full bg-muted text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
+                selectedTags.some((tag) => tag.name === item.name) &&
+                  'bg-primary text-white dark:text-black',
+                stringSavedTags.includes(item.id) &&
+                  'bg-primary text-white dark:text-black',
+              )}
+              onClick={() => toggleTag(item)}
+            >
+              {item.name}
+            </button>
+          ))}
+
+          {filteredTags?.map((item) => (
+            <button
+              type="button"
+              key={item.name}
               className={cn(
                 'w-fit py-2 px-3 rounded-full bg-muted text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
                 selectedTags.some((tag) => tag.name === item.name) &&
@@ -154,30 +180,18 @@ export const Tags = ({ isEditable, tagsKey, tagsData }: TagsProps) => {
           </Popover>
         </div>
       ) : (
-        <div className="w-full flex flex-wrap gap-2 mt-2 mb-10">
-          {tagsData?.map((item, index) => (
+        <div className="w-full flex flex-wrap gap-2 mt-2 mb-12">
+          {tags.map((item, index) => (
             <button
               type="button"
               key={index}
               className={cn(
                 'bg-primary text-white dark:text-black w-fit py-2 px-3 rounded-full text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
-                !stringSavedTags.includes(item.id) && 'hidden',
               )}
               onClick={() => {}}
             >
               {item.name}
             </button>
-          ))}
-          {enteredTags.map((enteredTag) => (
-            <div
-              key={enteredTag.name}
-              className={cn(
-                'w-fit py-2 px-3 rounded-full hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all bg-primary text-white dark:text-black',
-              )}
-              onClick={() => removeTag(enteredTag)}
-            >
-              {enteredTag.name}
-            </div>
           ))}
         </div>
       )}

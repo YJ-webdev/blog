@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
-import { Link } from '@prisma/client';
+import { Link, Tag } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 // import { createClient } from '@supabase/supabase-js';
@@ -121,6 +121,7 @@ export async function publishPost(formData: FormData): Promise<void> {
   const image = formData.get('image') as string | null;
   const content = formData.get('content') as string;
   const linksString = formData.get('links') as string | null;
+  const tagsString = formData.get('tags') as string | null;
 
   if (!id || !title || !content || !slug) {
     throw new Error('Required fields are missing');
@@ -170,7 +171,21 @@ export async function publishPost(formData: FormData): Promise<void> {
     });
   }
 
-  // create tags
+  let tags: { name: string }[] = [];
+
+  if (tagsString) {
+    try {
+      tags = JSON.parse(tagsString).map((tag: Tag) => ({ name: tag.name }));
+    } catch (error) {
+      console.error('Invalid tags JSON format:', error);
+      throw new Error('Invalid tags format');
+    }
+  }
+
+  const tagData = tags.map((tag) => ({
+    where: { name: tag.name },
+    create: { name: tag.name },
+  }));
 
   await prisma.post.update({
     where: { id },
@@ -179,6 +194,10 @@ export async function publishPost(formData: FormData): Promise<void> {
       slug,
       image: image ?? undefined,
       content,
+      tags: {
+        set: [],
+        connectOrCreate: tagData,
+      },
       published: true,
     },
   });

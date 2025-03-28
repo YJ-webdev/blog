@@ -14,7 +14,7 @@ export default async function SlugPage({
   const userId = (await getCurrentUser()) ?? '';
   const post = await getPostBySlug(slug);
   const data = await prisma.tag.findMany({
-    take: 12,
+    take: 18,
     orderBy: {
       id: 'asc',
     },
