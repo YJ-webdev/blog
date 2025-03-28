@@ -1,9 +1,9 @@
-import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostByUserId } from '@/app/lib/actions/post';
 import { extractText } from '@/app/lib/utils';
 import { auth } from '@/auth';
 import { List } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import PreviewCard from './preview-card';
 
 export default async function MyPostsPage() {
   const session = await auth();
@@ -24,7 +24,7 @@ export default async function MyPostsPage() {
             ? extractText(post.content)
             : '';
           return (
-            <PostPreviewCard
+            <PreviewCard
               key={post.slug}
               slug={post.slug!}
               title={post.title!}

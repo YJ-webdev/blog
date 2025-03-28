@@ -21,7 +21,7 @@ import { PostPreviewType } from '@/app/lib/types';
 import { deletePost } from '@/app/lib/actions/post';
 import { formatDateWithoutYear } from '@/app/lib/utils';
 
-export const PostPreviewCard = ({
+export const PreviewCard = ({
   slug,
   title,
   image,
@@ -64,14 +64,14 @@ export const PostPreviewCard = ({
 
         {myPosts && (
           <div className="absolute inset-0 hidden group-hover:flex items-center justify-center bg-white/30 dark:bg-[#1f1f1f]/50 rounded-lg">
-            <div className="flex gap-5">
-              <div className="rounded-full bg-white dark:bg-[#1f1f1f]">
+            <div className="flex gap-10">
+              <div className="rounded-full bg-white dark:bg-[#1f1f1f] hover:bg-muted shadow-lg hover:dark:bg-muted-foreground">
                 <SquarePen className="p-4" size={56} />
               </div>
 
               <AlertDialog>
                 <AlertDialogTrigger>
-                  <div className="rounded-full bg-white dark:bg-[#1f1f1f]">
+                  <div className="rounded-full bg-white dark:bg-[#1f1f1f] hover:bg-muted shadow-lg hover:dark:bg-muted-foreground">
                     <Trash className="p-4" size={56} />
                   </div>
                 </AlertDialogTrigger>
@@ -101,4 +101,4 @@ export const PostPreviewCard = ({
   );
 };
 
-export default PostPreviewCard;
+export default PreviewCard;
