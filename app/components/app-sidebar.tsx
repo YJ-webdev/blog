@@ -14,8 +14,8 @@ import {
 
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
-import { useState } from 'react';
-import { timeAgo } from '../lib/utils';
+import { useEffect, useState } from 'react';
+
 import { Tag } from '@prisma/client';
 import { SidebarPostType } from '../lib/types';
 import { TagLink } from './tag-button';
@@ -31,6 +31,51 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { open, setOpen, toggleSidebar } = useSidebar();
+  const [timeAgoValues, setTimeAgoValues] = useState<string[]>([]);
+
+  const timeAgo = (date: Date): string => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds} sec${diffInSeconds === 1 ? '' : 's'}`;
+    }
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} min${diffInMinutes === 1 ? '' : 's'}`;
+    }
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+      return `${diffInHours}h`;
+    }
+
+    const diffInDays = Math.floor(diffInSeconds / (60 * 60 * 24));
+
+    if (diffInDays === 1) {
+      return 'Yesterday';
+    }
+
+    if (diffInDays < 30) {
+      return `${diffInDays} day${diffInDays === 1 ? '' : 's'}`;
+    }
+
+    const diffInMonths = Math.floor(diffInDays / 30);
+    if (diffInMonths < 12) {
+      return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'}`;
+    }
+
+    const diffInYears = Math.floor(diffInMonths / 12);
+    return `${diffInYears}y`;
+  };
+
+  useEffect(() => {
+    const newTimeAgoValues = posts.map((post) =>
+      timeAgo(new Date(post.createdAt)),
+    );
+    setTimeAgoValues(newTimeAgoValues);
+  }, [posts]);
 
   return (
     <>
@@ -87,7 +132,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             <SidebarGroupContent>
               <div className="flex flex-col gap-2 ">
                 <ul className="list-none space-y-4">
-                  {posts.slice(0, 10).map((post) => (
+                  {posts.slice(0, 10).map((post, index) => (
                     <li key={post.slug} className="h-full w-full">
                       <Link
                         href={`/post/${post.slug}`}
@@ -99,7 +144,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                           {post.title}
                         </span>
                         <p className="flex items-end w-fit text-right text-xs text-muted-foreground tracking-tighter">
-                          {timeAgo(post.createdAt)}
+                          {timeAgoValues[index]}
                         </p>
                       </Link>
                     </li>
