@@ -14,6 +14,7 @@ import { Tags } from '@/app/components/tags';
 
 import { PrevPostType } from '@/app/lib/types';
 import { PrevNext } from './prev-next';
+import { useRouter } from 'next/navigation';
 
 interface ClientPageProps {
   post: Post & { tags: Tag[] };
@@ -32,6 +33,8 @@ export const ClientPage = ({
   prevPost,
   nextPost,
 }: ClientPageProps) => {
+  const router = useRouter();
+
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
   const slugKey = `postSlug_${post.id}`;
@@ -110,12 +113,18 @@ export const ClientPage = ({
     try {
       setIsSubmitting(true);
       const formData = gatherFormData();
-      await fetch('/api/post', {
+      const response = await fetch('/api/post', {
         method: 'POST',
         body: formData,
       });
 
-      toast.success('Post published successfully! 🎉');
+      if (response.ok) {
+        toast.success('Post published successfully! 🎉');
+
+        router.push('/');
+      } else {
+        toast.error('Failed to publish post. Please try again.');
+      }
     } catch {
       toast.error('Failed to publish post. Please try again.');
     } finally {

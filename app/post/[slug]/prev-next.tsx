@@ -56,7 +56,7 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
           </HoverCardContent>
         </HoverCard>
       )}
-      {nextPost.published && (
+      {nextPost.slug !== post.slug && (
         <HoverCard>
           <HoverCardTrigger asChild className="fixed bottom-20 right-0 ">
             <Link href={`/post/${nextPost.slug}`}>

@@ -19,6 +19,8 @@ import {
 import { PostPreviewType } from '@/app/lib/types';
 import { deletePost } from '@/app/lib/actions/post';
 import { formatDateWithoutYear } from '@/app/lib/utils';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export const PreviewCard = ({
   slug,
@@ -27,9 +29,17 @@ export const PreviewCard = ({
   content,
   createdAt,
 }: PostPreviewType) => {
+  const router = useRouter();
   const handleDelete = async () => {
-    await deletePost(slug!);
+    try {
+      await deletePost(slug!);
+      toast.success('Post deleted successfully');
+      router.push('/my-posts');
+    } catch {
+      toast.error('Failed to delete post');
+    }
   };
+
   return (
     <>
       <div className="relative group">
@@ -72,17 +82,17 @@ export const PreviewCard = ({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle className="font-semibold">
+                확실하신가요?
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                삭제 된 포스트는 되돌릴 수 없습니다. 확인 시, 서버에서 영구 삭제
+                됩니다.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDelete}>
-                Confirm
-              </AlertDialogAction>
+              <AlertDialogCancel>취소</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>확인</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>{' '}
         </AlertDialog>

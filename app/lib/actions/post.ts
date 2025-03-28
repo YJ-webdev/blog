@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
 import { Link, Post, Tag } from '@prisma/client';
-import { revalidatePath } from 'next/cache';
 
 // import { createClient } from '@supabase/supabase-js';
 
@@ -226,8 +225,6 @@ export async function publishPost(formData: FormData): Promise<void> {
       published: true,
     },
   });
-  revalidatePath('/post/new-post');
-  redirect('/');
 }
 
 export async function deletePost(slug: string) {
