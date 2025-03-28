@@ -59,7 +59,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
 
         <ScrollArea className="h-[1000px] w-full py-2 pl-3 pr-5 rounded-none">
           <SidebarGroup>
-            <SidebarGroupLabel className="-ml-2">주제</SidebarGroupLabel>
+            <SidebarGroupLabel className="-ml-2 -mt-3">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ">
                 {tags.map((item) => (

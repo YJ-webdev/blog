@@ -1,23 +1,27 @@
 import Link from 'next/link';
-import { BadgeInfo } from 'lucide-react';
+import { BadgeInfo, HomeIcon } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="flex h-[calc(100vh-10rem)] items-center justify-center flex-col gap-2 mx-auto">
-      <h2 className="flex gap-2">
-        <BadgeInfo size="1.5rem" />
-        Page Not Found
-      </h2>
-      <p className="text-xs text-muted-foreground">
-        The post you are trying to reach may have been unpublished or deleted.
-      </p>
+    <div className="h-full w-full">
+      <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-full max-w-md">
+        <div className="flex flex-col items-center justify-center gap-2 w-full text-center">
+          <h2 className="-translate-x-2 inline-flex text-muted-foreground gap-2 text-xs">
+            <BadgeInfo className="h-4 w-4" strokeWidth={1} />
+            Page Not Found
+          </h2>
+          <p className="text-7xl ">404</p>
+          <p className="">죄송합니다. 잘못 된 경로입니다. </p>
+          <span className="text-muted-foreground text-xs">
+            다양한 컨텐츠를 레인지저널에서 찾아보실 수 있습니다. 주제별, 일반
+            게시판, 다양한 태그를 사용하여 검색해보세요.
+          </span>
 
-      <Link
-        href="/"
-        className="underline text-muted-foreground hover:text-primary"
-      >
-        Return Home
-      </Link>
+          <Link href="/" className="underline mt-5 inline-flex gap-2">
+            <HomeIcon /> 홈으로 이동
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
