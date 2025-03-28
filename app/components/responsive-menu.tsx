@@ -11,11 +11,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export const ResponsiveMenu = ({
-  initials,
   session,
+  userName,
 }: {
-  initials: string;
   session: Session | null;
+  userName: string;
 }) => {
   // const pathname = usePathname();
 
@@ -46,7 +46,7 @@ export const ResponsiveMenu = ({
           <div className="flex items-center">
             <DropDownMenu
               session={session}
-              initials={initials}
+              userName={userName}
               openLoginDialog={openLoginDialog}
             />
           </div>

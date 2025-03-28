@@ -27,11 +27,11 @@ export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
             <CardHeader>
               <DialogTitle>
                 <CardTitle className="font-medium text-lg text-center">
-                  Log in to 레인지 저널.!
+                  레인지 저널에 오신 것을 환영합니다.
                 </CardTitle>
               </DialogTitle>
               <CardDescription className="text-center tracking-tight">
-                with your Google or Github account
+                구글 또는 깃허브로 로그인하세요
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
@@ -44,10 +44,10 @@ export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
               </div>
               <GithubSignIn />
             </CardContent>
-            <CardFooter className="text-xs text-muted-foreground">
-              By continuing, 레인지 저널. will receive ongoing access to the
-              information you share and OAuth provider will record when 레인지
-              저널. accesses it
+            <CardFooter className="text-xs text-muted-foreground text-center">
+              로그인시, 레인지 저널에서 사용자가 공유하는 정보에 지속적으로
+              액세스할 수 있으며, OAuth 제공자는 레인지 저널이 해당 정보에
+              액세스한 시점을 기록하게 됩니다.
             </CardFooter>
           </Card>
         </DialogContent>

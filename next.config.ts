@@ -24,8 +24,12 @@ const nextConfig: NextConfig = {
         hostname: 'www.youtube.com',
       },
       {
-        protocol: 'https', // You need to specify HTTPS for Amazon images
-        hostname: 'images-na.ssl-images-amazon.com', // Exact hostname for Amazon images
+        protocol: 'https',
+        hostname: 'images-na.ssl-images-amazon.com',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
       },
       {
         protocol: 'http',

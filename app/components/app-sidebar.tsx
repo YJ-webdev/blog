@@ -29,7 +29,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const { open, setOpen, toggleSidebar } = useSidebar();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [timeAgoValues, setTimeAgoValues] = useState<string[]>([]);

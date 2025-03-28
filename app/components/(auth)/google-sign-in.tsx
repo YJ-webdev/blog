@@ -7,7 +7,7 @@ export default function GoogleSignIn() {
       <div className="relative flex items-center justify-center hover:bg-primary/5 border border-primary/20 rounded-lg">
         <FcGoogle size={26} className="absolute left-4" />
         <button type="submit" className="px-4 py-2 outline-none">
-          Log in with <strong>Google</strong>
+          <strong>구글</strong> 계정으로 로그인 하기
         </button>
       </div>
     </form>

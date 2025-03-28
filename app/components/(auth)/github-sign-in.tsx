@@ -7,7 +7,7 @@ export default function GithubSignIn() {
       <div className="relative flex items-center justify-center hover:bg-primary/5 border border-primary/20 rounded-lg">
         <BsGithub size={24} className="absolute left-4" />
         <button type="submit" className="px-4 py-2">
-          Log in with <strong>Github</strong>
+          <strong>깃허브</strong> 계정으로 로그인 하기
         </button>
       </div>
     </form>

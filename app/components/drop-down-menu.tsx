@@ -25,15 +25,15 @@ import { useTransition } from 'react';
 import { createPost } from '../lib/actions/post';
 
 interface DropDownMenuProps {
-  initials: string;
   session: Session | null;
   openLoginDialog: () => void;
+  userName: string;
 }
 
 export const DropDownMenu = ({
-  initials,
   session,
   openLoginDialog,
+  userName,
 }: DropDownMenuProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -49,9 +49,12 @@ export const DropDownMenu = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="outline-transparent z-[99999]">
+      <DropdownMenuTrigger className="outline-none z-[99999]">
         {session && session.user ? (
-          <UserProfile firstLetter={initials} />
+          <>
+            <p className="hidden md:block">Hi, {userName}</p>
+            <UserProfile />
+          </>
         ) : (
           <MenuIcon size={24} strokeWidth={1.5} />
         )}
