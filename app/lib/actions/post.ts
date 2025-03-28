@@ -263,12 +263,24 @@ export async function getPrevNextPosts(postId: string) {
     prisma.post.findFirst({
       where: { createdAt: { lt: createdAt } },
       orderBy: { createdAt: 'desc' },
-      select: { id: true, slug: true, title: true, published: true },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        published: true,
+        tags: true,
+      },
     }),
     prisma.post.findFirst({
       where: { createdAt: { gt: createdAt } },
       orderBy: { createdAt: 'asc' },
-      select: { id: true, slug: true, title: true, published: true },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        published: true,
+        tags: true,
+      },
     }),
   ]);
 

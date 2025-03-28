@@ -11,18 +11,17 @@ import { toast } from 'sonner';
 import { Link as LinkPrisma, Post, Tag } from '@prisma/client';
 import { slugify } from '@/app/lib/utils';
 import { Tags } from '@/app/components/tags';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
+
 import { PrevPostType } from '@/app/lib/types';
+import { PrevNext } from './prev-next';
 
 interface ClientPageProps {
   post: Post & { tags: Tag[] };
   userId: string;
   postLinks?: LinkPrisma[];
   tagsData: Tag[];
-  prevPost: PrevPostType;
-  nextPost: PrevPostType;
+  prevPost: PrevPostType & { tags: Tag[] };
+  nextPost: PrevPostType & { tags: Tag[] };
 }
 
 export const ClientPage = ({
@@ -126,31 +125,7 @@ export const ClientPage = ({
 
   return (
     <div className="relative w-full">
-      {prevPost && (
-        <Link href={`/post/${prevPost.slug}`}>
-          <button
-            className={cn(
-              'fixed bottom-20 left-0 z-[50] bg-white dark:bg-[#1f1f1f] p-3',
-              prevPost.id === post.id && 'hidden',
-            )}
-          >
-            <ArrowLeft strokeWidth={1} className="md:size-14 sm:size-10" />
-          </button>
-        </Link>
-      )}
-
-      {nextPost.published && (
-        <Link href={`/post/${nextPost.slug}`}>
-          <button
-            className={cn(
-              'fixed bottom-20 right-0 z-[999] bg-white dark:bg-[#1f1f1f] p-3',
-              !nextPost.published && 'hidden',
-            )}
-          >
-            <ArrowRight strokeWidth={1} className="md:size-14 sm:size-10" />
-          </button>
-        </Link>
-      )}
+      <PrevNext prevPost={prevPost} nextPost={nextPost} post={post} />
 
       <form onSubmit={handleSubmit} className="w-full flex flex-col">
         {isEditable && post.title === null && (
