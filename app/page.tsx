@@ -38,7 +38,7 @@ export default async function Home() {
         image={mainPost.image!}
         createdAt={mainPost.createdAt!}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
         {otherPosts.map((post) => {
           const processedContent = post.content
             ? extractText(post.content)

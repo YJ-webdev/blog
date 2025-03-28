@@ -37,7 +37,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
         onClick={toggleSidebar}
         className="hidden md:block fixed top-5 left-5 z-10"
       >
-        {!open && <PanelLeft />}
+        {!open && <PanelLeft strokeWidth={1.5} />}
       </button>
       <Sidebar>
         <SidebarHeader className="hidden md:block ">
@@ -45,7 +45,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             onClick={toggleSidebar}
             className="hidden md:block fixed top-5 left-5 z-10"
           >
-            {open ? <PanelLeftDashed /> : null}
+            {open ? <PanelLeftDashed strokeWidth={1.5} /> : null}
           </button>
           <div className="w-full relative h-8">
             <kbd className="absolute top-4 right-2 text-end pointer-none inline-flex select-none items-center gap-1 px-1.5 text-xs font-medium text-muted-foreground">

@@ -173,7 +173,7 @@ export default function Editor({
   }
 
   return (
-    <div className="flex flex-col w-full overflow-hidden md:overflow-visible mb-5">
+    <div className="z-[10] flex flex-col w-full overflow-hidden md:overflow-visible mb-5">
       <div
         className={cn(
           'md:-mx-[54px] md:-translate-y-2 z-50',

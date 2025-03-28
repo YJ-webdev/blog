@@ -130,7 +130,7 @@ export const ClientPage = ({
         <Link href={`/post/${prevPost.slug}`}>
           <button
             className={cn(
-              'fixed bottom-20 left-0 z-[999] bg-white dark:bg-[#1f1f1f] p-3',
+              'fixed bottom-20 left-0 z-[50] bg-white dark:bg-[#1f1f1f] p-3',
               prevPost.id === post.id && 'hidden',
             )}
           >
