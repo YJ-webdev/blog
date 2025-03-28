@@ -1,5 +1,4 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
-// import { PostPreviewMain } from '@/app/components/post-preview-main';
 import { getPostsByTag } from '@/app/lib/actions/post';
 import { PostPreviewType } from '@/app/lib/types';
 import { extractText } from '@/app/lib/utils';
@@ -9,18 +8,9 @@ export async function generateMetadata({
 }: {
   params: { tag: string };
 }) {
-  const { tag } = params;
-  const posts = await getPostsByTag(tag);
+  const { tag } = await params;
 
-  // If no posts are found for this tag, return default metadata
-  if (!posts || posts.length === 0) {
-    return {
-      title: `레인지 저널 | 포스트가 아직 없습니다.`,
-      description: `There are no posts under the ${tag} tag at the moment.`,
-    };
-  }
-
-  const title = `레인지 저널 | 테그`;
+  const title = `레인지 저널 | ${decodeURIComponent(tag)}`;
   const description = `Browse through all posts tagged with ${tag}.`;
 
   return {
