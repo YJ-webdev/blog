@@ -12,10 +12,10 @@ export default function NotFound() {
           </h2>
           <p className="text-7xl ">404</p>
           <p className="">죄송합니다. 잘못 된 경로입니다. </p>
-          <span className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground text-xs">
             다양한 컨텐츠를 레인지저널에서 찾아보실 수 있습니다. 주제별, 일반
             게시판, 다양한 태그를 사용하여 검색해보세요.
-          </span>
+          </p>
 
           <Link href="/" className="underline mt-5 inline-flex gap-2">
             <HomeIcon /> 홈으로 이동
