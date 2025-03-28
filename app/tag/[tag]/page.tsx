@@ -15,12 +15,12 @@ export async function generateMetadata({
   // If no posts are found for this tag, return default metadata
   if (!posts || posts.length === 0) {
     return {
-      title: `${tag} - No Posts Available`,
+      title: `레인지 저널 | 포스트가 아직 없습니다.`,
       description: `There are no posts under the ${tag} tag at the moment.`,
     };
   }
 
-  const title = `${tag} Posts`;
+  const title = `레인지 저널 | 테그`;
   const description = `Browse through all posts tagged with ${tag}.`;
 
   return {

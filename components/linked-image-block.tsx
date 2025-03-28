@@ -1,5 +1,6 @@
 import { defaultBlockSchema } from '@blocknote/core';
 import { createReactBlockSpec } from '@blocknote/react';
+import Image from 'next/image';
 
 export const CustomImageBlock = createReactBlockSpec(
   {
@@ -20,7 +21,10 @@ export const CustomImageBlock = createReactBlockSpec(
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src={block.props.url} alt={block.props.caption || 'Image'} />
+              <Image
+                src={block.props.url}
+                alt={block.props.caption || 'Image'}
+              />
             </a>
           )}
         </div>
