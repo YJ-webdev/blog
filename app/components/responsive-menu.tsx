@@ -55,7 +55,7 @@ export const ResponsiveMenu = ({
         <>
           {pathname !== '/' && (
             <Link href={'/'} className="items-center gap-4 md:flex text-[14px]">
-              <HomeIcon size={24} strokeWidth={1.5} />
+              <HomeIcon />
             </Link>
           )}
 

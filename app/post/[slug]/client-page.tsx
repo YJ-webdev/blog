@@ -2,20 +2,27 @@
 
 import { ImageDropZone } from '@/app/components/image-drop-zone';
 import EditorWrapper from '@/components/dynamic-editor';
+
 import { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import LinkPreviews from './link-previews';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Link, Post, Tag } from '@prisma/client';
+import { Link as LinkPrisma, Post, Tag } from '@prisma/client';
 import { slugify } from '@/app/lib/utils';
 import { Tags } from '@/app/components/tags';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { PrevPostType } from '@/app/lib/types';
 
 interface ClientPageProps {
   post: Post & { tags: Tag[] };
   userId: string;
-  postLinks?: Link[];
+  postLinks?: LinkPrisma[];
   tagsData: Tag[];
+  prevPost: PrevPostType;
+  nextPost: PrevPostType;
 }
 
 export const ClientPage = ({
@@ -23,6 +30,8 @@ export const ClientPage = ({
   userId,
   postLinks,
   tagsData,
+  prevPost,
+  nextPost,
 }: ClientPageProps) => {
   const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
@@ -35,7 +44,7 @@ export const ClientPage = ({
   const [imageUrl, setImageUrl] = useState(
     () => localStorage.getItem(imageKey) ?? post.image ?? '',
   );
-  const [adLinks, setAdLinks] = useState<Array<Link | string>>([]);
+  const [adLinks, setAdLinks] = useState<Array<LinkPrisma | string>>([]);
   const [content, setContent] = useState(post.content || '');
   const [slug, setSlug] = useState(
     localStorage.getItem(slugKey) || post.slug || '',
@@ -116,64 +125,94 @@ export const ClientPage = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex flex-col">
-      {isEditable && post.title === null && (
-        <TextareaAutosize
-          placeholder="제목"
-          autoFocus
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
-          disabled={!isEditable}
-          spellCheck={false}
+    <div className="relative w-full">
+      {prevPost && (
+        <Link href={`/post/${prevPost.slug}`}>
+          <button
+            className={cn(
+              'fixed bottom-20 left-0 z-[999] bg-white dark:bg-[#1f1f1f] p-3',
+              prevPost.id === post.id && 'hidden',
+            )}
+          >
+            <ArrowLeft strokeWidth={1.25} className="md:size-14 sm:size-10" />
+          </button>
+        </Link>
+      )}
+
+      {nextPost && (
+        <Link href={`/post/${nextPost.slug}`}>
+          <button
+            className={cn(
+              'fixed bottom-20 right-0 z-[999] bg-white dark:bg-[#1f1f1f] p-3',
+              nextPost.published == false && 'hidden',
+            )}
+          >
+            <ArrowRight strokeWidth={1.25} className="md:size-14 sm:size-10" />
+          </button>
+        </Link>
+      )}
+
+      <form onSubmit={handleSubmit} className="w-full flex flex-col">
+        {isEditable && post.title === null && (
+          <TextareaAutosize
+            placeholder="제목"
+            autoFocus
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+            disabled={!isEditable}
+            spellCheck={false}
+          />
+        )}
+
+        <ImageDropZone
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          isEditable={isEditable}
+          imageKey={imageKey}
         />
-      )}
 
-      <ImageDropZone
-        imageUrl={imageUrl}
-        setImageUrl={setImageUrl}
-        isEditable={isEditable}
-        imageKey={imageKey}
-      />
+        <EditorWrapper
+          postId={post.id}
+          editable={isEditable}
+          initialContent={content}
+          onContentChange={setContent}
+        />
 
-      <EditorWrapper
-        postId={post.id}
-        editable={isEditable}
-        initialContent={content}
-        onContentChange={setContent}
-      />
+        <Tags
+          tagsKey={tagsKey}
+          isEditable={isEditable}
+          tagsData={tagsData}
+          tags={tags}
+          setTags={setTags}
+        />
 
-      <Tags
-        tagsKey={tagsKey}
-        isEditable={isEditable}
-        tagsData={tagsData}
-        tags={tags}
-        setTags={setTags}
-      />
+        <LinkPreviews
+          isEditable={isEditable}
+          postId={post.id}
+          setAdLinks={
+            setAdLinks as React.Dispatch<React.SetStateAction<LinkPrisma[]>>
+          }
+          postLinks={postLinks as LinkPrisma[]}
+        />
 
-      <LinkPreviews
-        isEditable={isEditable}
-        postId={post.id}
-        setAdLinks={setAdLinks as React.Dispatch<React.SetStateAction<Link[]>>}
-        postLinks={postLinks as Link[]}
-      />
-
-      {isEditable && (
-        <Button
-          type="submit"
-          className="fixed bottom-5 right-5"
-          disabled={!isFormValid || isSubmitting}
-          onClick={(event) => event.stopPropagation()}
-        >
-          {isSubmitting
-            ? '게시중...'
-            : post.published === false
-              ? '게시하기'
-              : '수정 완료 및 게시'}
-        </Button>
-      )}
-    </form>
+        {isEditable && (
+          <Button
+            type="submit"
+            className="fixed bottom-5 right-5 z-[99999]"
+            disabled={!isFormValid || isSubmitting}
+            onClick={(event) => event.stopPropagation()}
+          >
+            {isSubmitting
+              ? '게시중...'
+              : post.published === false
+                ? '게시하기'
+                : '수정 완료 및 게시'}
+          </Button>
+        )}
+      </form>
+    </div>
   );
 };

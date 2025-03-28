@@ -172,7 +172,7 @@ const LinkPreviews = ({
         <div className="flex flex-col w-full">
           <div className="flex w-full">
             <Input
-              className=" bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-sm"
+              className=" bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-sm text-[14px]"
               value={url}
               onChange={handleUrlChange}
               onKeyDown={(e) => {

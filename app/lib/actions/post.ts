@@ -226,3 +226,31 @@ export async function getTags() {
   const tags = await prisma.tag.findMany();
   return tags;
 }
+
+export async function getPrevNextPosts(postId: string) {
+  // Fetch the current post
+  const currentPost = await prisma.post.findUnique({
+    where: { id: postId, published: true },
+    select: { createdAt: true, slug: true, title: true },
+  });
+
+  if (!currentPost) return { prevPost: null, nextPost: null };
+
+  const { createdAt } = currentPost;
+
+  // Get previous and next posts
+  const [prevPost, nextPost] = await Promise.all([
+    prisma.post.findFirst({
+      where: { createdAt: { lt: createdAt } },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, slug: true, title: true, published: true },
+    }),
+    prisma.post.findFirst({
+      where: { createdAt: { gt: createdAt } },
+      orderBy: { createdAt: 'asc' },
+      select: { id: true, slug: true, title: true, published: true },
+    }),
+  ]);
+
+  return { prevPost, nextPost };
+}

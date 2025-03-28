@@ -14,3 +14,10 @@ export type PostPreviewType = SidebarPostType & {
   bookmarkedBy?: boolean;
   myPosts?: boolean;
 };
+
+export type PrevPostType = {
+  id: string;
+  slug: string | null;
+  title: string | null;
+  published: boolean;
+};

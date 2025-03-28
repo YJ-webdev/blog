@@ -1,7 +1,11 @@
 import { ClientPage } from '@/app/post/[slug]/client-page';
 import { ClientOnly } from '@/app/components/client-only';
 import { getCurrentUser } from '@/app/lib/actions/auth';
-import { getLinksbyPostId, getPostBySlug } from '@/app/lib/actions/post';
+import {
+  getLinksbyPostId,
+  getPostBySlug,
+  getPrevNextPosts,
+} from '@/app/lib/actions/post';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 
@@ -24,6 +28,8 @@ export default async function SlugPage({
     return redirect('/not-found');
   }
 
+  const { prevPost, nextPost } = await getPrevNextPosts(post.id);
+
   const links = await getLinksbyPostId(post.id);
 
   return (
@@ -34,6 +40,8 @@ export default async function SlugPage({
           userId={userId}
           postLinks={links}
           tagsData={data}
+          prevPost={prevPost || post}
+          nextPost={nextPost || post}
         />
       </ClientOnly>
     </div>
