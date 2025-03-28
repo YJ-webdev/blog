@@ -30,7 +30,7 @@ export default async function Home() {
     : '';
 
   return (
-    <div className="flex flex-col w-full mb-20">
+    <div className="flex flex-col gap-5 w-full mb-20">
       <PostPreviewMain
         slug={mainPost.slug ?? ''}
         title={mainPost.title!}
@@ -38,7 +38,7 @@ export default async function Home() {
         image={mainPost.image!}
         createdAt={mainPost.createdAt!}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {otherPosts.map((post) => {
           const processedContent = post.content
             ? extractText(post.content)

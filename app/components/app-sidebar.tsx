@@ -31,6 +31,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { open, setOpen, toggleSidebar } = useSidebar();
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [timeAgoValues, setTimeAgoValues] = useState<string[]>([]);
 
   const timeAgo = (date: Date): string => {
@@ -107,11 +108,16 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           <SidebarGroup>
             <SidebarGroupContent className="mb-4">
               <Input
+                value={searchTerm}
                 placeholder="검색어를 입력하세요"
                 className="border rounded-sm"
                 autoFocus
+                onChange={(e) =>
+                  setSearchTerm(e.target.value.toLowerCase().trim())
+                }
               />
             </SidebarGroupContent>
+
             <SidebarGroupLabel className="-ml-2 -mt-3">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ">

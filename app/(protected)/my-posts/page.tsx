@@ -16,7 +16,7 @@ export default async function MyPostsPage() {
   const posts = await getPostByUserId(userId!);
 
   return (
-    <div className="flex items-center gap-2 mt-5 mb-16 -mx-2">
+    <div className="flex items-center gap-2 mb-16 -mx-2">
       <List size={20} className="" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => {
