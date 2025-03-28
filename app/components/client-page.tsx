@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { Title } from './title';
 import { Toaster } from 'sonner';
 import Footer from './footer';
@@ -10,7 +8,6 @@ import { useSidebar } from '@/components/ui/sidebar';
 export const ClientPage = ({ children }: { children: React.ReactNode }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { open, setOpen } = useSidebar();
-
   return (
     <div
       style={{

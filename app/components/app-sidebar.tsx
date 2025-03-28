@@ -20,6 +20,7 @@ import { Tag } from '@prisma/client';
 import { SidebarPostType } from '../lib/types';
 import { TagLink } from './tag-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
 
 interface AppSidebarProps {
   posts: SidebarPostType[];
@@ -57,8 +58,15 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
         </SidebarHeader>
 
-        <ScrollArea className="h-[1000px] w-full py-2 pl-3 pr-5 rounded-none">
+        <ScrollArea className="h-[1000px] w-full py-2 px-3 rounded-none">
           <SidebarGroup>
+            <SidebarGroupContent className="mb-4">
+              <Input
+                placeholder="검색어를 입력하세요"
+                className="border rounded-sm"
+                autoFocus
+              />
+            </SidebarGroupContent>
             <SidebarGroupLabel className="-ml-2 -mt-3">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ">
