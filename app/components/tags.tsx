@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Tag } from '@prisma/client';
+import { TagButton, TagLink } from './tag-button';
 
 interface TagsProps {
   tagsKey: string;
@@ -100,49 +101,40 @@ export const Tags = ({
       {isEditable ? (
         <div className="w-full flex flex-wrap gap-2 mt-2 mb-12">
           {tags?.map((item) => (
-            <button
-              type="button"
+            <TagButton
               key={item.name}
+              item={item}
               className={cn(
-                'w-fit py-2 px-3 rounded-full bg-muted text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
                 selectedTags.some((tag) => tag.name === item.name) &&
                   'bg-primary text-white dark:text-black',
                 stringSavedTags.includes(item.id) &&
                   'bg-primary text-white dark:text-black',
               )}
               onClick={() => toggleTag(item)}
-            >
-              {item.name}
-            </button>
+            />
           ))}
 
           {filteredTags?.map((item) => (
-            <button
-              type="button"
+            <TagButton
               key={item.name}
+              item={item}
               className={cn(
-                'w-fit py-2 px-3 rounded-full bg-muted text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
                 selectedTags.some((tag) => tag.name === item.name) &&
                   'bg-primary text-white dark:text-black',
                 stringSavedTags.includes(item.id) &&
                   'bg-primary text-white dark:text-black',
               )}
               onClick={() => toggleTag(item)}
-            >
-              {item.name}
-            </button>
+            />
           ))}
 
           {enteredTags.map((enteredTag) => (
-            <div
+            <TagButton
               key={enteredTag.name}
-              className={cn(
-                'w-fit py-2 px-3 rounded-full hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all bg-primary text-white dark:text-black',
-              )}
+              item={enteredTag}
+              className="w-fit py-2 px-3 rounded-full hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90 duration-300 ease-out transition-all bg-primary text-white dark:text-black"
               onClick={() => removeTag(enteredTag)}
-            >
-              {enteredTag.name}
-            </div>
+            />
           ))}
 
           <Popover>
@@ -181,17 +173,13 @@ export const Tags = ({
         </div>
       ) : (
         <div className="w-full flex flex-wrap gap-2 mt-2 mb-12">
-          {tags.map((item, index) => (
-            <button
-              type="button"
-              key={index}
-              className={cn(
-                'bg-primary text-white dark:text-black w-fit py-2 px-3 rounded-full text-[14px] sm:hover:bg-primary/10 active:scale-90 duration-300 ease-out transition-all',
-              )}
+          {tags.map((item) => (
+            <TagLink
+              key={item.name} // Prefer a unique identifier instead of index
+              item={item}
+              selected={selectedTags.some((tag) => tag.name === item.name)}
               onClick={() => {}}
-            >
-              {item.name}
-            </button>
+            />
           ))}
         </div>
       )}

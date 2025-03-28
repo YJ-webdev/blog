@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
-import { Link, Tag } from '@prisma/client';
+import { Link, Post, Tag } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 // import { createClient } from '@supabase/supabase-js';
@@ -78,6 +78,31 @@ export const getPostByUserId = async (userId: string) => {
 };
 
 //getPostByTag
+export const getPostsByTag = async (tag: string): Promise<Post[]> => {
+  try {
+    console.log('Searching for posts with tag:', tag); // Debugging the tag
+
+    const posts = await prisma.post.findMany({
+      where: {
+        tags: {
+          some: {
+            name: tag,
+          },
+        },
+        published: true,
+      },
+    });
+
+    console.log(`Found ${posts.length} posts with tag: ${tag}`); // Debugging the result
+
+    return posts;
+  } catch (error) {
+    console.error('Error fetching posts by tag:', error);
+    throw new Error(
+      'Unable to fetch posts at this time. Please try again later.',
+    );
+  }
+};
 
 export async function createPost() {
   const user = await currentUser();
@@ -220,11 +245,6 @@ export async function deletePost(postId: string) {
   return await prisma.post.delete({
     where: { id: postId },
   });
-}
-
-export async function getTags() {
-  const tags = await prisma.tag.findMany();
-  return tags;
 }
 
 export async function getPrevNextPosts(postId: string) {

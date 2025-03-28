@@ -144,7 +144,7 @@ export const ClientPage = ({
           <button
             className={cn(
               'fixed bottom-20 right-0 z-[999] bg-white dark:bg-[#1f1f1f] p-3',
-              nextPost.published == false && 'hidden',
+              nextPost.published == false || (nextPost === post && 'hidden'),
             )}
           >
             <ArrowRight strokeWidth={1.25} className="md:size-14 sm:size-10" />

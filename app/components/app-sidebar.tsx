@@ -16,10 +16,10 @@ import {
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 import { timeAgo } from '../lib/utils';
 import { Tag } from '@prisma/client';
 import { SidebarPostType } from '../lib/types';
+import { TagLink } from './tag-button';
 
 interface AppSidebarProps {
   posts: SidebarPostType[];
@@ -63,18 +63,12 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ml-2">
                 {tags.map((item) => (
-                  <Link
+                  <TagLink
                     key={item.name}
-                    href={`/tag/${item.name}`}
+                    item={item}
+                    selected={selectedTag === item.name}
                     onClick={() => setSelectedTag(item.name)}
-                    className={cn(
-                      'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90  duration-300 ease-out transition-all',
-                      selectedTag === item.name &&
-                        'bg-primary text-white dark:text-black',
-                    )}
-                  >
-                    {item.name}
-                  </Link>
+                  />
                 ))}
               </div>
             </SidebarGroupContent>

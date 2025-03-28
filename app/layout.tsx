@@ -8,7 +8,6 @@ import Nav from './components/nav';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
 import { cookies } from 'next/headers';
-import { getTags } from './lib/actions/post';
 import { prisma } from '@/lib/prisma';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
@@ -37,11 +36,17 @@ export default async function RootLayout({
       createdAt: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'asc',
     },
   });
 
-  const tags = await getTags();
+  const tags = await prisma.tag.findMany({
+    take: 28,
+    orderBy: {
+      id: 'asc',
+    },
+  });
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
