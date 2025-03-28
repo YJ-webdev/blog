@@ -8,6 +8,46 @@ import {
 } from '@/app/lib/actions/post';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { extractText } from '@/app/lib/utils';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { slug } = params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'This post is no longer available.',
+    };
+  }
+
+  const title = post.title;
+  const description = extractText(post.content!).slice(0, 160); // Use the content or a custom description
+  const image = post.image || '/range-journal-default-image.jpg'; // Fallback image if not set
+  const url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}`; // Replace with your site's base URL
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      images: [
+        {
+          url: image,
+          width: 800,
+          height: 600,
+          alt: title,
+        },
+      ],
+    },
+  };
+}
 
 export default async function SlugPage({
   params,

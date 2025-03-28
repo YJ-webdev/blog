@@ -4,6 +4,37 @@ import { getPostsByTag } from '@/app/lib/actions/post';
 import { PostPreviewType } from '@/app/lib/types';
 import { extractText } from '@/app/lib/utils';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { tag: string };
+}) {
+  const { tag } = params;
+  const posts = await getPostsByTag(tag);
+
+  // If no posts are found for this tag, return default metadata
+  if (!posts || posts.length === 0) {
+    return {
+      title: `${tag} - No Posts Available`,
+      description: `There are no posts under the ${tag} tag at the moment.`,
+    };
+  }
+
+  const title = `${tag} Posts`;
+  const description = `Browse through all posts tagged with ${tag}.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${tag}`,
+      images: '/range-journal-default-image.jpg',
+    },
+  };
+}
+
 export default async function TagPage({
   params,
 }: {
