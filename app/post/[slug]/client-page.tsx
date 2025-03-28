@@ -139,12 +139,12 @@ export const ClientPage = ({
         </Link>
       )}
 
-      {nextPost && (
+      {nextPost.published && (
         <Link href={`/post/${nextPost.slug}`}>
           <button
             className={cn(
               'fixed bottom-20 right-0 z-[999] bg-white dark:bg-[#1f1f1f] p-3',
-              nextPost.published == false || (nextPost === post && 'hidden'),
+              !nextPost.published && 'hidden',
             )}
           >
             <ArrowRight strokeWidth={1} className="md:size-14 sm:size-10" />
