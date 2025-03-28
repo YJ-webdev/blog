@@ -77,7 +77,6 @@ export const getPostByUserId = async (userId: string) => {
   return post;
 };
 
-//getPostByTag
 export const getPostsByTag = async (tag: string): Promise<Post[]> => {
   try {
     console.log('Searching for posts with tag:', tag); // Debugging the tag
@@ -231,12 +230,12 @@ export async function publishPost(formData: FormData): Promise<void> {
   redirect('/');
 }
 
-export async function deletePost(postId: string) {
+export async function deletePost(slug: string) {
   const user = await currentUser();
   if (!user) return redirect('/login');
 
   const post = await prisma.post.findUnique({
-    where: { id: postId },
+    where: { slug: slug },
   });
 
   if (!post || post.authorId !== user.id) {
@@ -244,7 +243,7 @@ export async function deletePost(postId: string) {
   }
 
   return await prisma.post.delete({
-    where: { id: postId },
+    where: { slug: slug },
   });
 }
 

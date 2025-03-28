@@ -51,7 +51,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             <kbd className="absolute top-4 right-2 text-end pointer-none inline-flex select-none items-center gap-1 px-1.5 text-xs font-medium text-muted-foreground">
               <span className="rounded border font-mono bg-muted px-1">
                 ctrl
-              </span>{' '}
+              </span>
               + B
             </kbd>
           </div>
