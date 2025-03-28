@@ -4,7 +4,6 @@ import { PanelLeft, PanelLeftDashed } from 'lucide-react';
 
 import {
   Sidebar,
-  SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
@@ -20,6 +19,7 @@ import { timeAgo } from '../lib/utils';
 import { Tag } from '@prisma/client';
 import { SidebarPostType } from '../lib/types';
 import { TagLink } from './tag-button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface AppSidebarProps {
   posts: SidebarPostType[];
@@ -40,7 +40,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
         {!open && <PanelLeft />}
       </button>
       <Sidebar>
-        <SidebarHeader className="hidden md:block">
+        <SidebarHeader className="hidden md:block ">
           <button
             onClick={toggleSidebar}
             className="hidden md:block fixed top-5 left-5 z-10"
@@ -57,11 +57,11 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
         </SidebarHeader>
 
-        <SidebarContent>
+        <ScrollArea className="h-[1000px] w-full py-2 pl-3 pr-5 rounded-none">
           <SidebarGroup>
-            <SidebarGroupLabel className="ml-1">주제</SidebarGroupLabel>
+            <SidebarGroupLabel className="-ml-2">주제</SidebarGroupLabel>
             <SidebarGroupContent>
-              <div className="flex flex-wrap gap-2 ml-2">
+              <div className="flex flex-wrap gap-2 ">
                 {tags.map((item) => (
                   <TagLink
                     key={item.name}
@@ -73,11 +73,11 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               </div>
             </SidebarGroupContent>
 
-            <SidebarGroupLabel className="mt-5 ml-1">
+            <SidebarGroupLabel className="-ml-2 mt-5">
               떠오르는 기사
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <div className="flex flex-col gap-2 ml-3 mr-1">
+              <div className="flex flex-col gap-2 ">
                 <ul className="list-none space-y-4">
                   {posts.slice(0, 10).map((post) => (
                     <li key={post.slug} className="h-full w-full">
@@ -100,7 +100,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               </div>
             </SidebarGroupContent>
           </SidebarGroup>
-        </SidebarContent>
+        </ScrollArea>
         <SidebarFooter className="h-12 pl-5">
           <ModeToggle />
         </SidebarFooter>
