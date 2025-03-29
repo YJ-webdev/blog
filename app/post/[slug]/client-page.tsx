@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation';
 
 interface ClientPageProps {
   post: Post & { tags: Tag[] };
-  userId: string;
+  userId: string | undefined;
   postLinks: LinkPrisma[];
   tagsData: Tag[];
   prevPost?: PrevPostType;

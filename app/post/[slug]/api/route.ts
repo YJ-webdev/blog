@@ -1,16 +1,12 @@
 import { prisma } from '@/lib/prisma';
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const session = await auth();
-    const userId = session?.user?.id;
-
     const { slug } = await params;
     const post = await prisma.post.findUnique({
       where: { slug },
@@ -64,7 +60,6 @@ export async function GET(
 
     return NextResponse.json({
       post,
-      userId,
       prevPost,
       nextPost,
       tagsData,
