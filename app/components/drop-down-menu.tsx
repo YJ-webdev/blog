@@ -51,10 +51,7 @@ export const DropDownMenu = ({
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none z-[99999]">
         {session && session.user ? (
-          <>
-            <p className="hidden md:block">Hi, {userName}</p>
-            <UserProfile />
-          </>
+          <UserProfile userName={userName} />
         ) : (
           <MenuIcon size={24} strokeWidth={1.5} />
         )}
