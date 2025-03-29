@@ -1,4 +1,5 @@
 import { Block } from '@blocknote/core';
+import { Post } from '@prisma/client';
 
 export const formatDateWithoutYear = (
   dateString: Date,
@@ -38,3 +39,38 @@ export const slugify = (text: string) =>
     .replace(/[^\p{L}\p{N}\s-]/gu, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
+
+export function generateMetadataFromPost(post: Post) {
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'This post is no longer available.',
+    };
+  }
+
+  const postTitle = post.title ?? '새 포스트 작성';
+  const title = `레인지 저널 | ${postTitle}`;
+  const description = post.content
+    ? extractText(post.content).slice(0, 160)
+    : '';
+  const image = post.image || '/range-journal-default-image.jpg';
+  const url = `http://localhost:3000/post/${post.slug}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      images: [
+        {
+          url: image,
+          width: 800,
+          height: 600,
+          alt: title,
+        },
+      ],
+    },
+  };
+}

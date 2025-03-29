@@ -61,6 +61,7 @@ export const ClientPage = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditable = userId === post.authorId;
+
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
 
@@ -134,10 +135,10 @@ export const ClientPage = ({
 
   return (
     <div className="relative w-full">
-      <PrevNext prevPost={prevPost} nextPost={nextPost} post={post} />
+      <PrevNext prevPost={prevPost} nextPost={nextPost} />
 
       <form onSubmit={handleSubmit} className="w-full flex flex-col">
-        {isEditable && post.title === null && (
+        {post.authorId === userId && post.title === null && (
           <TextareaAutosize
             placeholder="제목"
             autoFocus
@@ -146,7 +147,6 @@ export const ClientPage = ({
               setTitle(e.target.value);
             }}
             className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
-            disabled={!isEditable}
             spellCheck={false}
           />
         )}

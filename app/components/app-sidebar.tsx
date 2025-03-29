@@ -30,7 +30,7 @@ interface AppSidebarProps {
 export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const { open, toggleSidebar } = useSidebar();
+  const { open, setOpen, toggleSidebar } = useSidebar();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [timeAgoValues, setTimeAgoValues] = useState<string[]>([]);
 
@@ -86,7 +86,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
       >
         {!open && <PanelLeft strokeWidth={1.5} />}
       </button>
-      <Sidebar className=" bg-white dark:bg-[#1f1f1f] p-2">
+      <Sidebar className=" bg-white dark:bg-[#1f1f1f]">
         <SidebarHeader className="hidden md:block ">
           <button
             onClick={toggleSidebar}
@@ -105,60 +105,72 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
         </SidebarHeader>
 
         <ScrollArea className="h-[1000px] w-full py-2 px-3 rounded-none">
-          <SidebarGroup className="">
-            <SidebarGroupContent className="mb-4">
-              <Input
-                value={searchTerm}
-                placeholder="검색어를 입력하세요"
-                className="border rounded-sm"
-                autoFocus
-                onChange={(e) =>
-                  setSearchTerm(e.target.value.toLowerCase().trim())
-                }
-              />
-            </SidebarGroupContent>
+          <div className="mx-2">
+            <SidebarGroup>
+              <SidebarGroupContent className="mb-4">
+                <Input
+                  value={searchTerm}
+                  placeholder="검색어를 입력하세요"
+                  className="border rounded-sm dark:bg-muted"
+                  autoFocus
+                  onChange={(e) =>
+                    setSearchTerm(e.target.value.toLowerCase().trim())
+                  }
+                />
+              </SidebarGroupContent>
 
-            <SidebarGroupLabel className="-ml-2 ">주제</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <div className="flex flex-wrap gap-2 ">
-                {tags.map((item) => (
-                  <TagLink
-                    key={item.name}
-                    item={item}
-                    selected={selectedTag === item.name}
-                    onClick={() => setSelectedTag(item.name)}
-                  />
-                ))}
-              </div>
-            </SidebarGroupContent>
-
-            <SidebarGroupLabel className="-ml-2 mt-5">
-              떠오르는 기사
-            </SidebarGroupLabel>
-            <SidebarGroupContent className="">
-              <div className="flex flex-col gap-2 ">
-                <ul className="list-none space-y-4">
-                  {posts.slice(0, 10).map((post, index) => (
-                    <li key={post.slug} className="h-full w-full">
-                      <Link
-                        href={`/post/${post.slug}`}
-                        // href={`/tag/${encodeURIComponent(item.name)}`}
-
-                        className="flex gap-2 items-stretch justify-between"
-                      >
-                        <span className="text-[14px] h-full flex-1 tracking-tight line-clamp-3 postlists hover:underline">
-                          {post.title}
-                        </span>
-                        <p className="flex items-end w-fit text-right text-xs text-muted-foreground tracking-tighter">
-                          {timeAgoValues[index]}
-                        </p>
-                      </Link>
-                    </li>
+              <SidebarGroupLabel className="-ml-2 text-muted-foreground ">
+                주제
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <div className="flex flex-wrap gap-2 ">
+                  {tags.map((item) => (
+                    <TagLink
+                      key={item.name}
+                      item={item}
+                      selected={selectedTag === item.name}
+                      onClick={() => {
+                        setSelectedTag(item.name);
+                        setOpen(false);
+                      }}
+                    />
                   ))}
-                </ul>
-              </div>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                </div>
+              </SidebarGroupContent>
+
+              <SidebarGroupLabel className="-ml-2 mt-5 text-muted-foreground">
+                떠오르는 기사
+              </SidebarGroupLabel>
+              <SidebarGroupContent className="">
+                <div className="flex flex-col gap-2 ">
+                  <ul className="list-none space-y-4">
+                    {posts.slice(0, 10).map((post, index) => (
+                      <li key={post.slug} className="h-full w-full">
+                        <button
+                          onClick={() => setTimeout(() => setOpen(false), 1000)}
+                          className="h-full w-full"
+                        >
+                          <Link
+                            href={`/post/${post.slug}`}
+                            // href={`/tag/${encodeURIComponent(item.name)}`}
+
+                            className="flex gap-2 items-stretch justify-between"
+                          >
+                            <span className="text-[14px] dark:text-zinc-200 text-start h-full flex-1 tracking-tight line-clamp-3 postlists hover:underline">
+                              {post.title}
+                            </span>
+                            <p className="flex items-end w-fit text-right text-xs text-muted-foreground tracking-tighter">
+                              {timeAgoValues[index]}
+                            </p>
+                          </Link>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </div>
         </ScrollArea>
         <SidebarFooter className="h-12 pl-5">
           <ModeToggle />

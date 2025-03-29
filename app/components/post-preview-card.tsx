@@ -18,7 +18,7 @@ export const PostPreviewCard = ({
       <Link
         href={`/post/${slug}`}
         className={cn(
-          'flex flex-col w-full hover:cursor-pointer group relative group p-5 gap-5 rounded-lg',
+          'flex flex-col w-full hover:cursor-pointer group relative group p-5 gap-4 rounded-lg',
         )}
       >
         <div className="">
@@ -30,7 +30,7 @@ export const PostPreviewCard = ({
             className="object-cover h-60 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
           />
         </div>
-        <div className="flex flex-col group-hover:text-black dark:group-hover:text-white gap-y-2">
+        <div className="flex flex-col dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-white gap-y-2">
           <div className="flex justify-between items-start">
             <h3 className="w-full text-lg font-semibold line-clamp-1">
               {title}
@@ -39,7 +39,7 @@ export const PostPreviewCard = ({
               {formatDateWithoutYear(createdAt)}
             </p>
           </div>
-          <p className="text-sm overflow-hidden">{content}</p>
+          <p className="text-sm/[23px] overflow-hidden ">{content}</p>
         </div>
       </Link>
     </>

@@ -11,50 +11,6 @@ import { Link, Post, Tag } from '@prisma/client';
 // const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export async function getLinksbyPostId(postId: string) {
-  const links = await prisma.link.findMany({
-    where: {
-      postId,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    take: 3,
-  });
-  return links;
-}
-
-export async function getPosts() {
-  const posts = await prisma.post.findMany({
-    where: {
-      published: true,
-    },
-  });
-  return posts;
-}
-
-export async function getPost(id: string) {
-  const post = await prisma.post.findUnique({
-    where: {
-      id: id,
-    },
-  });
-  return post;
-}
-
-export const getPostBySlug = async (
-  slug: string,
-): Promise<(Post & { tags: Tag[] }) | null> => {
-  const decodedSlug = decodeURIComponent(slug);
-  const post = await prisma.post.findUnique({
-    where: { slug: decodedSlug },
-    include: {
-      tags: true,
-    },
-  });
-  return post;
-};
-
 export const getPostByUserId = async (userId: string) => {
   const post = await prisma.post.findMany({
     where: {
@@ -114,7 +70,6 @@ export async function createPost() {
     where: {
       authorId: user.id,
       published: false,
-      slug: user.id,
     },
   });
 
@@ -240,42 +195,4 @@ export async function deletePost(slug: string) {
   return await prisma.post.delete({
     where: { slug: slug },
   });
-}
-
-export async function getPrevNextPosts(postId: string) {
-  // Fetch the current post
-  const currentPost = await prisma.post.findUnique({
-    where: { id: postId, published: true },
-    select: { createdAt: true },
-  });
-
-  if (!currentPost) return { prevPost: null, nextPost: null };
-
-  const { createdAt } = currentPost;
-
-  // Get previous and next posts
-  const [prevPost, nextPost] = await Promise.all([
-    prisma.post.findFirst({
-      where: { createdAt: { lt: createdAt }, published: true },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        tags: true,
-      },
-    }),
-    prisma.post.findFirst({
-      where: { createdAt: { gt: createdAt }, published: true },
-      orderBy: { createdAt: 'asc' },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        tags: true,
-      },
-    }),
-  ]);
-
-  return { prevPost, nextPost };
 }

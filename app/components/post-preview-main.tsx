@@ -29,7 +29,7 @@ export const PostPreviewMain = ({
           <div className="flex flex-col h-80 gap-2 sm:w-[200px] md:w-[250px]">
             <div className="flex-1 flex flex-col gap-2">
               <h3 className="font-semibold text-lg h-fit">{title}</h3>
-              <p className="text-sm truncate-text flex-1">{content}</p>
+              <p className="text-sm/[23px] truncate-text flex-1">{content}</p>
             </div>
             <p className="w-full text-xs text-end h-10">
               {formatDateWithoutYear(createdAt)}
@@ -38,7 +38,7 @@ export const PostPreviewMain = ({
         </div>
       </Link>
 
-      <Link
+      {/* <Link
         href={`/post/${slug}`}
         className="sm:hidden flex flex-col w-full hover:cursor-pointer group relative p-4 gap-3"
       >
@@ -60,9 +60,9 @@ export const PostPreviewMain = ({
               {formatDateWithoutYear(createdAt)}
             </p>
           </div>
-          <p className="text-sm overflow-hidden">{content}</p>
+          <p className=" overflow-hidden text-sm/[22px]">{content}</p>
         </div>
-      </Link>
+      </Link> */}
     </>
   );
 };

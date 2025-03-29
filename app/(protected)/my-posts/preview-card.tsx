@@ -43,7 +43,7 @@ export const PreviewCard = ({
   return (
     <>
       <div className="relative group">
-        <div className="flex flex-col w-full hover:cursor-pointer group p-5 gap-5">
+        <div className="flex flex-col w-full hover:cursor-pointer group p-5 gap-4">
           <Image
             src={image || ''}
             alt="Preview"
@@ -61,7 +61,7 @@ export const PreviewCard = ({
                 {formatDateWithoutYear(createdAt)}
               </p>
             </div>
-            <p className="text-sm overflow-hidden">{content}</p>
+            <p className="overflow-hidden text-sm/[22px]">{content}</p>
           </div>
         </div>
         <Link

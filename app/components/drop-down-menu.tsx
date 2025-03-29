@@ -48,7 +48,7 @@ export const DropDownMenu = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="outline-none z-[99999]">
+      <DropdownMenuTrigger className="outline-none z-[99999] p-4 -m-4 rounded-full">
         {session && session.user ? (
           <UserProfile userName={userName} />
         ) : (

@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { PrevPostType } from '@/app/lib/types';
-import { Post } from '@prisma/client';
 
 import {
   HoverCard,
@@ -16,10 +15,9 @@ import { Badge } from '@/components/ui/badge';
 interface PrevNextProps {
   prevPost?: PrevPostType;
   nextPost?: PrevPostType;
-  post: Post;
 }
 
-export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
+export const PrevNext = ({ prevPost, nextPost }: PrevNextProps) => {
   // Prevents mismatched server & client rendering
   return (
     <div>
@@ -28,12 +26,7 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
         <HoverCard>
           <HoverCardTrigger asChild className="fixed bottom-20 left-0 z-30">
             <Link href={`/post/${prevPost.slug}`}>
-              <button
-                className={cn(
-                  ' bg-white dark:bg-[#1f1f1f] p-3',
-                  prevPost.id === post.id && 'hidden',
-                )}
-              >
+              <button className={cn(' bg-white dark:bg-[#1f1f1f] p-3')}>
                 <ArrowLeft strokeWidth={1} className="md:size-14 sm:size-10" />
               </button>
             </Link>
@@ -60,12 +53,7 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
         <HoverCard>
           <HoverCardTrigger asChild className="fixed bottom-20 right-0 z-30 ">
             <Link href={`/post/${nextPost.slug}`}>
-              <button
-                className={cn(
-                  ' bg-white dark:bg-[#1f1f1f] p-3',
-                  !nextPost && 'hidden',
-                )}
-              >
+              <button className={cn(' bg-white dark:bg-[#1f1f1f] p-3')}>
                 <ArrowRight strokeWidth={1} className="md:size-14 sm:size-10" />
               </button>
             </Link>
