@@ -26,7 +26,10 @@ export async function generateMetadata({
   }
 
   const title = `레인지 저널 | ${post.title}`;
-  const description = extractText(post.content!).slice(0, 160); // Use the content or a custom description
+  const description = post.content
+    ? extractText(post.content).slice(0, 160)
+    : '';
+  // Use the content or a custom description
   const image = post.image || '/range-journal-default-image.jpg'; // Fallback image if not set
   const url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}`; // Replace with your site's base URL
 
@@ -80,8 +83,8 @@ export default async function SlugPage({
           userId={userId}
           postLinks={links}
           tagsData={data}
-          prevPost={prevPost || post}
-          nextPost={nextPost || post}
+          prevPost={prevPost || undefined}
+          nextPost={nextPost || undefined}
         />
       </ClientOnly>
     </div>

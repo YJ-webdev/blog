@@ -19,5 +19,5 @@ export type PrevPostType = {
   id: string;
   slug: string | null;
   title: string | null;
-  published: boolean;
+  tags: Tag[];
 };

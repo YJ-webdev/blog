@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { PrevPostType } from '@/app/lib/types';
-import { Post, Tag } from '@prisma/client';
+import { Post } from '@prisma/client';
 
 import {
   HoverCard,
@@ -14,8 +14,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 interface PrevNextProps {
-  prevPost: PrevPostType & { tags: Tag[] };
-  nextPost: PrevPostType & { tags: Tag[] };
+  prevPost?: PrevPostType;
+  nextPost?: PrevPostType;
   post: Post;
 }
 
@@ -42,7 +42,7 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
             <div className="flex flex-col gap-4">
               <p>{prevPost.title}</p>{' '}
               <div className="flex flex-wrap gap-2">
-                {prevPost.tags.map((tag) => (
+                {prevPost?.tags?.map((tag) => (
                   <Badge
                     key={tag.id}
                     variant="outline"
@@ -56,14 +56,14 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
           </HoverCardContent>
         </HoverCard>
       )}
-      {nextPost.slug !== post.slug && (
+      {nextPost && (
         <HoverCard>
           <HoverCardTrigger asChild className="fixed bottom-20 right-0 ">
             <Link href={`/post/${nextPost.slug}`}>
               <button
                 className={cn(
                   ' bg-white dark:bg-[#1f1f1f] p-3',
-                  !nextPost.published && 'hidden',
+                  !nextPost && 'hidden',
                 )}
               >
                 <ArrowRight strokeWidth={1} className="md:size-14 sm:size-10" />

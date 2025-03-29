@@ -9,7 +9,6 @@ import { UserProfile } from './user-profile';
 import Link from 'next/link';
 import {
   List,
-  // Bookmark,
   UserRoundMinus,
   PencilLine,
   House,
@@ -20,7 +19,7 @@ import { handleSignOut } from '../lib/actions/auth';
 import { Session } from 'next-auth';
 
 import { ShortCut } from './short-cut';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useTransition } from 'react';
 import { createPost } from '../lib/actions/post';
 
@@ -35,14 +34,14 @@ export const DropDownMenu = ({
   openLoginDialog,
   userName,
 }: DropDownMenuProps) => {
-  const router = useRouter();
+  // const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleCreatePost = async () => {
     startTransition(async () => {
       const post = await createPost();
       if (post) {
-        router.push(`/post/${post.slug}`);
+        redirect('/post/' + post.slug);
       }
     });
   };
@@ -71,12 +70,6 @@ export const DropDownMenu = ({
             <List className="mr-3 h-4 w-4" />내 포스트
           </Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem asChild>
-          <Link href={'/bookmarked'} className="flex items-center">
-            <Bookmark className="mr-3 h-4 w-4" />
-            북마크
-          </Link>
-        </DropdownMenuItem> */}
 
         <DropdownMenuItem asChild>
           <Link href={'/'} className="flex items-center cursor-pointer">
@@ -84,20 +77,6 @@ export const DropDownMenu = ({
             홈으로 가기
           </Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem asChild>
-          <Link
-            href={'/about'}
-            className={cn(
-              'flex items-center cursor-pointer',
-              session && session.user
-                ? 'text-muted-foreground'
-                : 'text-primary',
-            )}
-          >
-            <div className="mr-3 h-4 w-4" />
-            사이트 소개
-          </Link>
-        </DropdownMenuItem> */}
 
         <DropdownMenuSeparator className="my-0" />
         {session && session.user ? (

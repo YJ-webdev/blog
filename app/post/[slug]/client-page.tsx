@@ -19,10 +19,10 @@ import { useRouter } from 'next/navigation';
 interface ClientPageProps {
   post: Post & { tags: Tag[] };
   userId: string;
-  postLinks?: LinkPrisma[];
+  postLinks: LinkPrisma[];
   tagsData: Tag[];
-  prevPost: PrevPostType & { tags: Tag[] };
-  nextPost: PrevPostType & { tags: Tag[] };
+  prevPost?: PrevPostType;
+  nextPost?: PrevPostType;
 }
 
 export const ClientPage = ({

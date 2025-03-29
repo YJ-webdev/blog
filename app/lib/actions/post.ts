@@ -105,29 +105,25 @@ export const getPostsByTag = async (tag: string): Promise<Post[]> => {
 
 export async function createPost() {
   const user = await currentUser();
-
   if (!user) return redirect('/login');
 
-  const latestPost = await prisma.post.findFirst({
+  // slug should be uniquely generate automatinally.
+  const unpublishedPost = await prisma.post.findFirst({
     where: {
       authorId: user.id,
       published: false,
-      slug: 'new-post',
-    },
-
-    orderBy: {
-      createdAt: 'desc',
+      slug: user.id,
     },
   });
 
-  if (latestPost) {
-    return latestPost;
+  if (unpublishedPost) {
+    return unpublishedPost;
   }
 
   const newPost = await prisma.post.create({
     data: {
       authorId: user.id,
-      slug: 'new-post',
+      slug: user.id,
       published: false,
     },
   });
@@ -142,12 +138,12 @@ export async function publishPost(formData: FormData): Promise<void> {
   const id = formData.get('id') as string;
   const title = formData.get('title') as string;
   const slug = formData.get('slug') as string;
-  const image = formData.get('image') as string | null;
+  const image = formData.get('image') as string;
   const content = formData.get('content') as string;
   const linksString = formData.get('links') as string | null;
   const tagsString = formData.get('tags') as string | null;
 
-  if (!id || !title || !content || !slug) {
+  if (!id || !title || !content || !slug || !image) {
     throw new Error('Required fields are missing');
   }
 
@@ -248,7 +244,7 @@ export async function getPrevNextPosts(postId: string) {
   // Fetch the current post
   const currentPost = await prisma.post.findUnique({
     where: { id: postId, published: true },
-    select: { createdAt: true, slug: true, title: true },
+    select: { createdAt: true },
   });
 
   if (!currentPost) return { prevPost: null, nextPost: null };
@@ -258,24 +254,22 @@ export async function getPrevNextPosts(postId: string) {
   // Get previous and next posts
   const [prevPost, nextPost] = await Promise.all([
     prisma.post.findFirst({
-      where: { createdAt: { lt: createdAt } },
+      where: { createdAt: { lt: createdAt }, published: true },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         slug: true,
         title: true,
-        published: true,
         tags: true,
       },
     }),
     prisma.post.findFirst({
-      where: { createdAt: { gt: createdAt } },
+      where: { createdAt: { gt: createdAt }, published: true },
       orderBy: { createdAt: 'asc' },
       select: {
         id: true,
         slug: true,
         title: true,
-        published: true,
         tags: true,
       },
     }),

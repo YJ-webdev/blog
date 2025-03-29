@@ -9,6 +9,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/auth';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -26,6 +27,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'false';
 
@@ -68,7 +72,7 @@ export default async function RootLayout({
             <main>
               <SidebarTrigger className="bg-transparent hover:bg-transparent w-fit" />
               <Nav />
-              <ClientPage> {children}</ClientPage>
+              <ClientPage userId={userId}> {children}</ClientPage>
             </main>
           </SidebarProvider>
         </ThemeProvider>
