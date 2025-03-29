@@ -19,7 +19,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `http://rangejournal-9ynmody1z-yj-webdevs-projects.vercel.app/tag/${tag}`,
+      url: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${tag}`,
       images: '/range-journal-default-image.jpg',
     },
   };

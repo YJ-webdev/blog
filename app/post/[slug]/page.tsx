@@ -10,7 +10,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const res = await fetch(
-    `http://rangejournal-9ynmody1z-yj-webdevs-projects.vercel.app/post/${slug}/api`,
+    `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
   );
   if (!res.ok)
     return {
@@ -32,7 +32,7 @@ export default async function SlugPage({
   const userId = session?.user?.id;
 
   const res = await fetch(
-    `http://rangejournal-9ynmody1z-yj-webdevs-projects.vercel.app/post/${slug}/api`,
+    `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
   );
   if (!res.ok) return redirect('/not-found');
 

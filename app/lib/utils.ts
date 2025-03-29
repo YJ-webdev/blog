@@ -54,7 +54,7 @@ export function generateMetadataFromPost(post: Post) {
     ? extractText(post.content).slice(0, 160)
     : '';
   const image = post.image || '/range-journal-default-image.jpg';
-  const url = `http://rangejournal-9ynmody1z-yj-webdevs-projects.vercel.app/post/${post.slug}`;
+  const url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${post.slug}`;
 
   return {
     title,
