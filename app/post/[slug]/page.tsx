@@ -9,7 +9,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const res = await fetch(`http://localhost:3000/post/${slug}/api`);
+  const res = await fetch(
+    `http://rangejournal-9ynmody1z-yj-webdevs-projects.vercel.app/post/${slug}/api`,
+  );
   if (!res.ok)
     return {
       title: 'Post Not Found',
@@ -29,7 +31,9 @@ export default async function SlugPage({
   const session = await auth();
   const userId = session?.user?.id;
 
-  const res = await fetch(`http://localhost:3000/post/${slug}/api`);
+  const res = await fetch(
+    `http://rangejournal-9ynmody1z-yj-webdevs-projects.vercel.app/post/${slug}/api`,
+  );
   if (!res.ok) return redirect('/not-found');
 
   const { post, prevPost, nextPost, tagsData, links } = await res.json();
