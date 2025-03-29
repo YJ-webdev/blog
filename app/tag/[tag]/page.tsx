@@ -6,7 +6,7 @@ import { extractText } from '@/app/lib/utils';
 export async function generateMetadata({
   params,
 }: {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
 

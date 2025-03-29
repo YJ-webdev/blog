@@ -22,10 +22,10 @@ export type PrevPostType = {
   tags: Tag[];
 };
 
-export interface ResponseType {
-  title?: string;
-  description?: string;
-  images: string[];
-  siteName: string;
-  favicons: string[];
-}
+// export interface ResponseType {
+//   title?: string;
+//   description?: string;
+//   images: string[];
+//   siteName: string;
+//   favicons: string[];
+// }

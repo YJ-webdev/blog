@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,6 @@ import { getPreview } from '@/app/lib/actions/preview';
 import { LinkIcon, Loader2 } from 'lucide-react';
 import { Link } from '@prisma/client';
 import { AffiliateLink } from '@/app/components/affiliate-link';
-import { Response } from '@/app/lib/types';
 
 function getLargestFavicon(favicons: string[]): string {
   if (!favicons.length) return '';
@@ -22,7 +22,7 @@ function getLargestFavicon(favicons: string[]): string {
   })[0];
 }
 
-function transformResponse(res: Response, url: string) {
+function transformResponse(res: any, url: string) {
   return {
     title: 'title' in res ? res.title : null,
     description: 'description' in res ? res.description : null,
@@ -136,18 +136,18 @@ const LinkPreviews = ({
         setTimeout(() => setError(null), 5000);
         return;
       } else {
-        setLinks((prevLinks) => {
+        setLinks((prevLinks: any) => {
           const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
           return newLinks;
         });
 
         // Update adLinks state for prisma
-        setAdLinks?.((prevLinks: Link[]) => {
+        setAdLinks?.((prevLinks: any) => {
           const newLinks: Link[] = [
             {
               id: crypto.randomUUID(),
               postId,
-              url: normalizedUrl,
+
               ...linkPreview,
             },
             ...prevLinks,
