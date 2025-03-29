@@ -42,7 +42,9 @@ export async function getPost(id: string) {
   return post;
 }
 
-export const getPostBySlug = async (slug: string) => {
+export const getPostBySlug = async (
+  slug: string,
+): Promise<(Post & { tags: Tag[] }) | null> => {
   const decodedSlug = decodeURIComponent(slug);
   const post = await prisma.post.findUnique({
     where: { slug: decodedSlug },
