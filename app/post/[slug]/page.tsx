@@ -13,7 +13,7 @@ import { extractText } from '@/app/lib/utils';
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -25,7 +25,8 @@ export async function generateMetadata({
     };
   }
 
-  const title = `레인지 저널 | ${post.title}`;
+  const posttitle = post.title ?? '새 포스트 작성';
+  const title = `레인지 저널 | ${posttitle}`; // Use the title from the post
   const description = post.content
     ? extractText(post.content).slice(0, 160)
     : '';
