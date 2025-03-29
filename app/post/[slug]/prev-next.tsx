@@ -26,7 +26,7 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
       {' '}
       {prevPost && (
         <HoverCard>
-          <HoverCardTrigger asChild className="fixed bottom-20 left-0 z-[50]">
+          <HoverCardTrigger asChild className="fixed bottom-20 left-0 z-30">
             <Link href={`/post/${prevPost.slug}`}>
               <button
                 className={cn(
@@ -58,7 +58,7 @@ export const PrevNext = ({ prevPost, nextPost, post }: PrevNextProps) => {
       )}
       {nextPost && (
         <HoverCard>
-          <HoverCardTrigger asChild className="fixed bottom-20 right-0 ">
+          <HoverCardTrigger asChild className="fixed bottom-20 right-0 z-30 ">
             <Link href={`/post/${nextPost.slug}`}>
               <button
                 className={cn(

@@ -106,9 +106,9 @@ export const Tags = ({
               item={item}
               className={cn(
                 selectedTags.some((tag) => tag.name === item.name) &&
-                  'bg-primary text-white dark:text-black',
+                  'bg-primary dark:bg-zinc-100 text-white dark:text-black',
                 stringSavedTags.includes(item.id) &&
-                  'bg-primary text-white dark:text-black',
+                  'bg-primary dark:bg-zinc-100  text-white dark:text-black',
               )}
               onClick={() => toggleTag(item)}
             />
@@ -120,9 +120,9 @@ export const Tags = ({
               item={item}
               className={cn(
                 selectedTags.some((tag) => tag.name === item.name) &&
-                  'bg-primary text-white dark:text-black',
+                  'bg-primary dark:bg-zinc-100 text-white dark:text-black',
                 stringSavedTags.includes(item.id) &&
-                  'bg-primary text-white dark:text-black',
+                  'bg-primary dark:bg-zinc-100 text-white dark:text-black',
               )}
               onClick={() => toggleTag(item)}
             />
@@ -146,7 +146,7 @@ export const Tags = ({
               />
             </PopoverTrigger>
 
-            <PopoverContent className="rounded-lg w-60 px-5 pb-5 dark:bg-zinc-100">
+            <PopoverContent className="rounded-md border w-60 px-5 pb-5 dark:bg-zinc-100">
               <div className="grid w-full">
                 <p className="text-xs text-zinc-500 w-full text-center">
                   직접 입력하기.

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { ImageIcon, Trash } from 'lucide-react';
-import Image from 'next/image'; // Import Next.js Image component
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface ImageDropZoneProps {
@@ -16,7 +16,7 @@ export const ImageDropZone = ({
   imageKey,
   imageUrl,
 }: ImageDropZoneProps) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null); // Reference to file input
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const storedImage = localStorage.getItem(imageKey);
@@ -77,7 +77,7 @@ export const ImageDropZone = ({
             reader.onload = () => {
               const base64Image = reader.result as string;
               setImageUrl(base64Image);
-              localStorage.setItem(imageKey, base64Image);
+              sessionStorage.setItem(imageKey, base64Image);
             };
           }
         }}

@@ -12,7 +12,7 @@ export const ClientPage = ({
   children: React.ReactNode;
   userId?: string;
 }) => {
-  const { open, setOpen } = useSidebar();
+  const { open } = useSidebar();
   return (
     <div
       style={{

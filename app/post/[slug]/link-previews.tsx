@@ -10,6 +10,7 @@ import { getPreview } from '@/app/lib/actions/preview';
 import { LinkIcon, Loader2 } from 'lucide-react';
 import { Link } from '@prisma/client';
 import { AffiliateLink } from '@/app/components/affiliate-link';
+import { ResponseType } from '@/app/lib/types';
 
 function getLargestFavicon(favicons: string[]): string {
   if (!favicons.length) return '';
@@ -21,7 +22,7 @@ function getLargestFavicon(favicons: string[]): string {
   })[0];
 }
 
-function transformResponse(res: any, url: string) {
+function transformResponse(res: ResponseType, url: string) {
   return {
     title: 'title' in res ? res.title : null,
     description: 'description' in res ? res.description : null,
@@ -124,7 +125,9 @@ const LinkPreviews = ({
 
       const res = await getPreview(normalizedUrl);
       const linkPreview =
-        typeof res === 'string' ? res : transformResponse(res, normalizedUrl);
+        typeof res === 'string'
+          ? res
+          : transformResponse(res as ResponseType, normalizedUrl);
 
       // Update links state for localStorage
 
@@ -136,7 +139,19 @@ const LinkPreviews = ({
         return;
       } else {
         setLinks((prevLinks) => {
-          const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
+          const newLink = {
+            id: crypto.randomUUID(), // Unique ID
+            postId, // Ensure a post ID is present
+            createdAt: new Date(), // Ensure a valid Date
+            title: linkPreview.title ?? null, // Convert undefined to null
+            description: linkPreview.description ?? null,
+            image: linkPreview.image ?? null,
+            url: linkPreview.url,
+            siteName: linkPreview.siteName ?? null,
+            favicon: linkPreview.favicon ?? null,
+          };
+
+          const newLinks = [newLink, ...prevLinks].slice(0, 3); // Keep only top 3
           return newLinks;
         });
 
@@ -147,7 +162,12 @@ const LinkPreviews = ({
               id: crypto.randomUUID(),
               postId,
               url: normalizedUrl,
-              ...linkPreview,
+              createdAt: new Date(), // ✅ Ensure createdAt is included
+              title: linkPreview.title ?? null,
+              description: linkPreview.description ?? null,
+              image: linkPreview.image ?? null,
+              siteName: linkPreview.siteName ?? null,
+              favicon: linkPreview.favicon ?? null,
             },
             ...prevLinks,
           ].slice(0, 3);

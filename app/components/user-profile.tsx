@@ -6,7 +6,7 @@ export const UserProfile = ({ userName }: { userName: string }) => {
     <div className=" z-[99999]">
       {userName ? (
         <>
-          <p className="hidden lg:block">{`Hi, ${userName}`}</p>
+          <p className="hidden lg:block">{`안녕, ${userName}`}</p>
           <User className="lg:hidden" />
         </>
       ) : (

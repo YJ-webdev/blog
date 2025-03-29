@@ -21,3 +21,11 @@ export type PrevPostType = {
   title: string | null;
   tags: Tag[];
 };
+
+export interface ResponseType {
+  title?: string;
+  description?: string;
+  images: string[];
+  siteName: string;
+  favicons: string[];
+}

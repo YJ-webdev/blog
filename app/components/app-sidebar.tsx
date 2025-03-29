@@ -30,7 +30,7 @@ interface AppSidebarProps {
 export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const { open, setOpen, toggleSidebar } = useSidebar();
+  const { open, toggleSidebar } = useSidebar();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [timeAgoValues, setTimeAgoValues] = useState<string[]>([]);
 
@@ -86,7 +86,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
       >
         {!open && <PanelLeft strokeWidth={1.5} />}
       </button>
-      <Sidebar>
+      <Sidebar className=" bg-white dark:bg-[#1f1f1f] p-2">
         <SidebarHeader className="hidden md:block ">
           <button
             onClick={toggleSidebar}
@@ -95,7 +95,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             {open ? <PanelLeftDashed strokeWidth={1.5} /> : null}
           </button>
           <div className="w-full relative h-8">
-            <kbd className="absolute top-4 right-2 text-end pointer-none inline-flex select-none items-center gap-1 px-1.5 text-xs font-medium text-muted-foreground">
+            <kbd className="absolute top-2 right-2 text-end pointer-none inline-flex select-none items-center gap-1 px-1.5 text-xs font-medium text-muted-foreground">
               <span className="rounded border font-mono bg-muted px-1">
                 ctrl
               </span>
@@ -105,7 +105,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
         </SidebarHeader>
 
         <ScrollArea className="h-[1000px] w-full py-2 px-3 rounded-none">
-          <SidebarGroup>
+          <SidebarGroup className="">
             <SidebarGroupContent className="mb-4">
               <Input
                 value={searchTerm}
@@ -118,7 +118,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               />
             </SidebarGroupContent>
 
-            <SidebarGroupLabel className="-ml-2 -mt-3">주제</SidebarGroupLabel>
+            <SidebarGroupLabel className="-ml-2 ">주제</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="flex flex-wrap gap-2 ">
                 {tags.map((item) => (
@@ -135,7 +135,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             <SidebarGroupLabel className="-ml-2 mt-5">
               떠오르는 기사
             </SidebarGroupLabel>
-            <SidebarGroupContent>
+            <SidebarGroupContent className="">
               <div className="flex flex-col gap-2 ">
                 <ul className="list-none space-y-4">
                   {posts.slice(0, 10).map((post, index) => (

@@ -11,7 +11,7 @@ import { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { ContentLoading } from '@/app/components/content-loading';
 import { debounce } from 'lodash';
@@ -138,28 +138,19 @@ export default function Editor({
     return editorRef.current;
   }, [content]);
 
-  const debouncedSave = useCallback(
-    debounce((jsonBlocks: Block[]) => {
-      saveToStorage(postId, jsonBlocks, onContentChange);
-    }, 1000),
-    [postId, onContentChange],
-  );
-
   const onChange = () => {
     if (editor) {
       // Save the current cursor position
       cursorPositionRef.current = editor.getTextCursorPosition();
 
       const jsonBlocks = editor.document;
-      debouncedSave(jsonBlocks);
+
+      // Directly use the debouncedSave without useCallback
+      debounce((jsonBlocks: Block[]) => {
+        saveToStorage(postId, jsonBlocks, onContentChange);
+      }, 1000)(jsonBlocks); // Immediately invoke the debounced function
     }
   };
-
-  useEffect(() => {
-    return () => {
-      debouncedSave.cancel();
-    };
-  }, [debouncedSave]);
 
   useEffect(() => {
     if (cursorPositionRef.current && editor) {
