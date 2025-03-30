@@ -1,26 +1,26 @@
 import { ClientPage } from '@/app/post/[slug]/client-page';
 import { auth } from '@/auth';
-import { generateMetadataFromPost } from '@/app/lib/utils';
+// import { generateMetadataFromPost } from '@/app/lib/utils';
 import { redirect } from 'next/navigation';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const res = await fetch(
-    `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
-  );
-  if (!res.ok)
-    return {
-      title: 'Post Not Found',
-      description: 'This post is no longer available.',
-    };
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }) {
+//   const { slug } = await params;
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
+//   );
+//   if (!res.ok)
+//     return {
+//       title: 'Post Not Found',
+//       description: 'This post is no longer available.',
+//     };
 
-  const { post } = await res.json();
-  return generateMetadataFromPost(post);
-}
+//   const { post } = await res.json();
+//   return generateMetadataFromPost(post);
+// }
 
 export default async function SlugPage({
   params,
@@ -32,7 +32,7 @@ export default async function SlugPage({
   const userId = session?.user?.id;
 
   const res = await fetch(
-    `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
+    `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
   );
   if (!res.ok) return redirect('/not-found');
 
