@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { PostPreviewType } from '@/app/lib/types';
-import { deletePost } from '@/app/lib/actions/post';
+import { deletePost } from '@/app/actions/post';
 import { formatDateWithoutYear } from '@/app/lib/utils';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';

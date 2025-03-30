@@ -1,9 +1,7 @@
-import { getPostBySlug } from '@/app/lib/actions/post';
-import { ClientPage } from '@/app/post/[slug]/client-page';
-
 import { prisma } from '@/lib/prisma';
 // import { generateMetadataFromPost } from '@/app/lib/utils';
 import { redirect } from 'next/navigation';
+import { PostClient } from './client-page';
 
 // export async function generateMetadata({
 //   params,
@@ -30,7 +28,16 @@ export default async function SlugPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const decodedSlug = decodeURIComponent(slug);
+
+  const post = await prisma.post.findUnique({
+    where: { slug: decodedSlug },
+    include: {
+      tags: true,
+      links: true,
+    },
+  });
+
   if (post === null) {
     return redirect('/not-found');
   }
@@ -76,7 +83,7 @@ export default async function SlugPage({
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
-      <ClientPage
+      <PostClient
         post={post}
         postLinks={links}
         prevPost={prevPost || undefined}

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 
 import React, { useEffect, useState } from 'react';
 import LinkPreview from './link-preview';
-import { getPreview } from '@/app/lib/actions/preview';
+import { getPreview } from '@/app/actions/preview';
 
 import { LinkIcon, Loader2 } from 'lucide-react';
 import { Link } from '@prisma/client';
@@ -52,14 +52,14 @@ function normalizeUrl(url: string): string {
 }
 
 interface LinkPreviewsProps {
-  key: string;
+  linkKey: string;
   postLinks: Link[];
   setPostLinks: React.Dispatch<React.SetStateAction<Array<Link>>>;
   isEditable: boolean;
 }
 
 const LinkPreviews = ({
-  key,
+  linkKey,
   postLinks,
   setPostLinks,
   isEditable,
@@ -70,21 +70,21 @@ const LinkPreviews = ({
 
   //fetch links from the localStorage
   useEffect(() => {
-    const linksKey = `links_${key}`;
+    const linksKey = `links_${linkKey}`;
     const storedLinks = localStorage.getItem(linksKey);
     if (storedLinks) {
       const parsedLinks: Link[] = JSON.parse(storedLinks);
       setPostLinks(parsedLinks);
     }
-  }, [key, setPostLinks]);
+  }, [linkKey, setPostLinks]);
 
   // Save links to localStorage
   useEffect(() => {
     if (postLinks.length > 0) {
-      const linksKey = `links_${key}`;
+      const linksKey = `links_${linkKey}`;
       localStorage.setItem(linksKey, JSON.stringify(postLinks));
     }
-  }, [postLinks, key]);
+  }, [postLinks, linkKey]);
 
   const getData = async () => {
     const trimmedUrl = url.trim();
@@ -133,7 +133,7 @@ const LinkPreviews = ({
           const newLinks: Link[] = [
             {
               id: crypto.randomUUID(),
-              key,
+              linkKey,
 
               ...linkPreview,
             },

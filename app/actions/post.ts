@@ -3,90 +3,13 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
-import { Link, Post, Tag } from '@prisma/client';
+import { Link, Tag } from '@prisma/client';
 
 // import { createClient } from '@supabase/supabase-js';
 
 // const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 // const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-export async function getLinksbyPostId(postId: string) {
-  const links = await prisma.link.findMany({
-    where: {
-      postId,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    take: 3,
-  });
-  return links;
-}
-
-export const getPostBySlug = async (
-  slug: string,
-): Promise<(Post & { tags: Tag[]; links: Link[] }) | null> => {
-  const decodedSlug = decodeURIComponent(slug);
-  const post = await prisma.post.findUnique({
-    where: { slug: decodedSlug },
-    include: {
-      tags: true,
-      links: true,
-    },
-  });
-  return post;
-};
-
-export const getPostByUserId = async (userId: string) => {
-  const post = await prisma.post.findMany({
-    where: {
-      authorId: userId,
-      published: true,
-    },
-    select: {
-      slug: true,
-      title: true,
-      content: true,
-      image: true,
-      tags: true,
-      links: true,
-      bookmarkedBy: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return post;
-};
-
-export const getPostsByTag = async (tag: string): Promise<Post[]> => {
-  try {
-    console.log('Searching for posts with tag:', tag); // Debugging the tag
-    const decodedTag = decodeURIComponent(tag);
-
-    const posts = await prisma.post.findMany({
-      where: {
-        tags: {
-          some: {
-            name: decodedTag,
-          },
-        },
-        published: true,
-      },
-    });
-
-    console.log(`Found ${posts.length} posts with tag: ${tag}`); // Debugging the result
-
-    return posts;
-  } catch (error) {
-    console.error('Error fetching posts by tag:', error);
-    throw new Error(
-      'Unable to fetch posts at this time. Please try again later.',
-    );
-  }
-};
 
 export async function createPost() {
   const user = await currentUser();

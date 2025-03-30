@@ -4,13 +4,13 @@ import EditorWrapper from '@/components/dynamic-editor';
 import { useState } from 'react';
 import { Link, Post, Tag } from '@prisma/client';
 
-import LinkPreviews from './link-previews';
+import LinkPreviews from '../../../components/link-previews';
 import { PrevPostType } from '@/app/lib/types';
-import { PrevNext } from './prev-next';
+import { PrevNext } from '../../../components/prev-next';
 import { PostTags } from '@/app/components/tag-button';
 import Image from 'next/image';
 
-interface ClientPageProps {
+interface PostClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
   postLinks: Link[];
   prevPost?: PrevPostType;
@@ -18,13 +18,13 @@ interface ClientPageProps {
   postTags: Tag[];
 }
 
-export const ClientPage = ({
+export const PostClient = ({
   post,
   // postLinks,
   prevPost,
   nextPost,
   postTags,
-}: ClientPageProps) => {
+}: PostClientProps) => {
   // const titleKey = `postTitle_${post.id}`;
   // const imageKey = `uploadedImage_${post.id}`;
   // const slugKey = `postSlug_${post.id}`;
@@ -136,7 +136,7 @@ export const ClientPage = ({
         />
 
         <EditorWrapper
-          postId={post.id}
+          contentKey={post.id}
           editable={false}
           initialContent={content}
           onContentChange={setContent}
@@ -150,7 +150,7 @@ export const ClientPage = ({
 
         <LinkPreviews
           isEditable={false}
-          postId={post.id}
+          linkKey={post.id}
           postLinks={post.links}
           setPostLinks={() => {}}
         />

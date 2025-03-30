@@ -1,4 +1,4 @@
-import { handleSignIn } from '@/app/lib/actions/auth';
+import { handleSignIn } from '@/app/actions/auth';
 import { BsGithub } from 'react-icons/bs';
 
 export default function GithubSignIn() {

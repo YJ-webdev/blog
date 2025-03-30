@@ -15,13 +15,13 @@ import {
   MenuIcon,
   UserRoundPlus,
 } from 'lucide-react';
-import { handleSignOut } from '../lib/actions/auth';
+import { handleSignOut } from '../actions/auth';
 import { Session } from 'next-auth';
 
 import { ShortCut } from './short-cut';
 import { redirect } from 'next/navigation';
 import { useTransition } from 'react';
-import { createPost } from '../lib/actions/post';
+import { createPost } from '../actions/post';
 
 interface DropDownMenuProps {
   session: Session | null;

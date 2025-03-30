@@ -1,4 +1,4 @@
-import { publishPost } from '@/app/lib/actions/post';
+import { publishPost } from '@/app/actions/post';
 import { NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {

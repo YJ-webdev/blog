@@ -2,13 +2,14 @@
 
 import { ImageDropZone } from '@/app/components/image-drop-zone';
 import { Tags } from '@/app/components/tags';
-import LinkPreviews from '@/app/post/[slug]/link-previews';
+
 import EditorWrapper from '@/components/dynamic-editor';
 import { Button } from '@/components/ui/button';
 import { Link, Tag } from '@prisma/client';
 import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useFormStatus } from 'react-dom';
+import LinkPreviews from '@/app/components/link-previews';
 
 interface NewPostClientProps {
   tagsData: Tag[];
@@ -94,7 +95,7 @@ export const NewPostClient = ({ tagsData, userId }: NewPostClientProps) => {
           />
 
           <LinkPreviews
-            key={userId}
+            linkKey={userId}
             postLinks={postLinks}
             setPostLinks={setPostLinks}
             isEditable={true}

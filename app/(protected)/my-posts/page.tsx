@@ -1,10 +1,10 @@
-import { getPostByUserId } from '@/app/lib/actions/post';
 import { extractText } from '@/app/lib/utils';
 import { auth } from '@/auth';
 
 import { redirect } from 'next/navigation';
-import PreviewCard from './preview-card';
+import PreviewCard from '../../components/preview-card';
 import { NoPost } from './no-post';
+import { prisma } from '@/lib/prisma';
 
 export default async function MyPostsPage() {
   const session = await auth();
@@ -14,7 +14,25 @@ export default async function MyPostsPage() {
   }
 
   const userId = session?.user?.id;
-  const posts = await getPostByUserId(userId!);
+  const posts = await prisma.post.findMany({
+    where: {
+      authorId: userId,
+      published: true,
+    },
+    select: {
+      slug: true,
+      title: true,
+      content: true,
+      image: true,
+      tags: true,
+      links: true,
+      bookmarkedBy: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
 
   return (
     <div className="flex items-center gap-2 mb-16 -mx-2">

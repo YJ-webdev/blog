@@ -1,6 +1,6 @@
 'use client';
 
-import { createPost } from '@/app/lib/actions/post';
+import { createPost } from '@/app/actions/post';
 import { redirect } from 'next/navigation';
 import { useTransition } from 'react';
 

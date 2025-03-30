@@ -1,7 +1,7 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
-import { getPostsByTag } from '@/app/lib/actions/post';
 import { PostPreviewType } from '@/app/lib/types';
 import { extractText } from '@/app/lib/utils';
+import { prisma } from '@/lib/prisma';
 
 // export async function generateMetadata({
 //   params,
@@ -31,10 +31,18 @@ export default async function TagPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
 
-  const posts = await getPostsByTag(tag);
-
-  if (!posts || posts.length === 0) return <p>no posts yet</p>;
+  const posts = await prisma.post.findMany({
+    where: {
+      tags: {
+        some: {
+          name: decodedTag,
+        },
+      },
+      published: true,
+    },
+  });
 
   return (
     <div className="flex flex-col gap-7 w-full">
