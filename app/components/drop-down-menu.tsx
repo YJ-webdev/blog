@@ -41,7 +41,7 @@ export const DropDownMenu = ({
     startTransition(async () => {
       const post = await createPost();
       if (post) {
-        redirect('/post/' + post.slug);
+        redirect('/new-post/');
       }
     });
   };

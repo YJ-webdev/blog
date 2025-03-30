@@ -18,7 +18,7 @@ import { debounce } from 'lodash';
 
 interface EditorProps {
   editable: boolean;
-  postId: string;
+  contentKey: string;
   initialContent?: string;
   onContentChange: (content: string) => void;
 }
@@ -63,7 +63,7 @@ async function loadFromStorage(postId: string) {
 
 export default function Editor({
   editable,
-  postId,
+  contentKey,
   initialContent,
   onContentChange,
 }: EditorProps) {
@@ -97,7 +97,7 @@ export default function Editor({
   useEffect(() => {
     const loadContent = async () => {
       if (editable) {
-        const storedContent = await loadFromStorage(postId);
+        const storedContent = await loadFromStorage(contentKey);
 
         if (storedContent && storedContent.length > 0) {
           setContent(storedContent);
@@ -116,7 +116,7 @@ export default function Editor({
     };
 
     loadContent();
-  }, [postId, initialContent, editable]);
+  }, [contentKey, initialContent, editable]);
 
   const editor = useMemo(() => {
     if (content === 'loading') {
@@ -147,7 +147,7 @@ export default function Editor({
 
       // Directly use the debouncedSave without useCallback
       debounce((jsonBlocks: Block[]) => {
-        saveToStorage(postId, jsonBlocks, onContentChange);
+        saveToStorage(contentKey, jsonBlocks, onContentChange);
       }, 1000)(jsonBlocks); // Immediately invoke the debounced function
     }
   };

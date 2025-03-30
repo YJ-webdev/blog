@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 
-export const Title = ({ userId }: { userId?: string }) => {
+export const Title = () => {
   const pathname = usePathname();
 
   const segments = pathname.split('/').filter(Boolean);
@@ -14,16 +14,13 @@ export const Title = ({ userId }: { userId?: string }) => {
 
   return (
     <div className="mt-5 px-4 bg-white dark:bg-[#1f1f1f] max-w-[1000px] mx-auto w-full">
-      {slug &&
-        slug !== userId && ( // Ensure slug is not null before comparison
-          <h1 className="font-bold md:text-6xl text-5xl">{formatSlug(slug)}</h1>
-        )}
-
-      {!slug && (
-        <h1 className="font-bold md:text-6xl text-5xl">
-          {pathname === '/my-posts' ? <>내 포스트</> : <>레인지 저널.</>}
-        </h1>
-      )}
+      <h1 className="font-bold md:text-6xl text-5xl">
+        {pathname === '/my-posts' && '내 포스트'}
+        {pathname === '/edit' && ''}
+        {pathname === '/' && '레인지 저널'}
+        {pathname.includes('/new-post') && ''}
+        {!pathname.includes('/edit') && slug && formatSlug(slug)}
+      </h1>
     </div>
   );
 };

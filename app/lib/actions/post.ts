@@ -26,12 +26,13 @@ export async function getLinksbyPostId(postId: string) {
 
 export const getPostBySlug = async (
   slug: string,
-): Promise<(Post & { tags: Tag[] }) | null> => {
+): Promise<(Post & { tags: Tag[]; links: Link[] }) | null> => {
   const decodedSlug = decodeURIComponent(slug);
   const post = await prisma.post.findUnique({
     where: { slug: decodedSlug },
     include: {
       tags: true,
+      links: true,
     },
   });
   return post;

@@ -53,7 +53,7 @@ export const slugify = (text: string) =>
 //   const description = post.content
 //     ? extractText(post.content).slice(0, 160)
 //     : '';
-//   const image = post.image || '/range-journal-default-image.jpg';
+//   const image = post.image || '/images/default-image.jpg';
 //   const url = `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${post.slug}`;
 
 //   return {

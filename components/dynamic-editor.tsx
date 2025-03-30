@@ -7,21 +7,21 @@ const Editor = dynamic(() => import('./editor'), { ssr: false });
 
 interface EditorWrapperProps {
   editable: boolean;
-  postId: string;
-  initialContent?: string;
-  onContentChange: (content: string) => void;
+  contentKey: string;
+  initialContent: string;
+  onContentChange: (contentKey: string) => void;
 }
 
 export default function EditorWrapper({
   editable,
-  postId,
+  contentKey,
   initialContent,
   onContentChange,
 }: EditorWrapperProps) {
   return (
     <Editor
       editable={editable}
-      postId={postId}
+      contentKey={contentKey}
       initialContent={initialContent}
       onContentChange={onContentChange}
     />

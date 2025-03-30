@@ -52,51 +52,39 @@ function normalizeUrl(url: string): string {
 }
 
 interface LinkPreviewsProps {
-  postId: string;
-  isEditable: boolean;
-  setAdLinks: React.Dispatch<React.SetStateAction<Array<Link>>>;
+  key: string;
   postLinks: Link[];
+  setPostLinks: React.Dispatch<React.SetStateAction<Array<Link>>>;
+  isEditable: boolean;
 }
 
 const LinkPreviews = ({
-  postId,
-  isEditable,
-  setAdLinks,
+  key,
   postLinks,
+  setPostLinks,
+  isEditable,
 }: LinkPreviewsProps) => {
   const [url, setUrl] = useState('');
-  const [links, setLinks] = useState<Array<Link | string>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch links from the localStorage
+  //fetch links from the localStorage
   useEffect(() => {
-    if (!postId) return;
-
-    const storedLinks = localStorage.getItem(`links_${postId}`);
+    const linksKey = `links_${key}`;
+    const storedLinks = localStorage.getItem(linksKey);
     if (storedLinks) {
       const parsedLinks: Link[] = JSON.parse(storedLinks);
-
-      setAdLinks(parsedLinks);
-      setLinks((prevLinks) => {
-        const sortedLinks = [...parsedLinks].sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-        const areSame =
-          JSON.stringify(prevLinks) === JSON.stringify(sortedLinks);
-
-        return areSame ? prevLinks : sortedLinks;
-      });
+      setPostLinks(parsedLinks);
     }
-  }, [postId, setAdLinks, setLinks]);
+  }, [key, setPostLinks]);
 
   // Save links to localStorage
   useEffect(() => {
-    if (links.length > 0) {
-      localStorage.setItem(`links_${postId}`, JSON.stringify(links));
+    if (postLinks.length > 0) {
+      const linksKey = `links_${key}`;
+      localStorage.setItem(linksKey, JSON.stringify(postLinks));
     }
-  }, [links, postId]);
+  }, [postLinks, key]);
 
   const getData = async () => {
     const trimmedUrl = url.trim();
@@ -114,7 +102,7 @@ const LinkPreviews = ({
       const normalizedUrl = normalizeUrl(url);
 
       if (
-        links.some(
+        postLinks.some(
           (link) => typeof link !== 'string' && link.url === normalizedUrl,
         )
       ) {
@@ -136,17 +124,16 @@ const LinkPreviews = ({
         setTimeout(() => setError(null), 5000);
         return;
       } else {
-        setLinks((prevLinks: any) => {
-          const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
-          return newLinks;
-        });
+        // setPostLinks((prevLinks: any) => {
+        //   const newLinks = [linkPreview, ...prevLinks].slice(0, 3); // Add new link and keep only top 3
+        //   return newLinks;
+        // });
 
-        // Update adLinks state for prisma
-        setAdLinks?.((prevLinks: any) => {
+        setPostLinks((prevLinks: any) => {
           const newLinks: Link[] = [
             {
               id: crypto.randomUUID(),
-              postId,
+              key,
 
               ...linkPreview,
             },
@@ -183,6 +170,7 @@ const LinkPreviews = ({
                 }
               }}
               placeholder="쿠팡 링크는 포스트당 하나만 입력할 수 있습니다."
+              disabled={loading}
               autoFocus={false}
             />
             <Button
@@ -213,19 +201,11 @@ const LinkPreviews = ({
 
       <div className="flex flex-col max-w-[750px] gap-y-5">
         <div className="grid grid-cols-1 md:flex gap-5 justify-between w-full h-full">
-          {isEditable && links.length > 0
-            ? Array.isArray(links) &&
-              links.map((link, index) =>
-                typeof link !== 'string' ? (
-                  <LinkPreview key={index} preview={link} />
-                ) : (
-                  link
-                ),
-              )
-            : Array.isArray(postLinks) &&
-              postLinks.map((postLink, index) => (
-                <LinkPreview key={index} preview={postLink} />
-              ))}
+          {postLinks.length > 0 &&
+            Array.isArray(postLinks) &&
+            postLinks.map((link, index) => (
+              <LinkPreview key={index} preview={link} />
+            ))}
         </div>
       </div>
       <p className="text-xs text-center text-muted-foreground mt-4">

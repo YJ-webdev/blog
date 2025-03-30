@@ -13,20 +13,14 @@ import { Tag } from '@prisma/client';
 import { TagButton, TagLink } from './tag-button';
 
 interface TagsProps {
-  tagsKey: string;
   isEditable: boolean;
   tagsData: Tag[];
   tags: Tag[];
   setTags: React.Dispatch<React.SetStateAction<Tag[]>>;
+  tagsKey: string;
 }
 
-export const Tags = ({
-  isEditable,
-  tagsKey,
-  tagsData,
-  tags,
-  // setTags,
-}: TagsProps) => {
+export const Tags = ({ tagsKey, isEditable, tagsData, tags }: TagsProps) => {
   const [value, setValue] = useState('');
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags || []);
   const [enteredTags, setEnteredTags] = useState<Tag[]>([]);

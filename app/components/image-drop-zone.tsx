@@ -5,16 +5,14 @@ import { cn } from '@/lib/utils';
 
 interface ImageDropZoneProps {
   imageKey: string;
-  setImageUrl: (url: string) => void;
+  setImageUrl: React.Dispatch<React.SetStateAction<string>>;
   imageUrl: string;
-  isEditable: boolean;
 }
 
 export const ImageDropZone = ({
   setImageUrl,
-  isEditable,
-  imageKey,
   imageUrl,
+  imageKey,
 }: ImageDropZoneProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -26,7 +24,6 @@ export const ImageDropZone = ({
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
-      if (!isEditable) return;
 
       const file = event.dataTransfer.files[0];
       if (file) {
@@ -39,20 +36,18 @@ export const ImageDropZone = ({
         };
       }
     },
-    [imageKey, isEditable, setImageUrl],
+    [imageKey, setImageUrl],
   );
 
   const removeImage = (event: React.MouseEvent) => {
     event.stopPropagation();
-    if (!isEditable) return;
     setImageUrl('');
     localStorage.removeItem(imageKey);
   };
 
   const handleClick = () => {
-    if (!isEditable) return;
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger click on file input when div is clicked
+      fileInputRef.current.click();
     }
   };
 
@@ -61,10 +56,7 @@ export const ImageDropZone = ({
       onDragOver={(e) => e.preventDefault()} // Allow dropping
       onDrop={handleDrop} // Handle file drop
       onClick={handleClick} // Open file picker on div click
-      className={cn(
-        'relative w-full md:h-96 h-72 my-5',
-        isEditable && 'cursor-pointer',
-      )}
+      className={cn('relative w-full md:h-96 h-72 my-5 cursor-pointer')}
     >
       <input
         ref={fileInputRef} // Reference to the file input
@@ -107,7 +99,7 @@ export const ImageDropZone = ({
         )}
       </div>
 
-      {imageUrl && isEditable && (
+      {imageUrl && (
         <div
           onClick={removeImage}
           className="absolute top-4 right-5 rounded-full w-10 h-10 flex items-center justify-center text-white hover:bg-stone-800/30 bg-stone-300/60 cursor-pointer"

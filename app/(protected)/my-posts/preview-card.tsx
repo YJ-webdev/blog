@@ -65,7 +65,7 @@ export const PreviewCard = ({
           </div>
         </div>
         <Link
-          href={`/post/${slug}`}
+          href={`/edit/${slug}`}
           className="absolute inset-0 hidden group-hover:flex items-center justify-center bg-white/30 dark:bg-[#1f1f1f]/50 rounded-lg"
         >
           <div className="flex gap-10 pointer-events-auto group">

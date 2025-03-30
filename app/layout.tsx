@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     '최신 정보와 다양한 주제를 한 곳에서 검색해 보세요. 간당 명료한 컨텐츠로 알고싶은 정보만 쏙 골라보는 유익한 공간 레인지저널 블로그 페이지 입니다. 가볍게 얻을 수 있는 생활 정보에서부터 전문적 지식이 담긴 찾기 힘든 정보와 개인의 노하우가 담긴 다양한 주제의 블로그로 하나의 커뮤니티를 생성 하는 곳. 나누고 싶은 정보가 있거나 본인만의 경험담을 글로 남기고 싶으신가요? 그렇다면 이 사이트에 기자로 등록해주세요.',
   openGraph: {
-    images: `/range-journal-default-image.jpg`,
+    images: `/images/default-image.jpg`,
   },
 };
 
