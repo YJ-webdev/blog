@@ -44,47 +44,47 @@ export default async function SlugPage({
     return redirect('/not-found');
   }
 
-  const nextPost = await prisma.post.findFirst({
-    where: {
-      published: true,
-      createdAt: { gt: post.createdAt },
-    },
-    select: {
-      slug: true,
-      title: true,
-      tags: true,
-    },
-    orderBy: { createdAt: 'asc' },
-  });
+  // const nextPost = await prisma.post.findFirst({
+  //   where: {
+  //     published: true,
+  //     createdAt: { gt: post.createdAt },
+  //   },
+  //   select: {
+  //     slug: true,
+  //     title: true,
+  //     tags: true,
+  //   },
+  //   orderBy: { createdAt: 'asc' },
+  // });
 
-  const prevPost = await prisma.post.findFirst({
-    where: {
-      published: true,
-      createdAt: { lt: post.createdAt },
-    },
-    select: {
-      slug: true,
-      title: true,
-      tags: true,
-    },
-    orderBy: { createdAt: 'asc' },
-  });
+  // const prevPost = await prisma.post.findFirst({
+  //   where: {
+  //     published: true,
+  //     createdAt: { lt: post.createdAt },
+  //   },
+  //   select: {
+  //     slug: true,
+  //     title: true,
+  //     tags: true,
+  //   },
+  //   orderBy: { createdAt: 'asc' },
+  // });
 
-  const links = await prisma.link.findMany({
-    where: { postId: post.id },
-    orderBy: { createdAt: 'asc' },
-    take: 3,
-  });
+  // const links = await prisma.link.findMany({
+  //   where: { postId: post.id },
+  //   orderBy: { createdAt: 'asc' },
+  //   take: 3,
+  // });
 
   return (
     <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
       <ClientPage
         post={post}
         userId={userId || undefined}
-        postLinks={links}
+        // postLinks={links}
         tagsData={tagsData}
-        prevPost={prevPost || undefined}
-        nextPost={nextPost || undefined}
+        // prevPost={prevPost || undefined}
+        // nextPost={nextPost || undefined}
       />
     </div>
   );
