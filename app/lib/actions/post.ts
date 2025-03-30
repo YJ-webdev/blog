@@ -11,6 +11,32 @@ import { Link, Post, Tag } from '@prisma/client';
 // const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+export async function getLinksbyPostId(postId: string) {
+  const links = await prisma.link.findMany({
+    where: {
+      postId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 3,
+  });
+  return links;
+}
+
+export const getPostBySlug = async (
+  slug: string,
+): Promise<(Post & { tags: Tag[] }) | null> => {
+  const decodedSlug = decodeURIComponent(slug);
+  const post = await prisma.post.findUnique({
+    where: { slug: decodedSlug },
+    include: {
+      tags: true,
+    },
+  });
+  return post;
+};
+
 export const getPostByUserId = async (userId: string) => {
   const post = await prisma.post.findMany({
     where: {
