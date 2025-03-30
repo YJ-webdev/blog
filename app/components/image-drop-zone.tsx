@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { ImageIcon, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface ImageDropZoneProps {
-  imageKey: string;
+  // imageKey: string;
   setImageUrl: (url: string) => void;
   imageUrl: string;
   isEditable: boolean;
@@ -13,15 +13,15 @@ interface ImageDropZoneProps {
 export const ImageDropZone = ({
   setImageUrl,
   isEditable,
-  imageKey,
+  // imageKey,
   imageUrl,
 }: ImageDropZoneProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    const storedImage = localStorage.getItem(imageKey);
-    if (storedImage) setImageUrl(storedImage);
-  }, [imageKey, setImageUrl]);
+  // useEffect(() => {
+  //   const storedImage = localStorage.getItem(imageKey);
+  //   if (storedImage) setImageUrl(storedImage);
+  // }, [imageKey, setImageUrl]);
 
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -35,18 +35,18 @@ export const ImageDropZone = ({
         reader.onload = () => {
           const base64Image = reader.result as string;
           setImageUrl(base64Image);
-          localStorage.setItem(imageKey, base64Image);
+          // localStorage.setItem(imageKey, base64Image);
         };
       }
     },
-    [imageKey, isEditable, setImageUrl],
+    [isEditable, setImageUrl],
   );
 
   const removeImage = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (!isEditable) return;
     setImageUrl('');
-    localStorage.removeItem(imageKey);
+    // localStorage.removeItem(imageKey);
   };
 
   const handleClick = () => {
@@ -77,7 +77,7 @@ export const ImageDropZone = ({
             reader.onload = () => {
               const base64Image = reader.result as string;
               setImageUrl(base64Image);
-              sessionStorage.setItem(imageKey, base64Image);
+              // sessionStorage.setItem(imageKey, base64Image);
             };
           }
         }}

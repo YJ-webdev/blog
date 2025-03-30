@@ -3,7 +3,7 @@
 import { ImageDropZone } from '@/app/components/image-drop-zone';
 import EditorWrapper from '@/components/dynamic-editor';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import LinkPreviews from './link-previews';
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 interface ClientPageProps {
   post: Post & { tags: Tag[] };
   userId: string | undefined;
-  postLinks?: LinkPrisma[];
+  postLinks: LinkPrisma[];
   tagsData: Tag[];
   prevPost?: PrevPostType;
   nextPost?: PrevPostType;
@@ -35,26 +35,19 @@ export const ClientPage = ({
 }: ClientPageProps) => {
   const router = useRouter();
 
-  const titleKey = `postTitle_${post.id}`;
-  const imageKey = `uploadedImage_${post.id}`;
-  const slugKey = `postSlug_${post.id}`;
+  // const titleKey = `postTitle_${post.id}`;
+  // const imageKey = `uploadedImage_${post.id}`;
+  // const slugKey = `postSlug_${post.id}`;
   const tagsKey = `postTags_${post.id}`;
 
-  const [title, setTitle] = useState(
-    () => localStorage.getItem(titleKey) ?? post.title ?? '',
-  );
-  const [imageUrl, setImageUrl] = useState(
-    () => localStorage.getItem(imageKey) ?? post.image ?? '',
-  );
+  const [title, setTitle] = useState(() => post.title ?? '');
+  const [imageUrl, setImageUrl] = useState(() => post.image ?? '');
   const [adLinks, setAdLinks] = useState<Array<LinkPrisma | string>>([]);
   const [content, setContent] = useState(post.content || '');
-  const [slug, setSlug] = useState(
-    localStorage.getItem(slugKey) || post.slug || '',
-  );
+  const [slug, setSlug] = useState(post.slug || '');
 
   const [tags, setTags] = useState<Tag[]>(() => {
-    const storedTags = localStorage.getItem(tagsKey);
-    const parsedTags = storedTags ? JSON.parse(storedTags) : post.tags || [];
+    const parsedTags = post.tags || [];
 
     return parsedTags;
   });
@@ -75,17 +68,17 @@ export const ClientPage = ({
 
   const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
 
-  useEffect(() => {
-    if (!isEditable) return;
+  // useEffect(() => {
+  //   if (!isEditable) return;
 
-    setSlug(slugify(title));
+  //   setSlug(slugify(title));
 
-    const timeoutId = setTimeout(() => {
-      localStorage.setItem(titleKey, title);
-      localStorage.setItem(slugKey, slug);
-    }, 300);
-    return () => clearTimeout(timeoutId);
-  }, [title, titleKey, isEditable, slug, slugKey]);
+  //   const timeoutId = setTimeout(() => {
+  //     localStorage.setItem(titleKey, title);
+  //     localStorage.setItem(slugKey, slug);
+  //   }, 300);
+  //   return () => clearTimeout(timeoutId);
+  // }, [title, titleKey, isEditable, slug, slugKey]);
 
   const gatherFormData = () => {
     const formData = new FormData();
@@ -145,6 +138,7 @@ export const ClientPage = ({
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
+              setSlug(slugify(e.target.value));
             }}
             className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
             spellCheck={false}
@@ -155,7 +149,7 @@ export const ClientPage = ({
           imageUrl={imageUrl}
           setImageUrl={setImageUrl}
           isEditable={isEditable}
-          imageKey={imageKey}
+          // imageKey={imageKey}
         />
 
         <EditorWrapper
@@ -186,7 +180,7 @@ export const ClientPage = ({
           <Button
             type="submit"
             className="fixed bottom-5 right-5 z-[99999]"
-            disabled={!isFormValid || isSubmitting}
+            // disabled={!isFormValid || isSubmitting}
             onClick={(event) => event.stopPropagation()}
           >
             {isSubmitting
