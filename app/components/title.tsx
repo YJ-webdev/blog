@@ -20,6 +20,7 @@ export const Title = () => {
         {pathname === '/' && '레인지 저널'}
         {pathname.includes('/new-post') && ''}
         {pathname.includes('/tag') && slug && formatSlug(slug)}
+        {pathname === '/not-found' && '레인지 저널'}
       </h1>
     </div>
   );

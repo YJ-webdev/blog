@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="h-full w-full">
       <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-full max-w-md">
-        <div className="flex flex-col items-center justify-center gap-2 w-full text-center">
+        <div className="flex flex-col items-center justify-center gap-2 w-full text-center mb-10">
           <h2 className="-translate-x-2 inline-flex text-muted-foreground gap-2 text-xs">
             <BadgeInfo className="h-4 w-4" strokeWidth={1} />
             Page Not Found

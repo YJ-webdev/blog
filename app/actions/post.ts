@@ -45,73 +45,6 @@ export async function createPost(userId: string) {
   return post.id;
 }
 
-// export async function updatePost(formData: FormData): Promise<void> {
-//   const title = formData.get('title') as string;
-//   const slug = formData.get('slug') as string;
-//   const image = formData.get('image') as string;
-//   const content = formData.get('content') as string;
-//   const linksString = formData.get('links') as string | null;
-//   const tagsString = formData.get('tags') as string | null;
-
-//   if (!title || !content || !slug || !image) {
-//     throw new Error('Required fields are missing');
-//   }
-
-//   const links: Link[] = linksString ? JSON.parse(linksString) : [];
-
-//   const post = await prisma.post.create({
-//     data: {
-//       authorId: user.id,
-//       title,
-//       slug,
-//       image: image ?? undefined,
-//       content,
-//       published: true,
-//     },
-//   });
-
-//   if (links.length > 0) {
-//     const linkData = links.map((link) => ({
-//       url: link.url,
-//       title: link.title,
-//       description: link.description,
-//       image: link.image,
-//       siteName: link.siteName,
-//       favicon: link.favicon,
-//       postId: post.id,
-//     }));
-
-//     await prisma.link.createMany({
-//       data: linkData,
-//     });
-//   }
-
-//   let tags: { name: string }[] = [];
-
-//   if (tagsString) {
-//     try {
-//       tags = JSON.parse(tagsString).map((tag: Tag) => ({ name: tag.name }));
-//     } catch (error) {
-//       console.error('Invalid tags JSON format:', error);
-//       throw new Error('Invalid tags format');
-//     }
-//   }
-
-//   const tagData = tags.map((tag) => ({
-//     where: { name: tag.name },
-//     create: { name: tag.name },
-//   }));
-
-//   await prisma.post.update({
-//     where: { id: post.id },
-//     data: {
-//       tags: {
-//         connectOrCreate: tagData,
-//       },
-//     },
-//   });
-// }
-
 export async function publishPost(formData: FormData): Promise<void> {
   const user = await currentUser(); // Get the current user
 
@@ -141,22 +74,52 @@ export async function publishPost(formData: FormData): Promise<void> {
   const links: Link[] = linksString ? JSON.parse(linksString) : [];
 
   if (links.length > 0) {
-    const linkData = links.map((link) => ({
-      url: link.url,
-      title: link.title,
-      description: link.description,
-      image: link.image,
-      siteName: link.siteName,
-      favicon: link.favicon,
-      postId: id,
-    }));
-
-    await prisma.link.createMany({
-      data: linkData,
+    const existingLinks = await prisma.link.findMany({
+      where: { postId: id },
+      select: { id: true, url: true },
     });
+
+    const existingLinksMap = new Map(
+      existingLinks.map((link) => [link.url, link.id]),
+    );
+
+    const newLinks = [];
+    const linksToDelete = [];
+
+    // First, handle new links and mark old ones for deletion
+    for (const link of links) {
+      if (existingLinksMap.has(link.url)) {
+        // If the link URL already exists, mark the old one for deletion
+        const oldLinkId = existingLinksMap.get(link.url);
+        if (oldLinkId) {
+          linksToDelete.push(oldLinkId); // Only push if it's not undefined
+        }
+      }
+      newLinks.push({
+        url: link.url,
+        title: link.title,
+        description: link.description,
+        image: link.image,
+        siteName: link.siteName,
+        favicon: link.favicon,
+        postId: id,
+      });
+    }
+
+    // Delete the old links with the same URL
+    if (linksToDelete.length > 0) {
+      await prisma.link.deleteMany({
+        where: { id: { in: linksToDelete } },
+      });
+    }
+
+    // Insert the new links
+    if (newLinks.length > 0) {
+      await prisma.link.createMany({ data: newLinks });
+    }
   }
 
-  if (links.length > 0 && post.links.length + links.length > 3) {
+  if (post.links.length + links.length > 3) {
     const deductingAmount = post.links.length + links.length - 3;
 
     const oldLinks = await prisma.link.findMany({

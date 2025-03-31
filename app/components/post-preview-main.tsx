@@ -31,7 +31,7 @@ export const PostPreviewMain = ({
               <h3 className="font-semibold text-lg h-fit">{title}</h3>
               <p className="text-sm/[23px] truncate-text flex-1">{content}</p>
             </div>
-            <p className="w-full text-xs text-end h-10">
+            <p className="w-full text-xs text-end h-10 font-light ">
               {formatDateWithoutYear(createdAt)}
             </p>
           </div>

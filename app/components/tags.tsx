@@ -39,12 +39,6 @@ export const Tags = ({
 
     if (isEnteredTag) {
       setEnteredTags(enteredTags.filter((t) => t.name !== tag.name));
-
-      setSelectedTags((prevTags) =>
-        prevTags.some((t) => t.name === tag.name)
-          ? prevTags.filter((t) => t.name !== tag.name)
-          : [...prevTags, tag],
-      );
     }
 
     if (!isEnteredTag) {
@@ -60,29 +54,21 @@ export const Tags = ({
     const trimmedValue = value.trim();
     if (!trimmedValue) return;
 
-    const valueInObject = { id: 1, name: trimmedValue };
+    const newTag = { id: Date.now(), name: trimmedValue }; // Ensure unique IDs
+    const isDuplicate = enteredTags.some((t) => t.name === trimmedValue);
+    const isExistingTag = tagsData.some((t) => t.name === trimmedValue);
 
-    const isDuplicate = enteredTags.some((item) => item.name === trimmedValue);
-    const isExistingTag = tagsData.some((item) => item.name === trimmedValue);
-
-    if (!isDuplicate) {
-      setEnteredTags((prevTags) =>
-        prevTags.some((t) => t.name === trimmedValue)
-          ? prevTags
-          : [...prevTags, valueInObject],
-      );
-    }
-
-    if (isExistingTag) {
-      setSelectedTags(selectedTags.filter((tag) => tag.name !== trimmedValue));
+    if (!isDuplicate && !isExistingTag) {
+      setEnteredTags((prev) => [...prev, newTag]);
+      setSelectedTags((prev) => [...prev, newTag]); // Ensure it's added to selectedTags
     }
 
     setValue('');
   };
 
-  const removeTag = (tag: Tag) => {
-    setEnteredTags((prevTags) => prevTags.filter((t) => t.name !== tag.name));
-  };
+  // const removeTag = (tag: Tag) => {
+  //   setEnteredTags((prevTags) => prevTags.filter((t) => t.name !== tag.name));
+  // };
 
   useEffect(() => {
     const uniqueTags = [
@@ -129,14 +115,14 @@ export const Tags = ({
             />
           ))}
 
-          {enteredTags.map((enteredTag) => (
+          {/* {enteredTags.map((enteredTag) => (
             <TagButton
               key={enteredTag.name}
               item={enteredTag}
               className="w-fit py-2 px-3 rounded-full hover:bg-primary/10 text-[14px] cursor-pointer active:scale-90 duration-300 ease-out transition-all bg-primary text-white dark:text-black"
               onClick={() => removeTag(enteredTag)}
             />
-          ))}
+          ))} */}
 
           <Popover>
             <PopoverTrigger>
