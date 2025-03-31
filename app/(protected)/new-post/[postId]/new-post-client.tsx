@@ -6,12 +6,14 @@ import { Tags } from '@/app/components/tags';
 import EditorWrapper from '@/components/dynamic-editor';
 import { Button } from '@/components/ui/button';
 import { Link, Tag } from '@prisma/client';
-import { useEffect, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import LinkPreviews from '@/app/components/link-previews';
 import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface NewPostClientProps {
   postId: string;
@@ -23,6 +25,9 @@ export const NewPostClient = ({
 
   postId,
 }: NewPostClientProps) => {
+  const [status, action, isPending] = useActionState(publishPost, null);
+  const router = useRouter();
+
   const titleKey = `postTitle_${postId}`;
   const imageKey = `uploadedImage_${postId}`;
   const contentKey = `postContent_${postId}`;
@@ -64,9 +69,17 @@ export const NewPostClient = ({
     }
   }, [setTitle, setImageUrl, titleKey, imageKey]);
 
+  useEffect(() => {
+    if (status?.success) {
+      toast.success('Post published successfully!');
+      router.push('/my-posts');
+    } else if (status?.error) {
+      toast.error(status.error);
+    }
+  }, [status, router]);
   return (
     <form
-      action={publishPost}
+      action={action}
       className="flex flex-col max-w-[1000px] mx-auto items-center"
     >
       <input type="hidden" value={postId} name="id" />
@@ -125,13 +138,13 @@ export const NewPostClient = ({
       <Button
         type="submit"
         className="fixed bottom-5 right-5 z-[99999]"
-        disabled={!isFormValid}
+        disabled={!isFormValid || isPending}
         onClick={(event) => {
           event.stopPropagation();
           console.log(status);
         }}
       >
-        개시하기
+        {isPending ? '게시중...' : '개시하기'}
       </Button>
     </form>
   );

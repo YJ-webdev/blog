@@ -44,9 +44,7 @@ export const DropDownMenu = ({
 
   const handleCreatePost = async () => {
     startTransition(async () => {
-      const userId = session?.user?.id;
-      if (!userId) return;
-      const post = await createPost(userId);
+      const post = await createPost;
       if (post) {
         router.push(`/new-post/${post}`);
       }

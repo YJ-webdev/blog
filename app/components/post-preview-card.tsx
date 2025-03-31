@@ -18,7 +18,7 @@ export const PostPreviewCard = ({
       <Link
         href={`/post/${slug}`}
         className={cn(
-          'flex flex-col w-full hover:cursor-pointer group relative group p-4 gap-4 rounded-lg',
+          'flex flex-col w-full hover:cursor-pointer group relative group p-4 gap-3 rounded-lg',
         )}
       >
         <div className="">

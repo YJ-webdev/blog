@@ -6,12 +6,14 @@ import { Tags } from '@/app/components/tags';
 import EditorWrapper from '@/components/dynamic-editor';
 import { Button } from '@/components/ui/button';
 import { Link, Post, Tag } from '@prisma/client';
-import { useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useFormStatus } from 'react-dom';
+
 import LinkPreviews from '@/app/components/link-previews';
 import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface EditClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
@@ -19,7 +21,9 @@ interface EditClientProps {
 }
 
 export const EditClient = ({ post, tagsData }: EditClientProps) => {
-  const status = useFormStatus();
+  const [status, action, isPending] = useActionState(publishPost, null);
+  const router = useRouter();
+
   const imageKey = `uploadedImage_${post.id}`;
   const tagsKey = `postTags_${post.id}`;
 
@@ -43,9 +47,17 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
   const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
 
+  useEffect(() => {
+    if (status?.success) {
+      toast.success('Post published successfully!');
+      router.push('/my-posts');
+    } else if (status?.error) {
+      toast.error(status.error);
+    }
+  }, [status, router]);
   return (
     <form
-      action={publishPost}
+      action={action}
       className="flex flex-col items-center max-w-[1000px] mx-auto"
     >
       <input type="hidden" value={post.id ?? ''} name="id" />
@@ -109,12 +121,12 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
       <Button
         type="submit"
         className="fixed bottom-5 right-5 z-[99999] "
-        disabled={!isFormValid || status.pending}
+        disabled={!isFormValid || isPending}
         onClick={(event) => {
           event.stopPropagation();
         }}
       >
-        {status.pending ? '게시중...' : '개시하기'}
+        {isPending ? '게시중...' : '개시하기'}
       </Button>
     </form>
   );

@@ -119,7 +119,7 @@ const LinkPreviews = ({
 
       if (typeof linkPreview === 'string') {
         setError(
-          'Open Graph data is not found or blocked by the website. Try later.',
+          'OpenGraph data is not found or blocked by the website. Try later.',
         );
         setTimeout(() => setError(null), 5000);
         return;

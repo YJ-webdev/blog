@@ -78,7 +78,7 @@ export const Tags = ({
     ];
     localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
     setTags(uniqueTags);
-  }, [selectedTags, enteredTags, tagsKey]);
+  }, [selectedTags, enteredTags, tagsKey, setTags]);
 
   const tagsnames = tags.map((tag) => tag.name);
   const filteredTags = tagsData.filter((tag) => !tagsnames.includes(tag.name));

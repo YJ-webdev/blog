@@ -82,7 +82,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
     <>
       <button
         onClick={toggleSidebar}
-        className="hidden md:block fixed top-5 left-5 z-10"
+        className="hidden md:block fixed top-5 left-5 z-50"
       >
         {!open && <PanelLeft strokeWidth={1.5} />}
       </button>

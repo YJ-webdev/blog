@@ -56,7 +56,7 @@ export default async function MyPostsPage() {
         </div>
       )}
 
-      {posts.length === 0 && <NoPost session={session} />}
+      {posts.length === 0 && <NoPost />}
     </div>
   );
 }

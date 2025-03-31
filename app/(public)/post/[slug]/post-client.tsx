@@ -27,52 +27,6 @@ export const PostClient = ({
 }: PostClientProps) => {
   const [content, setContent] = useState(post.content || '');
 
-  // const gatherFormData = () => {
-  //   const formData = new FormData();
-  //   const savedTags = localStorage.getItem(tagsKey);
-
-  //   if (savedTags) {
-  //     formData.append('tags', savedTags);
-  //   }
-  //   formData.append('id', post.id);
-  //   formData.append('title', title);
-  //   formData.append('slug', slug);
-  //   formData.append('content', content);
-  //   if (imageUrl) formData.append('image', imageUrl);
-  //   formData.append('links', JSON.stringify(adLinks));
-
-  //   return formData;
-  // };
-
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   if (!isFormValid) {
-  //     return toast.error('Please fill in all required fields');
-  //   }
-
-  //   try {
-  //     setIsSubmitting(true);
-  //     const formData = gatherFormData();
-  //     const response = await fetch('/api/post', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-
-  //     if (response.ok) {
-  //       toast.success('Post published successfully! 🎉');
-
-  //       router.push('/');
-  //     } else {
-  //       toast.error('Failed to publish post. Please try again.');
-  //     }
-  //   } catch {
-  //     toast.error('Failed to publish post. Please try again.');
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
   return (
     <div className="flex flex-col items-center max-w-[1000px] mx-auto">
       <h1 className="w-full mx-4 px-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400">

@@ -43,7 +43,7 @@ export const PreviewCard = ({
   return (
     <>
       <div className="relative group">
-        <div className="flex flex-col w-full hover:cursor-pointer group p-5 gap-4">
+        <div className="flex flex-col w-full hover:cursor-pointer group p-5 gap-3">
           <Image
             src={image || ''}
             alt="Preview"

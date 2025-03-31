@@ -2,20 +2,16 @@
 
 import { createPost } from '@/app/actions/post';
 
-import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
-export const NoPost = ({ session }: { session: Session | null }) => {
+export const NoPost = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const userId = session?.user?.id;
-
   const handleCreatePost = async () => {
     startTransition(async () => {
-      if (!userId) return;
-      const post = await createPost(userId);
+      const post = await createPost;
       if (post) {
         router.push(`/new-post/${post}`);
       }
