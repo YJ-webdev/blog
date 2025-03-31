@@ -35,9 +35,9 @@ export default async function MyPostsPage() {
   });
 
   return (
-    <div className="flex items-center gap-2 mb-16 -mx-2">
+    <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16">
       {posts.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 -mx-2">
           {posts.map((post) => {
             const processedContent = post.content
               ? extractText(post.content)

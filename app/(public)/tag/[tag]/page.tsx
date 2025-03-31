@@ -46,7 +46,7 @@ export default async function TagPage({
 
   return (
     <div className="flex flex-col gap-7 w-full">
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 mb-20">
+      <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5 sm:grid-cols-2 mb-20">
         {posts.map((post: PostPreviewType) => {
           const processedContent = post.content
             ? extractText(post.content)

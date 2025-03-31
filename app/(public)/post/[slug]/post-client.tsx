@@ -25,56 +25,7 @@ export const PostClient = ({
   nextPost,
   postTags,
 }: PostClientProps) => {
-  // const titleKey = `postTitle_${post.id}`;
-  // const imageKey = `uploadedImage_${post.id}`;
-  // const slugKey = `postSlug_${post.id}`;
-
-  // const [title, setTitle] = useState(
-  //   () => localStorage.getItem(titleKey) ?? post.title ?? '',
-  // );
-  // const [imageUrl, setImageUrl] = useState(
-  //   () => localStorage.getItem(imageKey) ?? post.image ?? '',
-  // );
-  // const [adLinks, setAdLinks] = useState<Array<LinkPrisma | string>>([]);
   const [content, setContent] = useState(post.content || '');
-  // const [slug, setSlug] = useState(
-  //   localStorage.getItem(slugKey) || post.slug || '',
-  // );
-
-  // const [tags, setTags] = useState<Tag[]>(() => {
-  //   const storedTags = localStorage.getItem(tagsKey);
-  //   const parsedTags = storedTags ? JSON.parse(storedTags) : post.tags || [];
-
-  //   return parsedTags;
-  // });
-  // const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // const isEditable = userId === post.authorId;
-
-  // const parsedContent =
-  //   typeof content === 'string' ? JSON.parse(content || '[]') : content;
-
-  // const isContentValid =
-  //   Array.isArray(parsedContent) &&
-  //   parsedContent.some(
-  //     (block) =>
-  //       (block.content && block.content.length > 0) ||
-  //       (block.children && block.children.length > 0),
-  //   );
-
-  // const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
-
-  // useEffect(() => {
-  //   if (!isEditable) return;
-
-  //   setSlug(slugify(title));
-
-  //   const timeoutId = setTimeout(() => {
-  //     localStorage.setItem(titleKey, title);
-  //     localStorage.setItem(slugKey, slug);
-  //   }, 300);
-  //   return () => clearTimeout(timeoutId);
-  // }, [title, titleKey, isEditable, slug, slugKey]);
 
   // const gatherFormData = () => {
   //   const formData = new FormData();
@@ -123,16 +74,19 @@ export const PostClient = ({
   // };
 
   return (
-    <div className="relative w-full">
-      <PrevNext prevPost={prevPost} nextPost={nextPost} />
+    <div className="flex flex-col items-center max-w-[1000px] mx-auto">
+      <h1 className="w-full mx-4 px-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400">
+        {post.title}
+      </h1>
 
-      <div className="w-full flex flex-col">
+      <div className="max-w-[750px] mx-auto flex flex-col mt-2">
         <Image
-          className="w-full object-cover md:h-96 h-72 my-5"
+          className="mb-5 mt-2 md:h-96 h-72 w-[750px] object-cover"
           src={post.image || '/images/default-image.jpg'}
           alt="post image"
-          width={1000}
-          height={500}
+          width={700}
+          height={200}
+          objectFit="cover"
         />
 
         <EditorWrapper
@@ -155,6 +109,8 @@ export const PostClient = ({
           setPostLinks={() => {}}
         />
       </div>
+
+      <PrevNext prevPost={prevPost} nextPost={nextPost} />
     </div>
   );
 };

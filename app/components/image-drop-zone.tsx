@@ -15,6 +15,7 @@ export const ImageDropZone = ({
   imageKey,
 }: ImageDropZoneProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
   useEffect(() => {
     const storedImage = localStorage.getItem(imageKey);
@@ -27,6 +28,10 @@ export const ImageDropZone = ({
 
       const file = event.dataTransfer.files[0];
       if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+          alert('File size exceeds the 4MB limit.');
+          return;
+        }
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -56,7 +61,7 @@ export const ImageDropZone = ({
       onDragOver={(e) => e.preventDefault()} // Allow dropping
       onDrop={handleDrop} // Handle file drop
       onClick={handleClick} // Open file picker on div click
-      className={cn('relative w-full md:h-96 h-72 my-5 cursor-pointer')}
+      className={cn('relative w-full md:h-96 h-72 mb-5 mt-2 cursor-pointer')}
     >
       <input
         ref={fileInputRef} // Reference to the file input

@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 // import { generateMetadataFromPost } from '@/app/lib/utils';
 import { redirect } from 'next/navigation';
-import { PostClient } from './client-page';
+import { PostClient } from './post-client';
 
 // export async function generateMetadata({
 //   params,
@@ -64,7 +64,7 @@ export default async function SlugPage({
       title: true,
       tags: true,
     },
-    orderBy: { createdAt: 'asc' },
+    orderBy: { createdAt: 'desc' },
   });
   const links = await prisma.link.findMany({
     where: { postId: post.id },
@@ -82,7 +82,7 @@ export default async function SlugPage({
   });
 
   return (
-    <div className="max-w-[750px] mx-auto flex flex-col gap-5 px-4">
+    <div className="w-full flex flex-col gap-5 px-4">
       <PostClient
         post={post}
         postLinks={links}

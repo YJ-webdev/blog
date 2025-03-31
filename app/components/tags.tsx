@@ -20,7 +20,13 @@ interface TagsProps {
   tagsKey: string;
 }
 
-export const Tags = ({ tagsKey, isEditable, tagsData, tags }: TagsProps) => {
+export const Tags = ({
+  tagsKey,
+  isEditable,
+  tagsData,
+  tags,
+  setTags,
+}: TagsProps) => {
   const [value, setValue] = useState('');
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags || []);
   const [enteredTags, setEnteredTags] = useState<Tag[]>([]);
@@ -85,6 +91,7 @@ export const Tags = ({ tagsKey, isEditable, tagsData, tags }: TagsProps) => {
       ).values(),
     ];
     localStorage.setItem(tagsKey, JSON.stringify(uniqueTags));
+    setTags(uniqueTags);
   }, [selectedTags, enteredTags, tagsKey]);
 
   const tagsnames = tags.map((tag) => tag.name);

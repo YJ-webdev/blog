@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
   },
   /* config options here */
   reactStrictMode: false,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '3mb',
+    },
+  },
 };
 
 export default nextConfig;

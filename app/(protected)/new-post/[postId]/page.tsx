@@ -13,6 +13,19 @@ export default async function NewPostPage() {
     redirect('/');
   }
 
+  const post = await prisma.post.findFirst({
+    where: {
+      authorId: userId,
+      published: false,
+    },
+    select: {
+      id: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
   const tagsData = await prisma.tag.findMany({
     take: 20,
     orderBy: {
@@ -20,5 +33,13 @@ export default async function NewPostPage() {
     },
   });
 
-  return <NewPostClient tagsData={tagsData} userId={userId} />;
+  if (!post) {
+    return redirect('/my-posts');
+  }
+
+  return (
+    <div className="ml-2 w-full">
+      <NewPostClient postId={post.id} tagsData={tagsData} />;
+    </div>
+  );
 }

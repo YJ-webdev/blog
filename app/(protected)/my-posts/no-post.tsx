@@ -1,18 +1,22 @@
 'use client';
 
 import { createPost } from '@/app/actions/post';
-import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 export const NoPost = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleCreatePost = async () => {
     startTransition(async () => {
-      const post = await createPost();
+      const session = await auth();
+      const userId = session?.user?.id;
+      if (!userId) return;
+      const post = await createPost(userId);
       if (post) {
-        redirect('/post/' + post.slug);
+        router.push(`/new-post/${post}`);
       }
     });
   };

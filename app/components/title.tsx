@@ -13,13 +13,13 @@ export const Title = () => {
   };
 
   return (
-    <div className="mt-5 px-4 bg-white dark:bg-[#1f1f1f] max-w-[1000px] mx-auto w-full">
+    <div className="mt-5 px-2 bg-white dark:bg-[#1f1f1f] max-w-[1000px] mx-auto w-full">
       <h1 className="font-bold md:text-6xl text-5xl">
         {pathname === '/my-posts' && '내 포스트'}
         {pathname === '/edit' && ''}
         {pathname === '/' && '레인지 저널'}
         {pathname.includes('/new-post') && ''}
-        {!pathname.includes('/edit') && slug && formatSlug(slug)}
+        {pathname.includes('/tag') && slug && formatSlug(slug)}
       </h1>
     </div>
   );

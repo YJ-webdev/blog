@@ -5,30 +5,44 @@ import { Tags } from '@/app/components/tags';
 
 import EditorWrapper from '@/components/dynamic-editor';
 import { Button } from '@/components/ui/button';
-import { Link, Post, Tag } from '@prisma/client';
-import { useState } from 'react';
+import { Link, Tag } from '@prisma/client';
+import { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useFormStatus } from 'react-dom';
+
 import LinkPreviews from '@/app/components/link-previews';
 import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
 
-interface EditClientProps {
-  post: Post & { tags: Tag[]; links: Link[] };
+interface NewPostClientProps {
+  postId: string;
   tagsData: Tag[];
 }
 
-export const EditClient = ({ post, tagsData }: EditClientProps) => {
-  const status = useFormStatus();
-  const imageKey = `uploadedImage_${post.id}`;
-  const tagsKey = `postTags_${post.id}`;
+export const NewPostClient = ({
+  tagsData,
 
-  const [title, setTitle] = useState(post.title || '');
-  const [slug, setSlug] = useState(post.slug || '');
-  const [imageUrl, setImageUrl] = useState(post.image || '');
-  const [content, setContent] = useState(post.content || '');
-  const [postTags, setPostTags] = useState(post.tags || []);
-  const [postLinks, setPostLinks] = useState<Array<Link>>(post.links || []);
+  postId,
+}: NewPostClientProps) => {
+  const titleKey = `postTitle_${postId}`;
+  const imageKey = `uploadedImage_${postId}`;
+  const contentKey = `postContent_${postId}`;
+  const tagsKey = `postTags_${postId}`;
+  const linksKey = `postLinks_${postId}`;
+
+  const [title, setTitle] = useState(localStorage.getItem(titleKey) || '');
+  const [imageUrl, setImageUrl] = useState('');
+  const [content, setContent] = useState(
+    localStorage.getItem(contentKey) || '',
+  );
+  const [postTags, setPostTags] = useState<Tag[]>(() => {
+    const storedTags = localStorage.getItem(tagsKey);
+    return storedTags ? JSON.parse(storedTags) : [];
+  });
+
+  const [postLinks, setPostLinks] = useState<Array<Link>>(() => {
+    const storedLinks = localStorage.getItem(linksKey);
+    return storedLinks ? JSON.parse(storedLinks) : [];
+  });
 
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
@@ -43,14 +57,21 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
   const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setTitle(localStorage.getItem(titleKey) || '');
+      setImageUrl(localStorage.getItem(imageKey) || '');
+    }
+  }, [setTitle, setImageUrl, titleKey, imageKey]);
+
   return (
     <form
       action={publishPost}
-      className="flex flex-col items-center max-w-[1000px] mx-auto"
+      className="flex flex-col max-w-[1000px] mx-auto items-center"
     >
-      <input type="hidden" value={post.id ?? ''} name="id" />
+      <input type="hidden" value={postId} name="id" />
       <input type="hidden" value={title ?? ''} name="title" />
-      <input type="hidden" value={slug ?? ''} name="slug" />
+      <input type="hidden" value={slugify(title) ?? 'no-slug'} name="slug" />
       <input type="hidden" value={imageUrl ?? ''} name="image" />
       <input type="hidden" value={content ?? ''} name="content" />
       <input type="hidden" value={JSON.stringify(postTags ?? [])} name="tags" />
@@ -62,21 +83,16 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
       <TextareaAutosize
         placeholder="제목"
-        aria-label="Post title"
         autoFocus
         value={title}
         onChange={(e) => {
+          localStorage.setItem(titleKey, e.target.value);
           setTitle(e.target.value);
-
-          const slugiedTitle = slugify(e.target.value);
-          setSlug(slugiedTitle);
-          console.log(slug);
         }}
         className="w-full mx-4 px-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
         spellCheck={false}
       />
-
-      <div className="w-full max-w-[750px] px-4 flex flex-col">
+      <div className="w-full max-w-[750px] pl-2 pr-4 flex flex-col">
         <ImageDropZone
           imageKey={imageKey}
           setImageUrl={setImageUrl}
@@ -84,7 +100,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
         />
 
         <EditorWrapper
-          contentKey={post.id}
+          contentKey={postId}
           editable={true}
           initialContent={content}
           onContentChange={setContent}
@@ -92,14 +108,14 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
         <Tags
           tagsKey={tagsKey}
-          isEditable={true}
           tagsData={tagsData}
           tags={postTags}
           setTags={setPostTags}
+          isEditable={true}
         />
 
         <LinkPreviews
-          linkKey={post.id}
+          linkKey={postId}
           postLinks={postLinks}
           setPostLinks={setPostLinks}
           isEditable={true}
@@ -108,13 +124,14 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
       <Button
         type="submit"
-        className="fixed bottom-5 right-5 z-[99999] "
-        disabled={!isFormValid || status.pending}
+        className="fixed bottom-5 right-5 z-[99999]"
+        disabled={!isFormValid}
         onClick={(event) => {
           event.stopPropagation();
+          console.log(status);
         }}
       >
-        {status.pending ? '게시중...' : '개시하기'}
+        개시하기
       </Button>
     </form>
   );

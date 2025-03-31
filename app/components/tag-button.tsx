@@ -15,7 +15,7 @@ export const TagButton = ({ item, className, onClick }: TagButtonProps) => {
       type="button"
       key={item.name}
       className={cn(
-        'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 dark:hover:bg-white/15 text-sm hover:text-primary active:scale-90 duration-300 ease-out transition-all',
+        'w-fit py-2 px-3 rounded-full bg-muted hover:bg-primary/10 active:bg-primary/60  dark:hover:bg-white/15 text-sm hover:text-primary active:scale-90 duration-300 ease-out transition-all',
         className,
       )}
       onClick={onClick}

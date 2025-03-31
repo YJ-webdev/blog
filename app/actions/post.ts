@@ -2,8 +2,8 @@
 
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { currentUser } from '@/lib/auth';
 import { Link, Tag } from '@prisma/client';
+import { auth } from '@/auth';
 
 // import { createClient } from '@supabase/supabase-js';
 
@@ -11,36 +11,111 @@ import { Link, Tag } from '@prisma/client';
 // const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 // const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export async function createPost() {
-  const user = await currentUser();
-  if (!user) return redirect('/login');
+const currentUser = async () => {
+  const session = await auth();
+  return session?.user;
+};
 
-  // slug should be uniquely generate automatinally.
-  const unpublishedPost = await prisma.post.findFirst({
+export async function createPost(userId: string) {
+  if (!userId) throw new Error('User not authenticated');
+
+  const existingPost = await prisma.post.findFirst({
     where: {
-      authorId: user.id,
+      authorId: userId,
       published: false,
+    },
+    select: {
+      id: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
   });
 
-  if (unpublishedPost) {
-    return unpublishedPost;
+  if (existingPost) {
+    return existingPost.id;
   }
-
-  const newPost = await prisma.post.create({
+  const post = await prisma.post.create({
     data: {
-      authorId: user.id,
-      slug: user.id,
+      authorId: userId,
       published: false,
     },
   });
 
-  return newPost; // Return the new post
+  return post.id;
 }
 
+// export async function updatePost(formData: FormData): Promise<void> {
+//   const title = formData.get('title') as string;
+//   const slug = formData.get('slug') as string;
+//   const image = formData.get('image') as string;
+//   const content = formData.get('content') as string;
+//   const linksString = formData.get('links') as string | null;
+//   const tagsString = formData.get('tags') as string | null;
+
+//   if (!title || !content || !slug || !image) {
+//     throw new Error('Required fields are missing');
+//   }
+
+//   const links: Link[] = linksString ? JSON.parse(linksString) : [];
+
+//   const post = await prisma.post.create({
+//     data: {
+//       authorId: user.id,
+//       title,
+//       slug,
+//       image: image ?? undefined,
+//       content,
+//       published: true,
+//     },
+//   });
+
+//   if (links.length > 0) {
+//     const linkData = links.map((link) => ({
+//       url: link.url,
+//       title: link.title,
+//       description: link.description,
+//       image: link.image,
+//       siteName: link.siteName,
+//       favicon: link.favicon,
+//       postId: post.id,
+//     }));
+
+//     await prisma.link.createMany({
+//       data: linkData,
+//     });
+//   }
+
+//   let tags: { name: string }[] = [];
+
+//   if (tagsString) {
+//     try {
+//       tags = JSON.parse(tagsString).map((tag: Tag) => ({ name: tag.name }));
+//     } catch (error) {
+//       console.error('Invalid tags JSON format:', error);
+//       throw new Error('Invalid tags format');
+//     }
+//   }
+
+//   const tagData = tags.map((tag) => ({
+//     where: { name: tag.name },
+//     create: { name: tag.name },
+//   }));
+
+//   await prisma.post.update({
+//     where: { id: post.id },
+//     data: {
+//       tags: {
+//         connectOrCreate: tagData,
+//       },
+//     },
+//   });
+// }
+
 export async function publishPost(formData: FormData): Promise<void> {
-  const user = await currentUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await currentUser(); // Get the current user
+
+  if (!user) throw new Error('User not authenticated'); // Check if the user is authenticated
 
   const id = formData.get('id') as string;
   const title = formData.get('title') as string;

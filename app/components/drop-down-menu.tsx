@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,13 +17,16 @@ import {
   MenuIcon,
   UserRoundPlus,
 } from 'lucide-react';
-import { handleSignOut } from '../actions/auth';
+
 import { Session } from 'next-auth';
 
 import { ShortCut } from './short-cut';
-import { redirect } from 'next/navigation';
+
 import { useTransition } from 'react';
+import { handleSignOut } from '../actions/auth';
+
 import { createPost } from '../actions/post';
+import { useRouter } from 'next/navigation';
 
 interface DropDownMenuProps {
   session: Session | null;
@@ -34,14 +39,16 @@ export const DropDownMenu = ({
   openLoginDialog,
   userName,
 }: DropDownMenuProps) => {
-  // const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleCreatePost = async () => {
     startTransition(async () => {
-      const post = await createPost();
+      const userId = session?.user?.id;
+      if (!userId) return;
+      const post = await createPost(userId);
       if (post) {
-        redirect('/new-post/');
+        router.push(`/new-post/${post}`);
       }
     });
   };
