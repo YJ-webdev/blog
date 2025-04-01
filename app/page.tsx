@@ -19,6 +19,7 @@ export default async function Home() {
     orderBy: {
       createdAt: 'desc',
     },
+    cacheStrategy: { ttl: 60 },
   });
 
   if (!posts || posts.length === 0) return null;

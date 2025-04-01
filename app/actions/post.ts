@@ -5,12 +5,6 @@ import { redirect } from 'next/navigation';
 import { Link, Tag } from '@prisma/client';
 import { auth } from '@/auth';
 
-// import { createClient } from '@supabase/supabase-js';
-
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-// const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 const currentUser = async () => {
   const session = await auth();
   return session?.user;
