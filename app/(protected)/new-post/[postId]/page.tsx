@@ -24,7 +24,6 @@ export default async function NewPostPage() {
     orderBy: {
       createdAt: 'desc',
     },
-    cacheStrategy: { ttl: 60 },
   });
 
   const tagsData = await prisma.tag.findMany({
@@ -32,7 +31,6 @@ export default async function NewPostPage() {
     orderBy: {
       id: 'asc',
     },
-    cacheStrategy: { ttl: 60 },
   });
 
   if (!post) {
