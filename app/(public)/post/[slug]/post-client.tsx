@@ -14,14 +14,14 @@ interface PostClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
   prevPost?: PrevPostType;
   nextPost?: PrevPostType;
-  postTags: Tag[];
+  // postTags: Tag[];
 }
 
 export const PostClient = ({
   post,
   prevPost,
   nextPost,
-  postTags,
+  // postTags,
 }: PostClientProps) => {
   const [content, setContent] = useState(post.content || '');
 
@@ -38,7 +38,6 @@ export const PostClient = ({
           alt="post image"
           width={700}
           height={200}
-          objectFit="cover"
         />
 
         <EditorWrapper
@@ -49,7 +48,7 @@ export const PostClient = ({
         />
 
         <div className="w-full flex flex-wrap gap-2 mt-2 mb-12">
-          {postTags.map((item) => (
+          {post.tags.map((item) => (
             <PostTags key={item.name} item={item} />
           ))}
         </div>

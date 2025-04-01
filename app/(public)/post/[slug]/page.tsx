@@ -68,15 +68,15 @@ export default async function SlugPage({
     orderBy: { createdAt: 'desc' },
   });
 
-  const postTags = await prisma.tag.findMany({
-    where: {
-      posts: {
-        some: {
-          id: post.id,
-        },
-      },
-    },
-  });
+  // const postTags = await prisma.tag.findMany({
+  //   where: {
+  //     posts: {
+  //       some: {
+  //         id: post.id,
+  //       },
+  //     },
+  //   },
+  // });
 
   return (
     <div className="w-full flex flex-col gap-5 px-4">
@@ -84,7 +84,7 @@ export default async function SlugPage({
         post={post}
         prevPost={prevPost || undefined}
         nextPost={nextPost || undefined}
-        postTags={postTags}
+        // postTags={postTags}
       />
     </div>
   );

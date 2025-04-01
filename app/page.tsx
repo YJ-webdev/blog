@@ -2,6 +2,7 @@ import { PostPreviewMain } from './components/post-preview-main';
 import PostPreviewCard from './components/post-preview-card';
 import { extractText } from './lib/utils';
 import { prisma } from '@/lib/prisma';
+import { cn } from '@/lib/utils';
 
 export default async function Home() {
   const posts = await prisma.post.findMany({
@@ -29,17 +30,22 @@ export default async function Home() {
     ? extractText(posts[0].content)
     : '';
 
+  const secondaryPosts =
+    posts.length === 1 ? [mainPost, ...otherPosts] : otherPosts;
+
   return (
     <div className="flex max-w-[1000px] mx-auto flex-col w-full gap-5 mb-24">
-      <PostPreviewMain
-        slug={mainPost.slug ?? ''}
-        title={mainPost.title!}
-        content={processedFirstPostContent}
-        image={mainPost.image!}
-        createdAt={mainPost.createdAt!}
-      />
+      <div className={cn('', posts.length === 1 && 'sm:hidden')}>
+        <PostPreviewMain
+          slug={mainPost.slug ?? ''}
+          title={mainPost.title!}
+          content={processedFirstPostContent}
+          image={mainPost.image!}
+          createdAt={mainPost.createdAt!}
+        />
+      </div>
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 ">
-        {otherPosts.map((post) => {
+        {secondaryPosts.map((post) => {
           const processedContent = post.content
             ? extractText(post.content)
             : '';

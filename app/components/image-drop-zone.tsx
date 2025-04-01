@@ -74,7 +74,6 @@ export const ImageDropZone = ({
             height={200}
             width={700}
             className="w-full h-full object-cover"
-            objectFit="cover" // Maintain aspect ratio and cover the area
           />
         ) : (
           <ImageIcon

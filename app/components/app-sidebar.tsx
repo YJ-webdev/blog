@@ -23,8 +23,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 
 interface AppSidebarProps {
-  posts: SidebarPostType[];
-  tags: Tag[];
+  posts: SidebarPostType[] | null;
+  tags: Tag[] | null;
 }
 
 export function AppSidebar({ posts, tags }: AppSidebarProps) {
@@ -72,10 +72,10 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
   };
 
   useEffect(() => {
-    const newTimeAgoValues = posts.map((post) =>
+    const newTimeAgoValues = posts?.map((post) =>
       timeAgo(new Date(post.createdAt)),
     );
-    setTimeAgoValues(newTimeAgoValues);
+    if (newTimeAgoValues) setTimeAgoValues(newTimeAgoValues);
   }, [posts]);
 
   return (
@@ -124,7 +124,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <div className="flex flex-wrap gap-2 ">
-                  {tags.map((item) => (
+                  {tags?.map((item) => (
                     <TagLink
                       key={item.name}
                       item={item}
@@ -144,7 +144,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               <SidebarGroupContent className="">
                 <div className="flex flex-col gap-2 ">
                   <ul className="list-none space-y-4">
-                    {posts.slice(0, 10).map((post, index) => (
+                    {posts?.slice(0, 10).map((post, index) => (
                       <li key={post.slug} className="h-full w-full">
                         <button
                           onClick={() => setTimeout(() => setOpen(false), 1000)}

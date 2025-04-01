@@ -68,7 +68,7 @@ const LinkPreviews = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  //fetch links from the localStorage
+  //make it fetch links from the localStorage and setPostLinks as soon as page load
   useEffect(() => {
     const linksKey = `links_${linkKey}`;
     const storedLinks = localStorage.getItem(linksKey);
@@ -78,11 +78,16 @@ const LinkPreviews = ({
     }
   }, [linkKey, setPostLinks]);
 
-  // Save links to localStorage
+  // Push links to localStorage if there are any changes in postLinks
   useEffect(() => {
     if (postLinks.length > 0) {
       const linksKey = `links_${linkKey}`;
-      localStorage.setItem(linksKey, JSON.stringify(postLinks));
+      const storedLinks = localStorage.getItem(linksKey);
+
+      // Update localStorage only if there is a change
+      if (JSON.stringify(postLinks) !== storedLinks) {
+        localStorage.setItem(linksKey, JSON.stringify(postLinks));
+      }
     }
   }, [postLinks, linkKey]);
 

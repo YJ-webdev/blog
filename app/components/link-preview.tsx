@@ -20,12 +20,12 @@ const LinkPreview: React.FC<{ preview: LinkType }> = ({ preview }) => {
     >
       <Card className="border-none h-full">
         {preview.image && (
-          <div className="relative aspect-video">
+          <div className="relative aspect-video  overflow-hidden">
             <Image
               src={preview.image}
               alt="Link preview"
               layout="fill"
-              objectFit="cover"
+              className="object-cover"
             />
           </div>
         )}

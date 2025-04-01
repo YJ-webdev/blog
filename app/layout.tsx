@@ -7,7 +7,6 @@ import './globals.css';
 import Nav from './components/nav';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
-// import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
@@ -26,9 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const cookieStore = await cookies();
-  // const defaultOpen = cookieStore.get('sidebar_state')?.value === 'false';
-
   const posts = await prisma.post.findMany({
     where: {
       published: true,
@@ -64,7 +60,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider defaultOpen={false}>
-            <AppSidebar posts={posts} tags={tags} />
+            <AppSidebar posts={posts || null} tags={tags || null} />
             <main>
               <SidebarTrigger className="bg-transparent hover:bg-transparent" />
               <Nav />

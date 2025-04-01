@@ -89,28 +89,25 @@ export async function publishPost(prevstate: any, formData: FormData) {
       postId: id,
     }));
 
-    if (newLinks.length > 0) {
-      await prisma.link.createMany({ data: newLinks });
-    }
+    // Check if there are duplicated links by checking their URL and only add non-duplicated links
 
-    if (post.links.length + links.length > 3) {
-      // const deductingAmount = post.links.length + links.length - 3;
+    await prisma.link.createMany({ data: newLinks });
 
-      // const oldLinks = await prisma.link.findMany({
-      //   where: { postId: id },
-      //   orderBy: { createdAt: 'asc' },
-      //   take: deductingAmount,
-      //   select: { id: true, url: true },
-      // });
+    // Check if there are more than 3 links and delete the old ones, so only 3 links are kept
+    if (post.links.length + newLinks.length > 3) {
+      const excessLinksCount = post.links.length + newLinks.length - 3;
 
-      const oldLinks = await prisma.post.findUnique({
-        where: { id: id },
-        select: { links: true },
+      const linksToDelete = await prisma.link.findMany({
+        where: { postId: id },
+        orderBy: { createdAt: 'asc' },
+        take: excessLinksCount,
       });
+
+      const linkIdsToDelete = linksToDelete.map((link) => link.id);
 
       await prisma.link.deleteMany({
         where: {
-          id: { in: oldLinks?.links.map((link) => link.id) },
+          id: { in: linkIdsToDelete },
         },
       });
     }
