@@ -32,13 +32,12 @@ export default async function MyPostsPage() {
     orderBy: {
       createdAt: 'desc',
     },
-    cacheStrategy: { ttl: 60 },
   });
 
   return (
     <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16">
       {posts.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 -my-2  lg:grid-cols-3 -mx-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 -my-2  lg:grid-cols-3 w-full">
           {posts.map((post) => {
             const processedContent = post.content
               ? extractText(post.content)

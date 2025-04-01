@@ -71,13 +71,6 @@ export default async function SlugPage({
     cacheStrategy: { ttl: 60 },
   });
 
-  const links = await prisma.link.findMany({
-    where: { postId: post.id },
-    orderBy: { createdAt: 'asc' },
-    take: 3,
-    cacheStrategy: { ttl: 60 },
-  });
-
   const postTags = await prisma.tag.findMany({
     where: {
       posts: {
@@ -86,14 +79,12 @@ export default async function SlugPage({
         },
       },
     },
-    cacheStrategy: { ttl: 60 },
   });
 
   return (
     <div className="w-full flex flex-col gap-5 px-4">
       <PostClient
         post={post}
-        postLinks={links}
         prevPost={prevPost || undefined}
         nextPost={nextPost || undefined}
         postTags={postTags}

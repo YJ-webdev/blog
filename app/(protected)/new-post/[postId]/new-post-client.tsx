@@ -80,7 +80,7 @@ export const NewPostClient = ({
   return (
     <form
       action={action}
-      className="flex flex-col max-w-[1000px] mx-auto items-center"
+      className="flex flex-col max-w-[1000px] px-4 mx-auto items-center"
     >
       <input type="hidden" value={postId} name="id" />
       <input type="hidden" value={title ?? ''} name="title" />
@@ -102,10 +102,10 @@ export const NewPostClient = ({
           localStorage.setItem(titleKey, e.target.value);
           setTitle(e.target.value);
         }}
-        className="w-full mx-4 px-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+        className="w-full mt-1 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
         spellCheck={false}
       />
-      <div className="w-full max-w-[750px] pl-2 pr-4 flex flex-col">
+      <div className="w-full max-w-[750px] flex flex-col">
         <ImageDropZone
           imageKey={imageKey}
           setImageUrl={setImageUrl}

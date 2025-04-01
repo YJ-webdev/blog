@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import * as React from 'react';
+import { useDropzone, FileRejection } from 'react-dropzone';
 import { ImageIcon, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -14,35 +15,38 @@ export const ImageDropZone = ({
   imageUrl,
   imageKey,
 }: ImageDropZoneProps) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
-  useEffect(() => {
+  React.useEffect(() => {
     const storedImage = localStorage.getItem(imageKey);
     if (storedImage) setImageUrl(storedImage);
   }, [imageKey, setImageUrl]);
 
-  const handleDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
+  const onDropAccepted = (acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64Image = reader.result as string;
+      setImageUrl(base64Image);
+      localStorage.setItem(imageKey, base64Image);
+    };
+  };
 
-      const file = event.dataTransfer.files[0];
-      if (file) {
-        if (file.size > MAX_FILE_SIZE) {
-          alert('File size exceeds the 4MB limit.');
-          return;
-        }
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const base64Image = reader.result as string;
-          setImageUrl(base64Image);
-          localStorage.setItem(imageKey, base64Image);
-        };
-      }
-    },
-    [imageKey, setImageUrl],
-  );
+  const onDropRejected = (fileRejections: FileRejection[]) => {
+    const error = fileRejections[0].errors[0];
+    if (error.code === 'file-too-large') {
+      alert('File size exceeds the 3MB limit.');
+    }
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    maxSize: MAX_FILE_SIZE,
+    onDropAccepted,
+    onDropRejected,
+    multiple: false, // Allow only one file at a time
+    accept: { 'image/*': [] }, // Only accept images
+  });
 
   const removeImage = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -50,37 +54,13 @@ export const ImageDropZone = ({
     localStorage.removeItem(imageKey);
   };
 
-  const handleClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
   return (
     <div
-      onDragOver={(e) => e.preventDefault()} // Allow dropping
-      onDrop={handleDrop} // Handle file drop
-      onClick={handleClick} // Open file picker on div click
+      {...getRootProps()}
       className={cn('relative w-full md:h-96 h-72 mb-5 mt-2 cursor-pointer')}
     >
-      <input
-        ref={fileInputRef} // Reference to the file input
-        type="file"
-        onChange={(e) => {
-          if (e.target.files?.[0]) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-              const base64Image = reader.result as string;
-              setImageUrl(base64Image);
-              sessionStorage.setItem(imageKey, base64Image);
-            };
-          }
-        }}
-        className="hidden" // Hide the file input
-      />
-
+      <input {...getInputProps()} className="hidden" />{' '}
+      {/* Hidden file input */}
       <div
         className={cn(
           'absolute top-0 left-0 w-full h-full bg-transparent flex items-center justify-center',
@@ -103,7 +83,6 @@ export const ImageDropZone = ({
           />
         )}
       </div>
-
       {imageUrl && (
         <div
           onClick={removeImage}

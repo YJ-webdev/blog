@@ -60,6 +60,10 @@ export async function publishPost(prevstate: any, formData: FormData) {
     const linksString = formData.get('links') as string | null;
     const tagsString = formData.get('tags') as string | null;
 
+    if (image.length > 1024 * 1024 * 2) {
+      throw new Error('Image size is too large');
+    }
+
     if (!id || !title || !content || !slug || !image) {
       throw new Error('Required fields are missing');
     }
@@ -75,61 +79,38 @@ export async function publishPost(prevstate: any, formData: FormData) {
 
     const links: Link[] = linksString ? JSON.parse(linksString) : [];
 
-    if (links.length > 0) {
-      const existingLinks = await prisma.link.findMany({
-        where: { postId: id },
-        select: { id: true, url: true },
-      });
+    const newLinks = links.map((link) => ({
+      url: link.url,
+      title: link.title,
+      description: link.description,
+      image: link.image,
+      siteName: link.siteName,
+      favicon: link.favicon,
+      postId: id,
+    }));
 
-      const existingLinksMap = new Map(
-        existingLinks.map((link) => [link.url, link.id]),
-      );
-
-      const newLinks = [];
-      const linksToDelete = [];
-
-      for (const link of links) {
-        if (existingLinksMap.has(link.url)) {
-          const oldLinkId = existingLinksMap.get(link.url);
-          if (oldLinkId) {
-            linksToDelete.push(oldLinkId);
-          }
-        }
-        newLinks.push({
-          url: link.url,
-          title: link.title,
-          description: link.description,
-          image: link.image,
-          siteName: link.siteName,
-          favicon: link.favicon,
-          postId: id,
-        });
-      }
-
-      if (linksToDelete.length > 0) {
-        await prisma.link.deleteMany({
-          where: { id: { in: linksToDelete } },
-        });
-      }
-
-      if (newLinks.length > 0) {
-        await prisma.link.createMany({ data: newLinks });
-      }
+    if (newLinks.length > 0) {
+      await prisma.link.createMany({ data: newLinks });
     }
 
     if (post.links.length + links.length > 3) {
-      const deductingAmount = post.links.length + links.length - 3;
+      // const deductingAmount = post.links.length + links.length - 3;
 
-      const oldLinks = await prisma.link.findMany({
-        where: { postId: id },
-        orderBy: { createdAt: 'asc' },
-        take: deductingAmount,
-        select: { id: true },
+      // const oldLinks = await prisma.link.findMany({
+      //   where: { postId: id },
+      //   orderBy: { createdAt: 'asc' },
+      //   take: deductingAmount,
+      //   select: { id: true, url: true },
+      // });
+
+      const oldLinks = await prisma.post.findUnique({
+        where: { id: id },
+        select: { links: true },
       });
 
       await prisma.link.deleteMany({
         where: {
-          id: { in: oldLinks.map((link) => link.id) },
+          id: { in: oldLinks?.links.map((link) => link.id) },
         },
       });
     }

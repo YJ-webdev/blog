@@ -12,7 +12,6 @@ import Image from 'next/image';
 
 interface PostClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
-  postLinks: Link[];
   prevPost?: PrevPostType;
   nextPost?: PrevPostType;
   postTags: Tag[];
@@ -20,7 +19,6 @@ interface PostClientProps {
 
 export const PostClient = ({
   post,
-  // postLinks,
   prevPost,
   nextPost,
   postTags,
@@ -29,7 +27,7 @@ export const PostClient = ({
 
   return (
     <div className="flex flex-col items-center max-w-[1000px] mx-auto">
-      <h1 className="w-full -mt-1 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400">
+      <h1 className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400">
         {post.title}
       </h1>
 

@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { formatDateWithoutYear } from '@/app/lib/utils';
 
 import { SquarePen, Trash } from 'lucide-react';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,11 +17,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 import { PostPreviewType } from '@/app/lib/types';
 import { deletePost } from '@/app/actions/post';
-import { formatDateWithoutYear } from '@/app/lib/utils';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 
 export const PreviewCard = ({
   slug,
@@ -43,7 +42,7 @@ export const PreviewCard = ({
   return (
     <>
       <div className="relative group">
-        <div className="flex flex-col w-full hover:cursor-pointer group p-5 gap-3">
+        <div className="flex flex-col w-full hover:cursor-pointer group p-4 gap-3">
           <Image
             src={image || ''}
             alt="Preview"
