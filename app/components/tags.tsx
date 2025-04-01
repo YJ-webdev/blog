@@ -36,17 +36,16 @@ export const Tags = ({
 
   const toggleTag = (tag: Tag) => {
     const isEnteredTag = enteredTags.some((t) => t.name === tag.name);
+    const isSelectedTag = selectedTags.some((t) => t.name === tag.name);
 
     if (isEnteredTag) {
       setEnteredTags(enteredTags.filter((t) => t.name !== tag.name));
     }
 
-    if (!isEnteredTag) {
-      setSelectedTags((prevTags) =>
-        prevTags.some((t) => t.name === tag.name)
-          ? prevTags.filter((t) => t.name !== tag.name)
-          : [...prevTags, tag],
-      );
+    if (isSelectedTag) {
+      setSelectedTags((prev) => prev.filter((t) => t.name !== tag.name));
+    } else {
+      setSelectedTags((prev) => [...prev, tag]);
     }
   };
 
@@ -56,9 +55,8 @@ export const Tags = ({
 
     const newTag = { id: Date.now(), name: trimmedValue }; // Ensure unique IDs
     const isDuplicate = enteredTags.some((t) => t.name === trimmedValue);
-    const isExistingTag = tagsData.some((t) => t.name === trimmedValue);
 
-    if (!isDuplicate && !isExistingTag) {
+    if (!isDuplicate) {
       setEnteredTags((prev) => [...prev, newTag]);
       setSelectedTags((prev) => [...prev, newTag]); // Ensure it's added to selectedTags
     }

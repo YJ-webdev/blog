@@ -39,16 +39,19 @@ export async function createPost() {
   if (existingPost) {
     return existingPost.id;
   }
-  const post = await prisma.post.create({
+  const newPost = await prisma.post.create({
     data: {
       authorId: userId,
       published: false,
     },
+    select: {
+      id: true,
+    },
   });
-
-  return post.id;
+  return newPost.id;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function publishPost(prevstate: any, formData: FormData) {
   try {
     const user = await currentUser(); // Get the current user
@@ -169,9 +172,9 @@ export async function publishPost(prevstate: any, formData: FormData) {
     });
 
     return { success: true };
-  } catch (error) {
-    console.error('Error publishing post:', error);
-    return { error: error.message || 'An unexpected error occurred' };
+  } catch {
+    console.error('Error publishing post');
+    return { error: 'An unexpected error occurred' };
   }
 }
 
