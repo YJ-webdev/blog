@@ -29,6 +29,7 @@ export default async function RootLayout({
     where: {
       published: true,
     },
+    take: 10,
     select: {
       id: true,
       slug: true,
@@ -41,7 +42,7 @@ export default async function RootLayout({
   });
 
   const tags = await prisma.tag.findMany({
-    take: 11,
+    take: 10,
     orderBy: {
       id: 'asc',
     },

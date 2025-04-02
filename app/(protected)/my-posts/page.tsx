@@ -19,14 +19,13 @@ export default async function MyPostsPage() {
       authorId: userId,
       published: true,
     },
+    take: 6,
     select: {
       slug: true,
       title: true,
       content: true,
       image: true,
-      tags: true,
       links: true,
-      bookmarkedBy: true,
       createdAt: true,
     },
     orderBy: {
