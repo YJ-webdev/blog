@@ -3,7 +3,8 @@ import { ResponsiveMenu } from './responsive-menu';
 
 export default async function Nav() {
   const session = await auth();
-  const username = session?.user?.name || 'U'; // Fallback to "U" if no name
+  if (!session?.user) return null;
+  const username = session.user.name || 'Francisca'; // Fallback to "U" if no name
   const nameParts = username.split(' ');
   const userName = nameParts[0];
 

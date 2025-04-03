@@ -5,17 +5,10 @@ import { redirect } from 'next/navigation';
 import { Link, Tag } from '@prisma/client';
 import { auth } from '@/auth';
 
-const currentUser = async () => {
-  const session = await auth();
-  return session?.user;
-};
-
 export async function createPost() {
   const session = await auth();
-  if (!session || !session.user || !session.user.id)
-    throw new Error('User not authenticated');
+  if (!session?.user) throw new Error('User not authenticated');
 
-  const userId = session.user.id;
   const user = session.user;
   const existingPost = await prisma.post.findFirst({
     where: {
@@ -35,7 +28,7 @@ export async function createPost() {
   }
   const newPost = await prisma.post.create({
     data: {
-      authorId: userId,
+      authorId: session.user.id as string,
       published: false,
     },
     select: {
@@ -47,11 +40,10 @@ export async function createPost() {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function publishPost(prevstate: any, formData: FormData) {
+  const session = await auth();
+  if (!session?.user) return { error: 'User not authenticated' };
+
   try {
-    const user = await currentUser(); // Get the current user
-
-    if (!user) throw new Error('User not authenticated'); // Check if the user is authenticated
-
     const id = formData.get('id') as string;
     const title = formData.get('title') as string;
     const slug = formData.get('slug') as string;
@@ -60,12 +52,12 @@ export async function publishPost(prevstate: any, formData: FormData) {
     const linksString = formData.get('links') as string | null;
     const tagsString = formData.get('tags') as string | null;
 
-    if (image.length > 1024 * 1024 * 2) {
-      throw new Error('Image size is too large');
+    if (!id || !title || !content || !slug || !image) {
+      return { error: 'Required fields are missing' };
     }
 
-    if (!id || !title || !content || !slug || !image) {
-      throw new Error('Required fields are missing');
+    if (image.length > 1024 * 1024 * 2) {
+      return { error: '파일의 크키가 2MB를 초과했습니다.' };
     }
 
     const post = await prisma.post.findUnique({
@@ -73,8 +65,8 @@ export async function publishPost(prevstate: any, formData: FormData) {
       select: { authorId: true, links: true },
     });
 
-    if (!post || post.authorId !== user.id) {
-      return { error: 'User is not authorized to edit this post' };
+    if (!post || post.authorId !== session.user.id) {
+      return { error: '이 포스트를 편집할 권한이 없거나 포스트가 없습니다.' };
     }
 
     const links: Link[] = linksString ? JSON.parse(linksString) : [];
@@ -117,9 +109,8 @@ export async function publishPost(prevstate: any, formData: FormData) {
     if (tagsString) {
       try {
         tags = JSON.parse(tagsString).map((tag: Tag) => ({ name: tag.name }));
-      } catch (error) {
-        console.error('Invalid tags JSON format:', error);
-        throw new Error('Invalid tags format');
+      } catch {
+        return { error: '입력하신 태그를 읽을 수 없습니다.' };
       }
     }
 
@@ -145,20 +136,21 @@ export async function publishPost(prevstate: any, formData: FormData) {
 
     return { success: true };
   } catch {
-    console.error('Error publishing post');
-    return { error: 'An unexpected error occurred' };
+    return {
+      error: '파일 형식이 잘못 되었습니다. 이미지 파일이 맞는지 확인해주세요.',
+    };
   }
 }
 
 export async function deletePost(slug: string) {
-  const user = await currentUser();
-  if (!user) return redirect('/login');
+  const session = await auth();
+  if (!session?.user) return redirect('/login');
 
   const post = await prisma.post.findUnique({
     where: { slug: slug },
   });
 
-  if (!post || post.authorId !== user.id) {
+  if (!post || post.authorId !== session.user.id) {
     throw new Error('Unauthorized action');
   }
 

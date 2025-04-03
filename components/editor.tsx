@@ -23,13 +23,8 @@ interface EditorProps {
   onContentChange: (content: string) => void;
 }
 
-type TextCursorPosition = {
-  block: Block;
-  prevBlock: Block | undefined;
-  nextBlock: Block | undefined;
-};
-
 async function uploadFile(file: File) {
+  if (typeof file !== 'string') return '';
   const body = new FormData();
   body.append('file', file);
 
@@ -72,7 +67,6 @@ export default function Editor({
     PartialBlock[] | undefined | 'loading'
   >('loading');
   const editorRef = useRef<BlockNoteEditor | null>(null);
-  const cursorPositionRef = useRef<TextCursorPosition | null>(null); // To store cursor position
 
   useEffect(() => {
     const currentTheme = document.documentElement.classList.contains('dark')
@@ -140,24 +134,13 @@ export default function Editor({
 
   const onChange = () => {
     if (editor) {
-      // Save the current cursor position
-      cursorPositionRef.current = editor.getTextCursorPosition();
-
       const jsonBlocks = editor.document;
 
-      // Directly use the debouncedSave without useCallback
       debounce((jsonBlocks: Block[]) => {
         saveToStorage(contentKey, jsonBlocks, onContentChange);
-      }, 1000)(jsonBlocks); // Immediately invoke the debounced function
+      }, 1000)(jsonBlocks);
     }
   };
-
-  useEffect(() => {
-    if (cursorPositionRef.current && editor) {
-      // After saving content, restore the cursor position
-      editor.setTextCursorPosition(cursorPositionRef.current.block, 'end');
-    }
-  }, [content, editor]);
 
   if (editor === undefined) {
     return <ContentLoading />;

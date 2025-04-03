@@ -60,6 +60,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
       action={action}
       className="flex flex-col items-center max-w-[1000px] mx-auto"
     >
+      <input type="hidden" value={post.authorId ?? ''} name="authorId" />
       <input type="hidden" value={post.id ?? ''} name="id" />
       <input type="hidden" value={title ?? ''} name="title" />
       <input type="hidden" value={slug ?? ''} name="slug" />

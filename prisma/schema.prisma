@@ -15,13 +15,12 @@ model User {
   name          String?
   image         String?
   password      String?
-  posts         Post[]
-  bookmarks     Bookmark[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   accounts      Account[]
+  bookmarks     Bookmark[]
+  posts         Post[]
   sessions      Session[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -66,18 +65,14 @@ model Post {
   slug         String?    @unique
   image        String?
   content      String?
-  tags         Tag[]
-  links        Link[]
   authorId     String
-  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  published    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   bookmarkedBy Bookmark[]
-
-  published Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([slug], map: "unique_slug") // Custom name for the unique index
+  links        Link[]
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags         Tag[]      @relation("PostToTag")
 }
 
 model Link {
@@ -100,15 +95,14 @@ model Bookmark {
   userId    String
   postId    String
   createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@id([userId, postId]) // Ensures a user can only bookmark a post once
+  @@id([userId, postId])
 }
 
 model Tag {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  posts Post[]
+  posts Post[] @relation("PostToTag")
 }

@@ -8,10 +8,7 @@ import { prisma } from '@/lib/prisma';
 
 export default async function MyPostsPage() {
   const session = await auth();
-
-  if (!session) {
-    return redirect('/');
-  }
+  if (!session?.user) return redirect('/');
 
   const userId = session?.user?.id;
   const posts = await prisma.post.findMany({

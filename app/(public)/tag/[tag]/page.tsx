@@ -3,27 +3,27 @@ import { PostPreviewType } from '@/app/lib/types';
 import { extractText } from '@/app/lib/utils';
 import { prisma } from '@/lib/prisma';
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: Promise<{ tag: string }>;
-// }) {
-//   const { tag } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
+  const { tag } = await params;
 
-//   const title = `레인지 저널 | ${decodeURIComponent(tag)}`;
-//   const description = `Browse through all posts tagged with ${tag}.`;
+  const title = `레인지 저널 | ${decodeURIComponent(tag)}`;
+  const description = `Browse through all posts tagged with ${tag}.`;
 
-//   return {
-//     title,
-//     description,
-//     openGraph: {
-//       title,
-//       description,
-//       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${tag}`,
-//       images: '/range-journal-default-image.jpg',
-//     },
-//   };
-// }
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `/tag/${tag}`,
+      images: '/images/default-image.jpg',
+    },
+  };
+}
 
 export default async function TagPage({
   params,

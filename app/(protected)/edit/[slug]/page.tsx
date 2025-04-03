@@ -10,7 +10,9 @@ export default async function EditPage({
   params: Promise<{ slug: string }>;
 }) {
   const session = await auth();
-  const userId = session?.user?.id;
+  if (!session?.user) return null;
+
+  const userId = session.user.id;
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 

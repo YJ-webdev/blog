@@ -42,6 +42,7 @@
     "link-preview-js": "^3.0.14",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
+    "logging-service": "^1.0.1",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",
     "next-auth": "^5.0.0-beta.25",

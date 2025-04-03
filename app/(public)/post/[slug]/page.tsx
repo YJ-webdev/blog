@@ -1,26 +1,28 @@
 import { prisma } from '@/lib/prisma';
-// import { generateMetadataFromPost } from '@/app/lib/utils';
 import { redirect } from 'next/navigation';
 import { PostClient } from './post-client';
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>;
-// }) {
-//   const { slug } = await params;
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}/api`,
-//   );
-//   if (!res.ok)
-//     return {
-//       title: 'Post Not Found',
-//       description: 'This post is no longer available.',
-//     };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-//   const { post } = await res.json();
-//   return generateMetadataFromPost(post);
-// }
+  const title = `레인지 저널 | ${decodeURIComponent(slug).replace(/-/g, ' ')}`;
+  const description = `Browse through all posts tagged with ${slug}.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `/post/${slug}`,
+      images: '/images/default-image.jpg',
+    },
+  };
+}
 
 export default async function SlugPage({
   params,

@@ -12,6 +12,9 @@ import { prisma } from '@/lib/prisma';
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000',
+  ),
   title:
     '레인지 저널 | 지식 공유 블로그 레인지 저널에서 유용하고 정확한 정보를 찾으세요!',
   description:
