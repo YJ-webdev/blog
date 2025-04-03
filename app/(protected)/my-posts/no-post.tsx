@@ -5,17 +5,21 @@ import { createPost } from '@/app/actions/post';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
-export const NoPost = () => {
+import { toast } from 'sonner';
+
+export const NoPost = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleCreatePost = async () => {
-    startTransition(async () => {
-      const post = await createPost();
-      if (post) {
+    try {
+      startTransition(async () => {
+        const post = await createPost({ userId });
         router.push(`/new-post/${post}`);
-      }
-    });
+      });
+    } catch {
+      toast.error('포스트를 작성할 수 없습니다.');
+    }
   };
   return (
     <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-full max-w-md text-center">

@@ -10,7 +10,8 @@ export default async function MyPostsPage() {
   const session = await auth();
   if (!session?.user) return redirect('/');
 
-  const userId = session?.user?.id;
+  const userId = session.user.id;
+
   const posts = await prisma.post.findMany({
     where: {
       authorId: userId,
@@ -52,7 +53,7 @@ export default async function MyPostsPage() {
         </div>
       )}
 
-      {posts.length === 0 && <NoPost />}
+      {posts.length === 0 && <NoPost userId={userId || ''} />}
     </div>
   );
 }

@@ -5,7 +5,11 @@ import { Toaster } from 'sonner';
 import Footer from './footer';
 import { useSidebar } from '@/components/ui/sidebar';
 
-export const ClientPage = ({ children }: { children: React.ReactNode }) => {
+interface ClientPageProps {
+  children: React.ReactNode;
+}
+
+export const ClientPage = ({ children }: ClientPageProps) => {
   const { open } = useSidebar();
   return (
     <div

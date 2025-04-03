@@ -14,15 +14,9 @@ interface PostClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
   prevPost?: PrevPostType;
   nextPost?: PrevPostType;
-  // postTags: Tag[];
 }
 
-export const PostClient = ({
-  post,
-  prevPost,
-  nextPost,
-  // postTags,
-}: PostClientProps) => {
+export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
   const [content, setContent] = useState(post.content || '');
 
   return (

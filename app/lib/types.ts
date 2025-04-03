@@ -7,7 +7,7 @@ export type SidebarPostType = {
 };
 
 export type PostPreviewType = SidebarPostType & {
-  image: string | null;
+  image?: string | null;
   content: string | null;
   tags?: Tag[];
   authorId?: string;

@@ -45,11 +45,11 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
         (block.children && block.children.length > 0),
     );
 
-  const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
+  const isFormValid = title.trim() !== '' && isContentValid;
 
   useEffect(() => {
     if (status?.success) {
-      toast.success('Post published successfully!');
+      toast.success('포스트가 게시되었습니다.');
       router.push('/my-posts');
     } else if (status?.error) {
       toast.error(status.error);
@@ -83,7 +83,6 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
           const slugiedTitle = slugify(e.target.value);
           setSlug(slugiedTitle);
-          console.log(slug);
         }}
         className="w-full mx-4 px-4 mt-1 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
         spellCheck={false}

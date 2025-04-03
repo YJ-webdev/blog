@@ -38,7 +38,6 @@ export default async function SlugPage({
       tags: true,
       links: true,
     },
-    cacheStrategy: { ttl: 60 },
   });
 
   if (post === null) {
@@ -56,7 +55,6 @@ export default async function SlugPage({
       tags: true,
     },
     orderBy: { createdAt: 'asc' },
-    cacheStrategy: { ttl: 60 },
   });
 
   const prevPost = await prisma.post.findFirst({
@@ -70,7 +68,6 @@ export default async function SlugPage({
       tags: true,
     },
     orderBy: { createdAt: 'desc' },
-    cacheStrategy: { ttl: 60 },
   });
 
   return (
@@ -79,7 +76,6 @@ export default async function SlugPage({
         post={post}
         prevPost={prevPost || undefined}
         nextPost={nextPost || undefined}
-        // postTags={postTags}
       />
     </div>
   );

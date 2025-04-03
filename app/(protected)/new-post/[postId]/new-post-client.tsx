@@ -71,7 +71,7 @@ export const NewPostClient = ({
 
   useEffect(() => {
     if (status?.success) {
-      toast.success('Post published successfully!');
+      toast.success('포스트가 게시되었습니다.');
       router.push('/my-posts');
     } else if (status?.error) {
       toast.error(status.error);
@@ -141,7 +141,6 @@ export const NewPostClient = ({
         disabled={!isFormValid || isPending}
         onClick={(event) => {
           event.stopPropagation();
-          console.log(status);
         }}
       >
         {isPending ? '게시중...' : '개시하기'}

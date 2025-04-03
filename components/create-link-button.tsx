@@ -32,9 +32,6 @@ export function CreateLinkButton() {
             },
           ],
         );
-        setTimeout(() => {
-          console.log('Updated Image Block:', editor.getBlock(block.id));
-        }, 500);
       }
     }
   };

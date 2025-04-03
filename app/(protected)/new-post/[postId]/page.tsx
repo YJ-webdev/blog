@@ -7,11 +7,11 @@ import { NewPostClient } from './new-post-client';
 
 export default async function NewPostPage() {
   const session = await auth();
-  if (!session?.user) return redirect('/');
+  if (!session) redirect('/');
 
   const post = await prisma.post.findFirst({
     where: {
-      authorId: session.user.id,
+      authorId: session.user?.id,
       published: false,
     },
     select: {

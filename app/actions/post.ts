@@ -5,14 +5,10 @@ import { redirect } from 'next/navigation';
 import { Link, Tag } from '@prisma/client';
 import { auth } from '@/auth';
 
-export async function createPost() {
-  const session = await auth();
-  if (!session?.user) throw new Error('User not authenticated');
-
-  const user = session.user;
+export async function createPost({ userId }: { userId: string }) {
   const existingPost = await prisma.post.findFirst({
     where: {
-      authorId: user.id,
+      authorId: userId,
       published: false,
     },
     select: {
@@ -28,20 +24,22 @@ export async function createPost() {
   }
   const newPost = await prisma.post.create({
     data: {
-      authorId: session.user.id as string,
+      author: {
+        connect: { id: userId },
+      },
       published: false,
     },
     select: {
       id: true,
     },
   });
-  return newPost.id;
+  return newPost;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function publishPost(prevstate: any, formData: FormData) {
   const session = await auth();
-  if (!session?.user) return { error: 'User not authenticated' };
+  if (!session) return { error: '로그인이 필요합니다.' };
 
   try {
     const id = formData.get('id') as string;
@@ -53,7 +51,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
     const tagsString = formData.get('tags') as string | null;
 
     if (!id || !title || !content || !slug || !image) {
-      return { error: 'Required fields are missing' };
+      return { error: '필수 항목이 누락되었습니다.' };
     }
 
     if (image.length > 1024 * 1024 * 2) {
@@ -65,8 +63,8 @@ export async function publishPost(prevstate: any, formData: FormData) {
       select: { authorId: true, links: true },
     });
 
-    if (!post || post.authorId !== session.user.id) {
-      return { error: '이 포스트를 편집할 권한이 없거나 포스트가 없습니다.' };
+    if (!post) {
+      return { error: '포스트가 존재하지 않습니다.' };
     }
 
     const links: Link[] = linksString ? JSON.parse(linksString) : [];
@@ -81,11 +79,8 @@ export async function publishPost(prevstate: any, formData: FormData) {
       postId: id,
     }));
 
-    // Check if there are duplicated links by checking their URL and only add non-duplicated links
-
     await prisma.link.createMany({ data: newLinks });
 
-    // Check if there are more than 3 links and delete the old ones, so only 3 links are kept
     if (post.links.length + newLinks.length > 3) {
       const excessLinksCount = post.links.length + newLinks.length - 3;
 
@@ -144,15 +139,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
 
 export async function deletePost(slug: string) {
   const session = await auth();
-  if (!session?.user) return redirect('/login');
-
-  const post = await prisma.post.findUnique({
-    where: { slug: slug },
-  });
-
-  if (!post || post.authorId !== session.user.id) {
-    throw new Error('Unauthorized action');
-  }
+  if (!session) return redirect('/');
 
   return await prisma.post.delete({
     where: { slug: slug },

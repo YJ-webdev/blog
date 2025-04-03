@@ -17,8 +17,6 @@ interface LoginDialogProps {
 }
 
 export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
-  // Handle keyboard shortcut
-
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

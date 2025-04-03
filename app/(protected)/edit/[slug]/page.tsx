@@ -1,8 +1,7 @@
-import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-
 import { redirect } from 'next/navigation';
 import { EditClient } from './edit-client';
+import { auth } from '@/auth';
 
 export default async function EditPage({
   params,
@@ -10,15 +9,10 @@ export default async function EditPage({
   params: Promise<{ slug: string }>;
 }) {
   const session = await auth();
-  if (!session?.user) return null;
+  const userId = session?.user?.id;
 
-  const userId = session.user.id;
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
-
-  if (!userId) {
-    redirect('/');
-  }
 
   const post = await prisma.post.findUnique({
     where: { slug: decodedSlug },
@@ -31,6 +25,8 @@ export default async function EditPage({
   if (post === null) {
     return redirect('/not-found');
   }
+
+  if (!session?.user || userId !== post.authorId) return redirect('/');
 
   const tagsData = await prisma.tag.findMany({
     where: {

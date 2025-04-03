@@ -8,6 +8,7 @@ import Nav from './components/nav';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
 import { prisma } from '@/lib/prisma';
+import { SessionProvider } from 'next-auth/react';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -29,6 +30,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const existingUser = await prisma.user.findUnique({
+  //   where: { email: 'youjung.dev@gmail.com' }, // Use your email
+  // });
+
+  // console.log('Existing User:', existingUser);
+
   const posts = await prisma.post.findMany({
     where: {
       published: true,
@@ -68,7 +75,9 @@ export default async function RootLayout({
             <AppSidebar posts={posts || null} tags={tags || null} />
             <main>
               <SidebarTrigger className="bg-transparent hover:bg-transparent" />
-              <Nav />
+              <SessionProvider>
+                <Nav />
+              </SessionProvider>
               <ClientPage> {children}</ClientPage>
             </main>
           </SidebarProvider>
