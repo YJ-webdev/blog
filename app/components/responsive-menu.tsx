@@ -51,20 +51,7 @@ export const ResponsiveMenu = ({
             />
           </div>
         </div>
-      ) : (
-        <>
-          {pathname !== '/' && (
-            <Link
-              href={'/'}
-              className="items-center mt-1 gap-4 md:flex text-[14px]"
-            >
-              <HomeIcon strokeWidth={1.5} />
-            </Link>
-          )}
-
-          <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
-        </>
-      )}
+      </div>
     </>
   );
 };
