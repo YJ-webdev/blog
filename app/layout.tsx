@@ -30,12 +30,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const existingUser = await prisma.user.findUnique({
-  //   where: { email: 'youjung.dev@gmail.com' }, // Use your email
-  // });
-
-  // console.log('Existing User:', existingUser);
-
   const posts = await prisma.post.findMany({
     where: {
       published: true,

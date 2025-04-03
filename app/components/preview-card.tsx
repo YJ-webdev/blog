@@ -32,7 +32,7 @@ export const PreviewCard = ({
   const handleDelete = async () => {
     try {
       await deletePost(slug!);
-      toast.success('포스트가 삭제했습니다.');
+      toast.success('포스트를 삭제했습니다.');
       router.push('/my-posts');
     } catch {
       toast.error('포스트 삭제에 실패했습니다.');

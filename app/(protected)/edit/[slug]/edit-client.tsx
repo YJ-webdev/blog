@@ -49,7 +49,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
   useEffect(() => {
     if (status?.success) {
-      toast.success('포스트가 게시되었습니다.');
+      toast.success('포스트가 수정되었습니다.');
       router.push('/my-posts');
     } else if (status?.error) {
       toast.error(status.error);

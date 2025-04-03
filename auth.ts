@@ -10,10 +10,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   callbacks: {
-    jwt: async ({ token, user }) => {
-      console.log('User inside JWT callback:', user);
+    jwt({ token, user }) {
       if (user) {
-        token.id = user.id; // Ensure user.id exists
+        token.id = user.id;
       }
       return token;
     },
