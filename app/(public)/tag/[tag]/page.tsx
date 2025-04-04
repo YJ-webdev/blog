@@ -40,8 +40,10 @@ export default async function TagPage({
           name: decodedTag,
         },
       },
+
       published: true,
     },
+    take: 6,
   });
 
   return (

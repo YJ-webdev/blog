@@ -20,7 +20,7 @@ import { Tag } from '@prisma/client';
 import { SidebarPostType } from '../lib/types';
 import { TagLink } from './tag-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
 
 interface AppSidebarProps {
   posts: SidebarPostType[] | null;
@@ -31,7 +31,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const { open, setOpen, toggleSidebar } = useSidebar();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [searchTerm, setSearchTerm] = useState<string>('');
   const [timeAgoValues, setTimeAgoValues] = useState<string[]>([]);
 
   const timeAgo = (date: Date): string => {
@@ -80,17 +80,14 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
 
   return (
     <>
-      <button
-        onClick={toggleSidebar}
-        className="hidden md:block fixed top-5 left-5 z-50"
-      >
+      <button onClick={toggleSidebar} className=" fixed top-4 left-4 z-50">
         {!open && <PanelLeft strokeWidth={1.5} />}
       </button>
       <Sidebar className=" bg-white dark:bg-[#1f1f1f]">
-        <SidebarHeader className="hidden md:block ">
+        <SidebarHeader className="hidden md:block h-20">
           <button
             onClick={toggleSidebar}
-            className="hidden md:block fixed top-5 left-5 z-10"
+            className="hidden md:block fixed top-4 left-4 z-10"
           >
             {open ? <PanelLeftDashed strokeWidth={1.5} /> : null}
           </button>
@@ -104,10 +101,10 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
         </SidebarHeader>
 
-        <ScrollArea className="h-[1000px] w-full py-2 px-3 rounded-none">
-          <div className="mx-2">
+        <ScrollArea className="h-[1000px] w-full rounded-none pb-4">
+          <div className="mx-4">
             <SidebarGroup>
-              <SidebarGroupContent className="mb-4">
+              {/* <SidebarGroupContent className="mb-4">
                 <Input
                   value={searchTerm}
                   placeholder="검색어를 입력하세요"
@@ -117,7 +114,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                     setSearchTerm(e.target.value.toLowerCase().trim())
                   }
                 />
-              </SidebarGroupContent>
+              </SidebarGroupContent> */}
 
               <SidebarGroupLabel className="-ml-2 text-muted-foreground ">
                 주제
@@ -138,13 +135,13 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                 </div>
               </SidebarGroupContent>
 
-              <SidebarGroupLabel className="-ml-2 mt-5 text-muted-foreground">
+              <SidebarGroupLabel className="-ml-2 mt-8 text-muted-foreground">
                 떠오르는 기사
               </SidebarGroupLabel>
-              <SidebarGroupContent className="">
+              <SidebarGroupContent className="mb-2">
                 <div className="flex flex-col gap-2 ">
                   <ul className="list-none space-y-4">
-                    {posts?.slice(0, 10).map((post, index) => (
+                    {posts?.map((post, index) => (
                       <li key={post.slug} className="h-full w-full">
                         <button
                           onClick={() => setTimeout(() => setOpen(false), 1000)}

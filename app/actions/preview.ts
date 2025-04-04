@@ -2,5 +2,10 @@
 import { getLinkPreview } from 'link-preview-js';
 
 export async function getPreview(url: string) {
-  await getLinkPreview(url, { followRedirects: 'follow' });
+  try {
+    return await getLinkPreview(url, { followRedirects: 'follow' });
+  } catch (error) {
+    console.log(error);
+    return url;
+  }
 }

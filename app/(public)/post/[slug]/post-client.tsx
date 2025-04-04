@@ -21,7 +21,7 @@ export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
 
   return (
     <div className="flex flex-col items-center max-w-[1000px] mx-auto">
-      <h1 className="w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400">
+      <h1 className="mt-4 w-full resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-[2.5rem]/[3rem] font-bold focus:outline-none text-primary dark:placeholder-stone-400">
         {post.title}
       </h1>
 

@@ -56,6 +56,7 @@ interface LinkPreviewsProps {
   postLinks: Link[];
   setPostLinks: React.Dispatch<React.SetStateAction<Array<Link>>>;
   isEditable: boolean;
+  isAuthor?: boolean;
 }
 
 const LinkPreviews = ({
@@ -63,6 +64,7 @@ const LinkPreviews = ({
   postLinks,
   setPostLinks,
   isEditable,
+  isAuthor,
 }: LinkPreviewsProps) => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -159,6 +161,10 @@ const LinkPreviews = ({
     setUrl(e.target.value);
   };
 
+  const handleDelete = (id: string) => {
+    setPostLinks((prev) => prev.filter((link) => link.id !== id));
+  };
+
   return (
     <div className="w-full mx-auto flex flex-col items-center mb-10">
       {isEditable ? (
@@ -209,7 +215,16 @@ const LinkPreviews = ({
           {postLinks.length > 0 &&
             Array.isArray(postLinks) &&
             postLinks.map((link, index) => (
-              <LinkPreview key={index} preview={link} />
+              <LinkPreview
+                key={index}
+                preview={link}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDelete(link.id); // your actual delete logic
+                }}
+                isAuthor={isAuthor}
+              />
             ))}
         </div>
       </div>

@@ -31,6 +31,9 @@ export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  const username = session?.user?.name;
+  const firstName = username?.split(' ')[0];
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
@@ -47,6 +50,7 @@ export default function Nav() {
     if (!session || session.user?.id === undefined) return;
 
     const userId = session.user.id;
+
     try {
       startTransition(async () => {
         const post = await createPost({ userId });
@@ -58,13 +62,13 @@ export default function Nav() {
   };
 
   return (
-    <nav className="fixed right-5 top-4 z-[99999]">
+    <nav className="fixed right-4 top-4 z-[9999]">
       {session ? (
         <div className="items-center gap-6 flex">
           <div className="flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none p-4 -m-4 rounded-full">
-                <UserProfile userName={session.user?.name || 'Francisca'} />
+                <UserProfile userName={firstName || 'Francisca'} />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
@@ -110,7 +114,7 @@ export default function Nav() {
           {pathname !== '/' && (
             <Link
               href={'/'}
-              className="items-center mt-1 gap-4 md:flex text-[14px] z-[999999]"
+              className="items-center gap-4 md:flex text-[14px] z-[999999]"
             >
               <HomeIcon strokeWidth={1.5} />
             </Link>

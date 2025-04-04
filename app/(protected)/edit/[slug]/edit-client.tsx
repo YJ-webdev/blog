@@ -84,7 +84,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
           const slugiedTitle = slugify(e.target.value);
           setSlug(slugiedTitle);
         }}
-        className="w-full mx-4 px-4 mt-1 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+        className="w-full mx-4 px-4 mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
         spellCheck={false}
       />
 
@@ -115,6 +115,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
           postLinks={postLinks}
           setPostLinks={setPostLinks}
           isEditable={true}
+          isAuthor={true}
         />
       </div>
 
@@ -126,7 +127,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
           event.stopPropagation();
         }}
       >
-        {isPending ? '게시중...' : '개시하기'}
+        {isPending ? '저장 후 게시중...' : '변경 사항 개시하기'}
       </Button>
     </form>
   );

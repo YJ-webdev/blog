@@ -4,6 +4,7 @@ import { Title } from './title';
 import { Toaster } from 'sonner';
 import Footer from './footer';
 import { useSidebar } from '@/components/ui/sidebar';
+import { usePathname } from 'next/navigation';
 
 interface ClientPageProps {
   children: React.ReactNode;
@@ -11,6 +12,8 @@ interface ClientPageProps {
 
 export const ClientPage = ({ children }: ClientPageProps) => {
   const { open } = useSidebar();
+  const pathname = usePathname();
+
   return (
     <div
       style={{
@@ -19,7 +22,9 @@ export const ClientPage = ({ children }: ClientPageProps) => {
       className="flex relative transition-all ease-in-out duration-500"
     >
       <div className="bg-white dark:bg-[#1f1f1f] flex flex-col w-full min-h-screen mx-auto transition-all ease-in-out duration-300">
-        <Title />
+        {!pathname.includes('/post') &&
+          !pathname.includes('/edit') &&
+          !pathname.includes('/new-post') && <Title />}
         <main className="flex-1">{children}</main>
         <Toaster />
         <Footer />

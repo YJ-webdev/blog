@@ -102,7 +102,7 @@ export const NewPostClient = ({
           localStorage.setItem(titleKey, e.target.value);
           setTitle(e.target.value);
         }}
-        className="w-full mt-1 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+        className="w-full mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
         spellCheck={false}
       />
       <div className="w-full max-w-[750px] flex flex-col">
