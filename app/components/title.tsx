@@ -13,8 +13,8 @@ export const Title = () => {
   };
 
   return (
-    <div className="p-4 z-[99999]  max-w-[1000px] mx-auto w-full">
-      <h1 className="font-bold lg:text-6xl sm:text-5xl text-[2.5rem]/[3rem]">
+    <div className="pt-2 sm:pt-4  px-4 max-w-[1000px] mx-auto w-full">
+      <h1 className="font-bold lg:text-6xl sm:text-5xl text-[2.25rem]">
         {pathname === '/my-posts' && '내 포스트'}
         {pathname === '/' && '레인지 저널'}
         {pathname.includes('/tag') && slug && formatSlug(slug)}

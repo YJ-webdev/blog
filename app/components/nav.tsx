@@ -19,26 +19,22 @@ import { List, UserRoundMinus, PencilLine, House } from 'lucide-react';
 
 import { handleSignOut } from '../actions/auth';
 import { createPost } from '../actions/post';
-import { useSession } from 'next-auth/react';
 
 import { toast } from 'sonner';
+import { User } from 'next-auth';
 
-export default function Nav() {
-  const { data: session } = useSession();
-
+export default function Nav({ user }: { user: User | null }) {
+  const userFirstName = user?.name?.split(' ')[0];
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const username = session?.user?.name;
-  const firstName = username?.split(' ')[0];
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
         e.preventDefault();
-        setIsOpen((prev) => !prev); // Toggle dialog
+        setIsOpen((prev) => !prev);
       }
     };
 
@@ -47,13 +43,9 @@ export default function Nav() {
   }, []);
 
   const handleCreatePost = async () => {
-    if (!session || session.user?.id === undefined) return;
-
-    const userId = session.user.id;
-
     try {
       startTransition(async () => {
-        const post = await createPost({ userId });
+        const post = await createPost();
         router.push(`/new-post/${post}`);
       });
     } catch {
@@ -63,12 +55,12 @@ export default function Nav() {
 
   return (
     <nav className="fixed right-4 top-4 z-[9999]">
-      {session ? (
+      {user ? (
         <div className="items-center gap-6 flex">
           <div className="flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none p-4 -m-4 rounded-full">
-                <UserProfile userName={firstName || 'Francisca'} />
+                <UserProfile userName={userFirstName || 'Francisca'} />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"

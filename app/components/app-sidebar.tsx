@@ -101,7 +101,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
         </SidebarHeader>
 
-        <ScrollArea className="h-[1000px] w-full rounded-none pb-4">
+        <ScrollArea className="h-[1000px] w-full rounded-none pb-4 border-none">
           <div className="mx-4">
             <SidebarGroup>
               {/* <SidebarGroupContent className="mb-4">
@@ -136,7 +136,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               </SidebarGroupContent>
 
               <SidebarGroupLabel className="-ml-2 mt-8 text-muted-foreground">
-                떠오르는 기사
+                떠오르는 글
               </SidebarGroupLabel>
               <SidebarGroupContent className="mb-2">
                 <div className="flex flex-col gap-2 ">

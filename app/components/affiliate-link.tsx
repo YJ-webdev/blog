@@ -13,7 +13,7 @@ export const AffiliateLink = () => {
     <iframe
       src="https://coupa.ng/chFqOC"
       height="75"
-      className="w-full mx-auto dark:bg-[#1f1f1f]"
+      className="w-full mx-auto bg-transparent"
       frameBorder="0"
       scrolling="no"
       referrerPolicy="unsafe-url"

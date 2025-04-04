@@ -7,14 +7,14 @@ import { useTransition } from 'react';
 
 import { toast } from 'sonner';
 
-export const NoPost = ({ userId }: { userId: string }) => {
+export const NoPost = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleCreatePost = async () => {
     try {
       startTransition(async () => {
-        const post = await createPost({ userId });
+        const post = await createPost();
         router.push(`/new-post/${post}`);
       });
     } catch {

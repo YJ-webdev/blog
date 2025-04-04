@@ -8,7 +8,7 @@ import Nav from './components/nav';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
 import { prisma } from '@/lib/prisma';
-import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -53,6 +53,8 @@ export default async function RootLayout({
     },
   });
 
+  const session = await auth();
+  const user = session?.user;
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -69,9 +71,7 @@ export default async function RootLayout({
             <AppSidebar posts={posts || null} tags={tags || null} />
             <main>
               <SidebarTrigger className="bg-transparent hover:bg-transparent" />
-              <SessionProvider>
-                <Nav />
-              </SessionProvider>
+              <Nav user={user || null} />
               <ClientPage> {children}</ClientPage>
             </main>
           </SidebarProvider>

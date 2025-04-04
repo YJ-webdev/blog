@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import { PostPreviewType } from '@/app/lib/types';
 import { deletePost } from '@/app/actions/post';
 
-export const PreviewCard = ({
+export const PreviewMyPost = ({
   slug,
   title,
   image,
@@ -100,4 +100,4 @@ export const PreviewCard = ({
   );
 };
 
-export default PreviewCard;
+export default PreviewMyPost;

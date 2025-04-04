@@ -2,9 +2,10 @@ import { extractText } from '@/app/lib/utils';
 import { auth } from '@/auth';
 
 import { redirect } from 'next/navigation';
-import PreviewCard from '../../components/preview-card';
+
 import { NoPost } from './no-post';
 import { prisma } from '@/lib/prisma';
+import PreviewMyPost from '@/app/components/preview-my-post';
 
 export default async function MyPostsPage() {
   const session = await auth();
@@ -32,7 +33,7 @@ export default async function MyPostsPage() {
   });
 
   return (
-    <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16">
+    <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16 sm:mt-6">
       {posts.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 -my-2  lg:grid-cols-3 w-full">
           {posts.map((post) => {
@@ -40,7 +41,7 @@ export default async function MyPostsPage() {
               ? extractText(post.content)
               : '';
             return (
-              <PreviewCard
+              <PreviewMyPost
                 key={post.slug}
                 slug={post.slug!}
                 title={post.title!}
@@ -53,7 +54,7 @@ export default async function MyPostsPage() {
         </div>
       )}
 
-      {posts.length === 0 && <NoPost userId={userId || ''} />}
+      {posts.length === 0 && <NoPost />}
     </div>
   );
 }

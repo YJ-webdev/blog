@@ -5,7 +5,13 @@ import { redirect } from 'next/navigation';
 import { Link, Tag } from '@prisma/client';
 import { auth } from '@/auth';
 
-export async function createPost({ userId }: { userId: string }) {
+export async function createPost() {
+  const session = await auth();
+  if (!session || session.user?.id === undefined)
+    return { error: '로그인이 필요합니다.' };
+
+  const userId = session.user.id;
+
   const existingPost = await prisma.post.findFirst({
     where: {
       authorId: userId,
@@ -33,7 +39,7 @@ export async function createPost({ userId }: { userId: string }) {
       id: true,
     },
   });
-  return newPost;
+  return newPost.id;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
