@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { PostClient } from './post-client';
+import { getPost } from '@/app/lib/data';
 
 export async function generateMetadata({
   params,
@@ -8,18 +9,22 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
 
-  const title = `레인지 저널 | ${decodeURIComponent(slug).replace(/-/g, ' ')}`;
-  const description = `Browse through all posts tagged with ${slug}.`;
+  const post = await getPost(decodedSlug);
+  if (post === null) {
+    return redirect('/not-found');
+  }
+  const processedContent = post.content;
 
   return {
-    title,
-    description,
+    title: post.title,
+    description: processedContent,
     openGraph: {
-      title,
-      description,
-      url: `/post/${slug}`,
-      images: '/images/default-image.jpg',
+      title: post.title,
+      description: processedContent,
+      url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${decodedSlug}`,
+      images: post.image,
     },
   };
 }
@@ -32,13 +37,7 @@ export default async function SlugPage({
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
-  const post = await prisma.post.findUnique({
-    where: { slug: decodedSlug },
-    include: {
-      tags: true,
-      links: true,
-    },
-  });
+  const post = await getPost(decodedSlug);
 
   if (post === null) {
     return redirect('/not-found');
@@ -56,7 +55,6 @@ export default async function SlugPage({
     },
     orderBy: { createdAt: 'asc' },
   });
-
   const prevPost = await prisma.post.findFirst({
     where: {
       published: true,

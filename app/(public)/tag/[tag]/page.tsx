@@ -1,7 +1,6 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
-import { PostPreviewType } from '@/app/lib/types';
+import { getPostsByTags } from '@/app/lib/data';
 import { extractText } from '@/app/lib/utils';
-import { prisma } from '@/lib/prisma';
 
 export async function generateMetadata({
   params,
@@ -9,18 +8,21 @@ export async function generateMetadata({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
 
-  const title = `레인지 저널 | ${decodeURIComponent(tag)}`;
-  const description = `Browse through all posts tagged with ${tag}.`;
+  const posts = await getPostsByTags(decodedTag);
+  if (posts.length === 0 || posts === null) {
+    return null;
+  }
 
   return {
-    title,
-    description,
+    title: `레인지 저널 | ${decodedTag}`,
+    description: `Browse through all posts tagged with ${decodedTag}.`,
     openGraph: {
-      title,
-      description,
-      url: `/tag/${tag}`,
-      images: '/images/default-image.jpg',
+      title: `레인지 저널 | ${decodedTag}`,
+      description: `Browse through all posts tagged with ${decodedTag}.`,
+      url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${decodedTag}`,
+      images: `/images/tag-${decodedTag}.jpg`,
     },
   };
 }
@@ -33,23 +35,12 @@ export default async function TagPage({
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
 
-  const posts = await prisma.post.findMany({
-    where: {
-      tags: {
-        some: {
-          name: decodedTag,
-        },
-      },
-
-      published: true,
-    },
-    take: 6,
-  });
+  const posts = await getPostsByTags(decodedTag);
 
   return (
     <div className="flex flex-col gap-7 w-full sm:mt-4">
       <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
-        {posts.map((post: PostPreviewType) => {
+        {posts.map((post) => {
           const processedContent = post.content
             ? extractText(post.content)
             : '';

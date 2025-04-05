@@ -2,16 +2,25 @@
 
 import EditorWrapper from '@/components/dynamic-editor';
 import { useState } from 'react';
-import { Link, Post, Tag } from '@prisma/client';
 
 import LinkPreviews from '../../../components/link-previews';
 import { PrevPostType } from '@/app/lib/types';
 import { PrevNext } from '../../../components/prev-next';
 import { PostTags } from '@/app/components/tag-button';
 import Image from 'next/image';
+import { Link, Tag } from '@prisma/client';
 
 interface PostClientProps {
-  post: Post & { tags: Tag[]; links: Link[] };
+  post: {
+    id: string;
+    title: string | null;
+    image: string | null;
+    content: string | null;
+    tags: Tag[];
+    links: Link[];
+    authorId: string;
+    createdAt: Date;
+  };
   prevPost?: PrevPostType;
   nextPost?: PrevPostType;
 }
@@ -28,7 +37,7 @@ export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
       <div className="max-w-[750px] mx-auto flex flex-col mt-2">
         <Image
           className="mb-5 mt-2 md:h-96 h-72 w-[750px] object-cover"
-          src={post.image || '/images/default-image.jpg'}
+          src={post.image || 'opengraph-image.jpg'}
           alt="post image"
           width={700}
           height={200}

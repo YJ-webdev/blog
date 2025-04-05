@@ -101,7 +101,10 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
         </SidebarHeader>
 
-        <ScrollArea className="h-[1000px] w-full rounded-none pb-4 border-none">
+        <ScrollArea
+          scrollHideDelay={0}
+          className="h-[1000px] w-full rounded-none pb-4 border-none"
+        >
           <div className="mx-4">
             <SidebarGroup>
               {/* <SidebarGroupContent className="mb-4">
