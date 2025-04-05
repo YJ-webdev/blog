@@ -56,7 +56,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
     const linksString = formData.get('links') as string | null;
     const tagsString = formData.get('tags') as string | null;
 
-    if (!id || !title || !content || !slug || !image) {
+    if (!id || !title || !content || !slug) {
       return { error: '필수 항목이 누락되었습니다.' };
     }
 
@@ -138,7 +138,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
     return { success: true };
   } catch {
     return {
-      error: '파일 형식이 잘못 되었습니다. 이미지 파일이 맞는지 확인해주세요.',
+      error: '파일을 업로드할 수 없습니다. 관리자에게 문의해주세요.',
     };
   }
 }

@@ -1,5 +1,7 @@
 'use client';
 
+import { type PutBlobResult } from '@vercel/blob';
+
 import { ImageDropZone } from '@/app/components/image-drop-zone';
 import { Tags } from '@/app/components/tags';
 
@@ -20,11 +22,26 @@ interface NewPostClientProps {
   tagsData: Tag[];
 }
 
+// const postId = 'abc123'; // your current post's ID
+// const file = selectedFile;
+
+// const res = await fetch('/api/upload', {
+//   method: 'POST',
+//   body: JSON.stringify({
+//     filename: `${postId}/${file.name}`, // 👈 upload to /abc123/filename.jpg
+//     contentType: file.type,
+//   }),
+//   headers: { 'Content-Type': 'application/json' },
+// });
+
 export const NewPostClient = ({
   tagsData,
 
   postId,
 }: NewPostClientProps) => {
+  // const inputFileRef = useRef<HTMLInputElement>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+
   const [status, action, isPending] = useActionState(publishPost, null);
   const router = useRouter();
 
@@ -78,73 +95,80 @@ export const NewPostClient = ({
     }
   }, [status, router]);
   return (
-    <form
-      action={action}
-      className="flex flex-col max-w-[1000px] px-4 mx-auto items-center"
-    >
-      <input type="hidden" value={postId} name="id" />
-      <input type="hidden" value={title ?? ''} name="title" />
-      <input type="hidden" value={slugify(title) ?? 'no-slug'} name="slug" />
-      <input type="hidden" value={imageUrl ?? ''} name="image" />
-      <input type="hidden" value={content ?? ''} name="content" />
-      <input type="hidden" value={JSON.stringify(postTags ?? [])} name="tags" />
-      <input
-        type="hidden"
-        value={JSON.stringify(postLinks ?? [])}
-        name="links"
-      />
-
-      <TextareaAutosize
-        placeholder="제목"
-        autoFocus
-        value={title}
-        onChange={(e) => {
-          localStorage.setItem(titleKey, e.target.value);
-          setTitle(e.target.value);
-        }}
-        className="w-full mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
-        spellCheck={false}
-      />
-      <div className="w-full max-w-[750px] flex flex-col">
-        <ImageDropZone
-          imageKey={imageKey}
-          setImageUrl={setImageUrl}
-          imageUrl={imageUrl}
-        />
-
-        <EditorWrapper
-          contentKey={postId}
-          editable={true}
-          initialContent={content}
-          onContentChange={setContent}
-        />
-
-        <Tags
-          tagsKey={tagsKey}
-          tagsData={tagsData}
-          tags={postTags}
-          setTags={setPostTags}
-          isEditable={true}
-        />
-
-        <LinkPreviews
-          linkKey={postId}
-          postLinks={postLinks}
-          setPostLinks={setPostLinks}
-          isEditable={true}
-        />
-      </div>
-
-      <Button
-        type="submit"
-        className="fixed bottom-5 right-5 z-[99999]"
-        disabled={!isFormValid || isPending}
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
+    <>
+      <form
+        action={action}
+        className="flex flex-col max-w-[1000px] px-4 mx-auto items-center"
       >
-        {isPending ? '게시중...' : '개시하기'}
-      </Button>
-    </form>
+        <input type="hidden" value={postId} name="id" />
+        <input type="hidden" value={title ?? ''} name="title" />
+        <input type="hidden" value={slugify(title) ?? 'no-slug'} name="slug" />
+        <input type="hidden" name="image" value={blob?.url ?? ''} />
+        <input type="hidden" value={content ?? ''} name="content" />
+        <input
+          type="hidden"
+          value={JSON.stringify(postTags ?? [])}
+          name="tags"
+        />
+        <input
+          type="hidden"
+          value={JSON.stringify(postLinks ?? [])}
+          name="links"
+        />
+
+        <TextareaAutosize
+          placeholder="제목"
+          autoFocus
+          value={title}
+          onChange={(e) => {
+            localStorage.setItem(titleKey, e.target.value);
+            setTitle(e.target.value);
+          }}
+          className="w-full mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+          spellCheck={false}
+        />
+        <div className="w-full max-w-[750px] flex flex-col">
+          <ImageDropZone imageKey={imageKey} blob={blob} setBlob={setBlob} />
+
+          <EditorWrapper
+            contentKey={postId}
+            editable={true}
+            initialContent={content}
+            onContentChange={setContent}
+          />
+
+          <Tags
+            tagsKey={tagsKey}
+            tagsData={tagsData}
+            tags={postTags}
+            setTags={setPostTags}
+            isEditable={true}
+          />
+
+          <LinkPreviews
+            linkKey={postId}
+            postLinks={postLinks}
+            setPostLinks={setPostLinks}
+            isEditable={true}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className="fixed bottom-5 right-5 z-[99999]"
+          disabled={!isFormValid || isPending}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          {isPending ? '게시중...' : '개시하기'}
+        </Button>
+      </form>
+      {blob && (
+        <div>
+          Blob url: <a href={blob.url}>{blob.url}</a>
+        </div>
+      )}
+    </>
   );
 };
