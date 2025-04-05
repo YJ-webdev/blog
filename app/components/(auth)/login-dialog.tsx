@@ -25,7 +25,7 @@ export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
             <CardHeader>
               <DialogTitle>
                 <CardTitle className="font-medium text-lg text-center">
-                  레인지 저널에 오신 것을 환영합니다.
+                  애쉬저널에 오신 것을 환영합니다.
                 </CardTitle>
               </DialogTitle>
               <CardDescription className="text-center tracking-tight">
@@ -43,9 +43,9 @@ export const LoginDialog = ({ isOpen, setIsOpen }: LoginDialogProps) => {
               <GithubSignIn />
             </CardContent>
             <CardFooter className="text-xs text-muted-foreground text-center">
-              로그인시, 레인지 저널에서 사용자가 공유하는 정보에 지속적으로
-              액세스할 수 있으며, OAuth 제공자는 레인지 저널이 해당 정보에
-              액세스한 시점을 기록하게 됩니다.
+              로그인시, 애쉬저널에서 사용자가 공유하는 정보에 지속적으로
+              액세스할 수 있으며, OAuth 제공자는 애쉬저널이 해당 정보에 액세스한
+              시점을 기록하게 됩니다.
             </CardFooter>
           </Card>
         </DialogContent>

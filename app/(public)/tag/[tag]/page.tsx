@@ -16,10 +16,10 @@ export async function generateMetadata({
   }
 
   return {
-    title: `레인지 저널 | ${decodedTag}`,
+    title: `애쉬저널 | ${decodedTag}`,
     description: `Browse through all posts tagged with ${decodedTag}.`,
     openGraph: {
-      title: `레인지 저널 | ${decodedTag}`,
+      title: `애쉬저널 | ${decodedTag}`,
       description: `Browse through all posts tagged with ${decodedTag}.`,
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${decodedTag}`,
       images: `/images/tag-${decodedTag}.jpg`,
