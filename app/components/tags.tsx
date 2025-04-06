@@ -30,6 +30,7 @@ export const Tags = ({
   const [value, setValue] = useState('');
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags || []);
   const [enteredTags, setEnteredTags] = useState<Tag[]>([]);
+  const [savedTags, setSavedTags] = useState<Tag[]>([]);
 
   const toggleTag = (tag: Tag) => {
     const isEnteredTag = enteredTags.some((t) => t.name === tag.name);
@@ -61,9 +62,13 @@ export const Tags = ({
     setValue('');
   };
 
-  // const removeTag = (tag: Tag) => {
-  //   setEnteredTags((prevTags) => prevTags.filter((t) => t.name !== tag.name));
-  // };
+  useEffect(() => {
+    const saved = localStorage.getItem(tagsKey);
+    if (saved) {
+      const parsedTags: Tag[] = JSON.parse(saved);
+      setSavedTags(parsedTags);
+    }
+  }, [tagsKey, setTags]);
 
   useEffect(() => {
     const uniqueTags = [
@@ -78,9 +83,6 @@ export const Tags = ({
   const tagsnames = tags.map((tag) => tag.name);
   const filteredTags = tagsData.filter((tag) => !tagsnames.includes(tag.name));
 
-  const savedTags = localStorage.getItem(tagsKey);
-  const stringSavedTags = savedTags ? JSON.parse(savedTags) : [];
-
   return (
     <div className="flex flex-col">
       {isEditable ? (
@@ -92,7 +94,7 @@ export const Tags = ({
               className={cn(
                 selectedTags.some((tag) => tag.name === item.name) &&
                   'bg-primary dark:bg-zinc-100 text-white dark:text-black',
-                stringSavedTags.includes(item.id) &&
+                savedTags.some((tag) => tag.id === item.id) &&
                   'bg-primary dark:bg-zinc-100  text-white dark:text-black',
               )}
               onClick={() => toggleTag(item)}
@@ -106,7 +108,7 @@ export const Tags = ({
               className={cn(
                 selectedTags.some((tag) => tag.name === item.name) &&
                   'bg-primary dark:bg-zinc-100 text-white dark:text-black',
-                stringSavedTags.includes(item.id) &&
+                savedTags.some((tag) => tag.id === item.id) &&
                   'bg-primary dark:bg-zinc-100 text-white dark:text-black',
               )}
               onClick={() => toggleTag(item)}

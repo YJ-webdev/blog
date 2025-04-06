@@ -1,9 +1,11 @@
 'use client';
 
+import { PostPreviewType } from '@/app/lib/types';
+import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { formatDateWithoutYear } from '@/app/lib/utils';
+import { toast } from 'sonner';
 
 import { SquarePen, Trash } from 'lucide-react';
 import {
@@ -17,8 +19,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { toast } from 'sonner';
-import { PostPreviewType } from '@/app/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
+import { formatDateWithoutYear } from '@/app/lib/utils';
 import { deletePost } from '@/app/actions/post';
 
 export const PreviewMyPost = ({
@@ -43,13 +45,15 @@ export const PreviewMyPost = ({
     <>
       <div className="relative group">
         <div className="flex flex-col w-full hover:cursor-pointer group p-4 gap-3">
-          <Image
-            src={image || ''}
-            alt="Preview"
-            height={200}
-            width={700}
-            className="object-cover h-60 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
-          />
+          <Suspense fallback={<Skeleton className="h-full w-full" />}>
+            <Image
+              src={image || ''}
+              alt="Preview"
+              height={200}
+              width={700}
+              className="object-cover h-60 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
+            />
+          </Suspense>
 
           <div className="flex flex-col group-hover:text-black dark:group-hover:text-white gap-y-2">
             <div className="flex justify-between items-start">

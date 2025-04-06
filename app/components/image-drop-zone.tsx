@@ -20,10 +20,10 @@ export const ImageDropZone = ({
 }: ImageDropZoneProps) => {
   const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
-  React.useEffect(() => {
-    const stored = localStorage.getItem(imageKey);
-    if (stored) setBlob(JSON.parse(stored));
-  }, [imageKey, setBlob]);
+  // React.useEffect(() => {
+  //   const stored = localStorage.getItem(imageKey);
+  //   if (stored) setBlob(JSON.parse(stored));
+  // }, [imageKey, setBlob]);
 
   const onDropAccepted = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];

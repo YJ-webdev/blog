@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       request,
       onBeforeGenerateToken: async () => {
         return {
-          allowedContentTypes: ['image/*'], // Accepts PNG, JPEG, WebP, etc.
+          allowedContentTypes: ['image/*'],
           tokenPayload: JSON.stringify({
             userId: session.user.id,
           }),

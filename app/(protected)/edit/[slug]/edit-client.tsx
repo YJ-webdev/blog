@@ -29,8 +29,6 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
   const [title, setTitle] = useState(post.title || '');
   const [blob, setBlob] = useState<string | null>(post.image || null);
-
-  // Uploaded image blob as a initial state
   const [content, setContent] = useState(post.content || '');
   const [postTags, setPostTags] = useState(post.tags || []);
   const [postLinks, setPostLinks] = useState<Array<Link>>(post.links || []);

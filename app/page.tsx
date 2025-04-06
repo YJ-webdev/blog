@@ -9,7 +9,7 @@ export default async function Home() {
     where: {
       published: true,
     },
-    take: 7,
+    take: 10,
     select: {
       slug: true,
       title: true,

@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { formatDateWithoutYear } from '../lib/utils';
 import { PostPreviewType } from '../lib/types';
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const PostPreviewMain = ({
   slug,
@@ -18,13 +20,15 @@ export const PostPreviewMain = ({
       >
         <div className="flex gap-5">
           <div className="flex flex-col h-80 gap-5 flex-1">
-            <Image
-              src={image || ''}
-              alt={title || 'image-broken'}
-              width={500}
-              height={500}
-              className="object-cover h-full w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
-            />
+            <Suspense fallback={<Skeleton className="h-full w-full" />}>
+              <Image
+                src={image || ''}
+                alt={title || 'image-broken'}
+                width={500}
+                height={500}
+                className="object-cover h-full w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
+              />
+            </Suspense>
           </div>
           <div className="flex flex-col h-80 gap-2 sm:w-[200px] md:w-[250px]">
             <div className="flex-1 flex flex-col gap-2">

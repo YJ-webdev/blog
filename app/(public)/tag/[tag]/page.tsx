@@ -1,6 +1,8 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostsByTags } from '@/app/lib/data';
 import { extractText } from '@/app/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Suspense } from 'react';
 
 export async function generateMetadata({
   params,
@@ -46,14 +48,18 @@ export default async function TagPage({
             : '';
 
           return (
-            <PostPreviewCard
+            <Suspense
               key={post.slug}
-              slug={post.slug ?? ''}
-              title={post.title!}
-              content={processedContent} // Pass extracted content
-              image={post.image!}
-              createdAt={post.createdAt!}
-            />
+              fallback={<Skeleton className="h-full w-full" />}
+            >
+              <PostPreviewCard
+                slug={post.slug ?? ''}
+                title={post.title!}
+                content={processedContent} // Pass extracted content
+                image={post.image!}
+                createdAt={post.createdAt!}
+              />
+            </Suspense>
           );
         })}
       </div>

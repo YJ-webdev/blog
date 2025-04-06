@@ -35,7 +35,7 @@ export default async function NewPostPage() {
 
   return (
     <div className="w-full">
-      <NewPostClient postId={post.id || ''} tagsData={tagsData || []} />;
+      <NewPostClient postId={post.id || ''} tagsData={tagsData || []} />
     </div>
   );
 }

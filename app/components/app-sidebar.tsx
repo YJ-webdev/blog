@@ -103,7 +103,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
 
         <ScrollArea
           scrollHideDelay={0}
-          className="h-[1000px] w-full rounded-none pb-4 border-none"
+          className="h-[1000px] w-full rounded-none border-none"
         >
           <div className="mx-4">
             <SidebarGroup>
@@ -172,7 +172,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
             </SidebarGroup>
           </div>
         </ScrollArea>
-        <SidebarFooter className="h-12 pl-5">
+        <SidebarFooter className="pl-4">
           <ModeToggle />
         </SidebarFooter>
       </Sidebar>

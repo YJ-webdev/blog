@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import Link from 'next/link';
 
-import { HomeIcon } from 'lucide-react';
+import { HomeIcon, UserIcon } from 'lucide-react';
 import { LoginDialog } from './(auth)/login-dialog';
 import {
   DropdownMenu,
@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { UserProfile } from './user-profile';
 import { List, UserRoundMinus, PencilLine, House } from 'lucide-react';
 
 import { handleSignOut } from '../actions/auth';
@@ -59,12 +58,13 @@ export default function Nav({ user }: { user: User | null }) {
         <div className="items-center gap-6 flex">
           <div className="flex items-center">
             <DropdownMenu>
-              <DropdownMenuTrigger className="outline-none p-4 -m-4 rounded-full">
-                <UserProfile userName={userFirstName || 'Francisca'} />
+              <DropdownMenuTrigger className="outline-none p-2 pb-3 -m-2 rounded-full z-[99999]">
+                <p className="hidden lg:block">{`Hi, ${userFirstName}`}</p>
+                <UserIcon className="lg:hidden" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-48 mt-2 flex flex-col gap-1"
+                className="w-48 flex flex-col gap-1"
               >
                 <DropdownMenuItem
                   onClick={handleCreatePost}

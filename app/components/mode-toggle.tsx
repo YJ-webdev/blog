@@ -24,7 +24,7 @@ export function ModeToggle() {
   };
 
   return (
-    <button onClick={toggleTheme} className="mb-5">
+    <button onClick={toggleTheme} className="mb-2">
       {isDarkMode ? (
         <Sun
           className="transition-all dark:rotate-0 dark:scale-100"
