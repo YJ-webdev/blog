@@ -31,9 +31,6 @@ export const Tags = ({
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags || []);
   const [enteredTags, setEnteredTags] = useState<Tag[]>([]);
 
-  const savedTags = localStorage.getItem(tagsKey);
-  const stringSavedTags = savedTags ? JSON.parse(savedTags) : [];
-
   const toggleTag = (tag: Tag) => {
     const isEnteredTag = enteredTags.some((t) => t.name === tag.name);
     const isSelectedTag = selectedTags.some((t) => t.name === tag.name);
@@ -80,6 +77,9 @@ export const Tags = ({
 
   const tagsnames = tags.map((tag) => tag.name);
   const filteredTags = tagsData.filter((tag) => !tagsnames.includes(tag.name));
+
+  const savedTags = localStorage.getItem(tagsKey);
+  const stringSavedTags = savedTags ? JSON.parse(savedTags) : [];
 
   return (
     <div className="flex flex-col">

@@ -14,7 +14,6 @@ import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { PutBlobResult } from '@vercel/blob';
 
 interface EditClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
@@ -25,34 +24,16 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
   const [status, action, isPending] = useActionState(publishPost, null);
   const router = useRouter();
 
-  const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
-  const contentKey = `postContent_${post.id}`;
   const tagsKey = `postTags_${post.id}`;
-  const linksKey = `postLinks_${post.id}`;
 
-  const [title, setTitle] = useState('');
-  const [blob, setBlob] = useState<PutBlobResult | null>(null);
-  const [content, setContent] = useState('');
-  const [postTags, setPostTags] = useState<Tag[]>([]);
-  const [postLinks, setPostLinks] = useState<Array<Link>>([]);
+  const [title, setTitle] = useState(post.title || '');
+  const [blob, setBlob] = useState<string | null>(post.image || null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedTitle = localStorage.getItem(titleKey);
-      const storedBlob = localStorage.getItem(imageKey);
-      const storedContent = localStorage.getItem(contentKey);
-      const storedTags = localStorage.getItem(tagsKey);
-      const storedLinks = localStorage.getItem(linksKey);
-
-      if (storedTitle) setTitle(storedTitle);
-      if (storedBlob) setBlob(JSON.parse(storedBlob));
-      if (storedContent) setContent(storedContent);
-      if (storedTags) setPostTags(JSON.parse(storedTags));
-      if (storedLinks) setPostLinks(JSON.parse(storedLinks));
-    }
-  }, [titleKey, imageKey, contentKey, tagsKey, linksKey]);
+  // Uploaded image blob as a initial state
+  const [content, setContent] = useState(post.content || '');
+  const [postTags, setPostTags] = useState(post.tags || []);
+  const [postLinks, setPostLinks] = useState<Array<Link>>(post.links || []);
 
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
@@ -69,7 +50,7 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
 
   useEffect(() => {
     if (status?.success) {
-      toast.success('포스트가 게시되었습니다.');
+      toast.success('포스트가 수정되었습니다.');
       router.push('/my-posts');
     } else if (status?.error) {
       toast.error(status.error);
@@ -82,8 +63,8 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
     >
       <input type="hidden" name="id" value={post.id} />
       <input type="hidden" name="title" value={title} />
-      <input type="hidden" name="slug" value={slugify(title) || 'no-slug'} />
-      <input type="hidden" name="image" value={blob?.url || ''} />
+      <input type="hidden" name="slug" value={slugify(title)} />
+      <input type="hidden" name="image" value={blob || ''} />
       <input type="hidden" name="content" value={content} />
       <input type="hidden" name="tags" value={JSON.stringify(postTags ?? [])} />
       <input
@@ -98,7 +79,6 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
         autoFocus
         value={title}
         onChange={(e) => {
-          localStorage.setItem(titleKey, e.target.value);
           setTitle(e.target.value);
         }}
         className="w-full mx-4 px-4 mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"

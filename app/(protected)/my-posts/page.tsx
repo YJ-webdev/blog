@@ -43,10 +43,10 @@ export default async function MyPostsPage() {
             return (
               <PreviewMyPost
                 key={post.slug}
-                slug={post.slug!}
-                title={post.title!}
+                slug={post.slug}
+                title={post.title}
                 content={processedContent}
-                image={post.image!}
+                image={post.image}
                 createdAt={post.createdAt}
               />
             );

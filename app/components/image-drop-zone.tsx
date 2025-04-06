@@ -4,14 +4,14 @@ import { ImageIcon, Trash } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { upload } from '@vercel/blob/client';
-import { PutBlobResult } from '@vercel/blob';
+// import { PutBlobResult } from '@vercel/blob';
 import { toast } from 'sonner';
 
-interface ImageDropZoneProps {
+type ImageDropZoneProps = {
   imageKey: string;
-  setBlob: React.Dispatch<React.SetStateAction<PutBlobResult | null>>;
-  blob: PutBlobResult | null;
-}
+  setBlob: React.Dispatch<React.SetStateAction<null | string>>;
+  blob: null | string;
+};
 
 export const ImageDropZone = ({
   imageKey,
@@ -30,9 +30,9 @@ export const ImageDropZone = ({
     try {
       const newBlob = await upload(`${imageKey}/${file.name}`, file, {
         access: 'public',
-        handleUploadUrl: '/api/post/uploads',
+        handleUploadUrl: '/api/post/upload',
       });
-      setBlob(newBlob);
+      setBlob(newBlob.url);
       localStorage.setItem(imageKey, JSON.stringify(newBlob));
     } catch (error) {
       console.error('Upload failed:', error);
@@ -76,7 +76,7 @@ export const ImageDropZone = ({
       >
         {blob ? (
           <Image
-            src={blob.url}
+            src={blob as string}
             alt="Image Preview"
             height={200}
             width={700}

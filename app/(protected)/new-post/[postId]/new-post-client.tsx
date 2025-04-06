@@ -1,7 +1,5 @@
 'use client';
 
-import { type PutBlobResult } from '@vercel/blob';
-
 import { ImageDropZone } from '@/app/components/image-drop-zone';
 import { Tags } from '@/app/components/tags';
 
@@ -33,7 +31,7 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
   const linksKey = `postLinks_${postId}`;
 
   const [title, setTitle] = useState('');
-  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  const [blob, setBlob] = useState<null | string>(null);
   const [content, setContent] = useState('');
   const [postTags, setPostTags] = useState<Tag[]>([]);
   const [postLinks, setPostLinks] = useState<Array<Link>>([]);
@@ -84,8 +82,8 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
       >
         <input type="hidden" name="id" value={postId} />
         <input type="hidden" name="title" value={title} />
-        <input type="hidden" name="slug" value={slugify(title) || 'no-slug'} />
-        <input type="hidden" name="image" value={blob?.url || ''} />
+        <input type="hidden" name="slug" value={slugify(title)} />
+        <input type="hidden" name="image" value={blob || ''} />
         <input type="hidden" name="content" value={content} />
         <input
           type="hidden"
@@ -146,11 +144,6 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
           {isPending ? '게시중...' : '개시하기'}
         </Button>
       </form>
-      {blob && (
-        <div>
-          Blob url: <a href={blob.url}>{blob.url}</a>
-        </div>
-      )}
     </>
   );
 };
