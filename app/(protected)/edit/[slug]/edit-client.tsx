@@ -14,6 +14,7 @@ import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { PutBlobResult } from '@vercel/blob';
 
 interface EditClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
@@ -24,15 +25,34 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
   const [status, action, isPending] = useActionState(publishPost, null);
   const router = useRouter();
 
+  const titleKey = `postTitle_${post.id}`;
   const imageKey = `uploadedImage_${post.id}`;
+  const contentKey = `postContent_${post.id}`;
   const tagsKey = `postTags_${post.id}`;
+  const linksKey = `postLinks_${post.id}`;
 
-  const [title, setTitle] = useState(post.title || '');
-  const [slug, setSlug] = useState(post.slug || '');
-  const [imageUrl, setImageUrl] = useState(post.image || '');
-  const [content, setContent] = useState(post.content || '');
-  const [postTags, setPostTags] = useState(post.tags || []);
-  const [postLinks, setPostLinks] = useState<Array<Link>>(post.links || []);
+  const [title, setTitle] = useState('');
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  const [content, setContent] = useState('');
+  const [postTags, setPostTags] = useState<Tag[]>([]);
+  const [postLinks, setPostLinks] = useState<Array<Link>>([]);
+
+  // Load saved values from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedTitle = localStorage.getItem(titleKey);
+      const storedBlob = localStorage.getItem(imageKey);
+      const storedContent = localStorage.getItem(contentKey);
+      const storedTags = localStorage.getItem(tagsKey);
+      const storedLinks = localStorage.getItem(linksKey);
+
+      if (storedTitle) setTitle(storedTitle);
+      if (storedBlob) setBlob(JSON.parse(storedBlob));
+      if (storedContent) setContent(storedContent);
+      if (storedTags) setPostTags(JSON.parse(storedTags));
+      if (storedLinks) setPostLinks(JSON.parse(storedLinks));
+    }
+  }, [titleKey, imageKey, contentKey, tagsKey, linksKey]);
 
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
@@ -45,11 +65,11 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
         (block.children && block.children.length > 0),
     );
 
-  const isFormValid = title.trim() !== '' && isContentValid;
+  const isFormValid = title.trim() !== '' && isContentValid && blob !== null;
 
   useEffect(() => {
     if (status?.success) {
-      toast.success('포스트가 수정되었습니다.');
+      toast.success('포스트가 게시되었습니다.');
       router.push('/my-posts');
     } else if (status?.error) {
       toast.error(status.error);
@@ -60,17 +80,16 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
       action={action}
       className="flex flex-col items-center max-w-[1000px] mx-auto"
     >
-      <input type="hidden" value={post.authorId ?? ''} name="authorId" />
-      <input type="hidden" value={post.id ?? ''} name="id" />
-      <input type="hidden" value={title ?? ''} name="title" />
-      <input type="hidden" value={slug ?? ''} name="slug" />
-      <input type="hidden" value={imageUrl ?? ''} name="image" />
-      <input type="hidden" value={content ?? ''} name="content" />
-      <input type="hidden" value={JSON.stringify(postTags ?? [])} name="tags" />
+      <input type="hidden" name="id" value={post.id} />
+      <input type="hidden" name="title" value={title} />
+      <input type="hidden" name="slug" value={slugify(title) || 'no-slug'} />
+      <input type="hidden" name="image" value={blob?.url || ''} />
+      <input type="hidden" name="content" value={content} />
+      <input type="hidden" name="tags" value={JSON.stringify(postTags ?? [])} />
       <input
         type="hidden"
-        value={JSON.stringify(postLinks ?? [])}
         name="links"
+        value={JSON.stringify(postLinks ?? [])}
       />
 
       <TextareaAutosize
@@ -79,21 +98,15 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
         autoFocus
         value={title}
         onChange={(e) => {
+          localStorage.setItem(titleKey, e.target.value);
           setTitle(e.target.value);
-
-          const slugiedTitle = slugify(e.target.value);
-          setSlug(slugiedTitle);
         }}
         className="w-full mx-4 px-4 mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
         spellCheck={false}
       />
 
       <div className="w-full max-w-[750px] px-4 flex flex-col">
-        <ImageDropZone
-          imageKey={imageKey}
-          setImageUrl={setImageUrl}
-          imageUrl={imageUrl}
-        />
+        <ImageDropZone imageKey={imageKey} blob={blob} setBlob={setBlob} />
 
         <EditorWrapper
           contentKey={post.id}

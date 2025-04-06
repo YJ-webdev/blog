@@ -22,26 +22,7 @@ interface NewPostClientProps {
   tagsData: Tag[];
 }
 
-// const postId = 'abc123'; // your current post's ID
-// const file = selectedFile;
-
-// const res = await fetch('/api/upload', {
-//   method: 'POST',
-//   body: JSON.stringify({
-//     filename: `${postId}/${file.name}`, // 👈 upload to /abc123/filename.jpg
-//     contentType: file.type,
-//   }),
-//   headers: { 'Content-Type': 'application/json' },
-// });
-
-export const NewPostClient = ({
-  tagsData,
-
-  postId,
-}: NewPostClientProps) => {
-  // const inputFileRef = useRef<HTMLInputElement>(null);
-  const [blob, setBlob] = useState<PutBlobResult | null>(null);
-
+export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
   const [status, action, isPending] = useActionState(publishPost, null);
   const router = useRouter();
 
@@ -51,20 +32,28 @@ export const NewPostClient = ({
   const tagsKey = `postTags_${postId}`;
   const linksKey = `postLinks_${postId}`;
 
-  const [title, setTitle] = useState(localStorage.getItem(titleKey) || '');
-  const [imageUrl, setImageUrl] = useState('');
-  const [content, setContent] = useState(
-    localStorage.getItem(contentKey) || '',
-  );
-  const [postTags, setPostTags] = useState<Tag[]>(() => {
-    const storedTags = localStorage.getItem(tagsKey);
-    return storedTags ? JSON.parse(storedTags) : [];
-  });
+  const [title, setTitle] = useState('');
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  const [content, setContent] = useState('');
+  const [postTags, setPostTags] = useState<Tag[]>([]);
+  const [postLinks, setPostLinks] = useState<Array<Link>>([]);
 
-  const [postLinks, setPostLinks] = useState<Array<Link>>(() => {
-    const storedLinks = localStorage.getItem(linksKey);
-    return storedLinks ? JSON.parse(storedLinks) : [];
-  });
+  // Load saved values from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedTitle = localStorage.getItem(titleKey);
+      const storedBlob = localStorage.getItem(imageKey);
+      const storedContent = localStorage.getItem(contentKey);
+      const storedTags = localStorage.getItem(tagsKey);
+      const storedLinks = localStorage.getItem(linksKey);
+
+      if (storedTitle) setTitle(storedTitle);
+      if (storedBlob) setBlob(JSON.parse(storedBlob));
+      if (storedContent) setContent(storedContent);
+      if (storedTags) setPostTags(JSON.parse(storedTags));
+      if (storedLinks) setPostLinks(JSON.parse(storedLinks));
+    }
+  }, [titleKey, imageKey, contentKey, tagsKey, linksKey]);
 
   const parsedContent =
     typeof content === 'string' ? JSON.parse(content || '[]') : content;
@@ -77,14 +66,7 @@ export const NewPostClient = ({
         (block.children && block.children.length > 0),
     );
 
-  const isFormValid = title.trim() !== '' && isContentValid && imageUrl !== '';
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setTitle(localStorage.getItem(titleKey) || '');
-      setImageUrl(localStorage.getItem(imageKey) || '');
-    }
-  }, [setTitle, setImageUrl, titleKey, imageKey]);
+  const isFormValid = title.trim() !== '' && isContentValid && blob !== null;
 
   useEffect(() => {
     if (status?.success) {
@@ -100,20 +82,20 @@ export const NewPostClient = ({
         action={action}
         className="flex flex-col max-w-[1000px] px-4 mx-auto items-center"
       >
-        <input type="hidden" value={postId} name="id" />
-        <input type="hidden" value={title ?? ''} name="title" />
-        <input type="hidden" value={slugify(title) ?? 'no-slug'} name="slug" />
-        <input type="hidden" name="image" value={blob?.url ?? ''} />
-        <input type="hidden" value={content ?? ''} name="content" />
+        <input type="hidden" name="id" value={postId} />
+        <input type="hidden" name="title" value={title} />
+        <input type="hidden" name="slug" value={slugify(title) || 'no-slug'} />
+        <input type="hidden" name="image" value={blob?.url || ''} />
+        <input type="hidden" name="content" value={content} />
         <input
           type="hidden"
-          value={JSON.stringify(postTags ?? [])}
           name="tags"
+          value={JSON.stringify(postTags ?? [])}
         />
         <input
           type="hidden"
-          value={JSON.stringify(postLinks ?? [])}
           name="links"
+          value={JSON.stringify(postLinks ?? [])}
         />
 
         <TextareaAutosize
