@@ -80,7 +80,7 @@ export default function Nav({ user, posts, tags }: NavProps) {
                         <Link
                           href={`/tag/${item.name}`}
                           key={item.name}
-                          className="w-fit py-2 bg-muted px-3 rounded-full hover:bg-primary/10 dark:hover:bg-white/15 text-sm cursor-pointer active:scale-90 duration-300 ease-out transition-all"
+                          className="w-fit py-2 bg-muted px-3 rounded-full hover:bg-primary/10 dark:hover:bg-white/15 text-base cursor-pointer active:scale-90 duration-300 ease-out transition-all"
                         >
                           {item.name}
                         </Link>
