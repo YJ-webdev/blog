@@ -180,14 +180,14 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
           {/* <div className="w-full h-2 bg-muted mt-2" /> */}
         </ScrollArea>
-        <SidebarFooter className="pl-4 bg-muted">
+        <SidebarFooter className="pl-4">
           {session.status === 'unauthenticated' && (
             <>
               <div
                 onClick={() => setIsOpen(true)}
                 className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
               >
-                <UserRoundPlus className="w-5 h-5 mt-1" strokeWidth={1.5} />
+                <UserRoundPlus className="w-5 h-5" strokeWidth={1.5} />
               </div>
 
               <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />

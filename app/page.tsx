@@ -45,7 +45,7 @@ export default async function Home() {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 ">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 ">
         {secondaryPosts.map((post) => {
           const processedContent = post.content
             ? extractText(post.content)

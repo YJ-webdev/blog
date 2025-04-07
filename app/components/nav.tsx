@@ -33,6 +33,7 @@ import { toast } from 'sonner';
 import { User } from 'next-auth';
 import { SidebarPostType } from '../lib/types';
 import { Tag } from '@prisma/client';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface NavProps {
   user: User | null;
@@ -64,46 +65,54 @@ export default function Nav({ user, posts, tags }: NavProps) {
         <DrawerTrigger className="fixed md:hidden right-4 top-4 z-[9999]">
           <MenuIcon strokeWidth={1.5} />
         </DrawerTrigger>
-        <DrawerContent className="z-[99999] w-[90%] flex flex-row gap-2 p-2">
-          <div className="h-[100px] self-center w-2 rounded-full bg-muted-foreground/30 flex border" />
-          <div className="flex flex-col gap-2 w-full">
-            <DrawerHeader className="flex flex-col gap-2 items-start p-0 m-0">
-              <DrawerTitle className="mx-5 mt-5 text-sm text-muted-foreground font-light">
-                인기 주제
-              </DrawerTitle>
-              <DrawerDescription className="mx-5 flex flex-wrap gap-2 text-base font-medium text-primary items-start">
-                {tags?.map((item) => (
-                  <DrawerClose asChild key={item.name}>
-                    <Link
-                      href={`/tag/${item.name}`}
-                      key={item.name}
-                      className="w-fit py-2 bg-muted px-3 rounded-full hover:bg-primary/10 dark:hover:bg-white/15 text-sm cursor-pointer active:scale-90 duration-300 ease-out transition-all"
-                    >
-                      {item.name}
-                    </Link>
-                  </DrawerClose>
-                ))}
-              </DrawerDescription>
-            </DrawerHeader>
+        <DrawerContent className="z-[99999] w-[90%] flex flex-row gap-2 px-2 py-2">
+          <div className="h-[100px] self-center w-2 ml-1 rounded-full bg-muted flex" />
+          <div className="relative flex flex-col gap-4 w-full h-[100vh]">
+            <ScrollArea className="h-full w-full m-0 p-0">
+              <div className=" flex flex-col h-full mb-10">
+                <DrawerHeader className="flex flex-col gap-2 h-full items-start p-0 m-0">
+                  <DrawerTitle className="mx-5 mt-4 text-sm text-muted-foreground font-light">
+                    인기 주제
+                  </DrawerTitle>
+                  <DrawerDescription className="mx-5 flex flex-wrap gap-2 text-base font-medium text-primary items-start">
+                    {tags?.map((item) => (
+                      <DrawerClose asChild key={item.name}>
+                        <Link
+                          href={`/tag/${item.name}`}
+                          key={item.name}
+                          className="w-fit py-2 bg-muted px-3 rounded-full hover:bg-primary/10 dark:hover:bg-white/15 text-sm cursor-pointer active:scale-90 duration-300 ease-out transition-all"
+                        >
+                          {item.name}
+                        </Link>
+                      </DrawerClose>
+                    ))}
+                  </DrawerDescription>
+                </DrawerHeader>
 
-            <DrawerHeader className="flex flex-col gap-2 items-start p-0 m-0">
-              <DrawerTitle className="mx-5 mt-5 text-sm text-muted-foreground font-light">
-                떠오르는 글
-              </DrawerTitle>
-              <DrawerDescription className="mx-5 flex flex-col gap-4 text-base font-medium text-primary items-start">
-                {posts?.map((post) => (
-                  <DrawerClose asChild key={post.slug}>
-                    <Link
-                      href={`/post/${post.slug}`}
-                      className="text-base font-medium text-primary text-start line-clamp-1"
-                    >
-                      {post.title}
-                    </Link>
-                  </DrawerClose>
-                ))}
-              </DrawerDescription>
-            </DrawerHeader>
+                <DrawerHeader className="flex flex-col gap-4 h-full items-start p-0 flex-grow">
+                  <DrawerTitle className="mx-5 mt-9 text-sm text-muted-foreground font-light">
+                    떠오르는 글
+                  </DrawerTitle>
+                  <DrawerDescription className="mx-5 flex flex-col gap-4 text-base font-medium text-primary items-start">
+                    {posts?.map((post) => (
+                      <DrawerClose asChild key={post.slug}>
+                        <Link
+                          href={`/post/${post.slug}`}
+                          className="text-base font-medium text-primary text-start line-clamp-1"
+                        >
+                          {post.title}
+                        </Link>
+                      </DrawerClose>
+                    ))}
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="flex-grow" />
+              </div>
+            </ScrollArea>
           </div>
+          {/* <p className="fixed z-[99999] bottom-20 right-0 flex text-xs text-center text-muted-foreground pr-5 h-full mb-5 mt-auto ">
+            © 2025 ashjournals.com
+          </p> */}
         </DrawerContent>
       </Drawer>
 
