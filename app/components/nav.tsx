@@ -69,7 +69,7 @@ export default function Nav({ user, posts, tags }: NavProps) {
           <div className="h-[100px] self-center w-2 ml-1 rounded-full bg-muted flex" />
           <div className="relative flex flex-col gap-4 w-full h-[100vh]">
             <ScrollArea className="h-full w-full m-0 p-0">
-              <div className=" flex flex-col h-full mb-10">
+              <div className=" flex flex-col h-full mb-5">
                 <DrawerHeader className="flex flex-col gap-2 h-full items-start p-0 m-0">
                   <DrawerTitle className="mx-5 mt-4 text-sm text-muted-foreground font-light">
                     인기 주제
@@ -109,10 +109,10 @@ export default function Nav({ user, posts, tags }: NavProps) {
                 <div className="flex-grow" />
               </div>
             </ScrollArea>
+            <p className="right-0 text-xs text-center text-muted-foreground pr-5 mb-5 mt-auto ">
+              © 2025 ashjournals.com
+            </p>
           </div>
-          {/* <p className="fixed z-[99999] bottom-20 right-0 flex text-xs text-center text-muted-foreground pr-5 h-full mb-5 mt-auto ">
-            © 2025 ashjournals.com
-          </p> */}
         </DrawerContent>
       </Drawer>
 

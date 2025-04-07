@@ -34,7 +34,7 @@ export default async function Home() {
     posts.length === 1 ? [mainPost, ...otherPosts] : otherPosts;
 
   return (
-    <div className="flex max-w-[1000px] mx-auto flex-col w-full -mt-5 sm:mt-4 gap-5 mb-24">
+    <div className="flex max-w-[1000px] mx-auto flex-col w-full -mt-5 sm:mt-4 gap-5 mb-5">
       <div className="mt-5 sm:mt-0">
         <PostPreviewMain
           slug={mainPost.slug ?? ''}
