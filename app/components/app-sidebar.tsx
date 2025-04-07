@@ -1,6 +1,6 @@
 'use client';
 
-import { PanelLeft, PanelLeftDashed } from 'lucide-react';
+import { PanelLeft, PanelLeftDashed, UserRoundPlus } from 'lucide-react';
 
 import {
   Sidebar,
@@ -13,13 +13,14 @@ import {
 } from '@/components/ui/sidebar';
 
 import Link from 'next/link';
-import { ModeToggle } from './mode-toggle';
+// import { ModeToggle } from './mode-toggle';
 import { useEffect, useState } from 'react';
 
 import { Tag } from '@prisma/client';
 import { SidebarPostType } from '../lib/types';
 import { TagLink } from './tag-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { LoginDialog } from './(auth)/login-dialog';
 // import { Input } from '@/components/ui/input';
 
 interface AppSidebarProps {
@@ -28,6 +29,7 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ posts, tags }: AppSidebarProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const { open, setOpen, toggleSidebar } = useSidebar();
@@ -80,7 +82,10 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
 
   return (
     <>
-      <button onClick={toggleSidebar} className=" fixed top-4 left-4 z-50">
+      <button
+        onClick={toggleSidebar}
+        className="hidden md:block fixed top-4 left-4 z-50"
+      >
         {!open && <PanelLeft strokeWidth={1.5} />}
       </button>
       <Sidebar className=" bg-white dark:bg-[#1f1f1f]">
@@ -173,7 +178,14 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
           </div>
         </ScrollArea>
         <SidebarFooter className="pl-4">
-          <ModeToggle />
+          <div
+            onClick={() => setIsOpen(true)}
+            className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
+          >
+            <UserRoundPlus className="w-5 h-5" strokeWidth={1.5} />
+          </div>
+
+          <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
         </SidebarFooter>
       </Sidebar>
     </>

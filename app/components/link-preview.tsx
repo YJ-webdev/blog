@@ -18,7 +18,7 @@ interface LinkPreviewProps {
 
 const LinkPreview = ({ preview, onClick, isAuthor }: LinkPreviewProps) => {
   return (
-    <div className="relative mt-8 mb-2 rounded-sm shadow-md md:max-w-[250px] w-full mx-auto">
+    <div className="relative mb-2 rounded-sm shadow-md md:max-w-[250px] w-full mx-auto">
       <Link
         href={preview.url!}
         target="_blank"

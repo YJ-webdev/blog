@@ -41,28 +41,26 @@ export default async function TagPage({
 
   return (
     <div className="flex flex-col gap-7 w-full sm:mt-4">
-      <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
-        {posts.map((post) => {
-          const processedContent = post.content
-            ? extractText(post.content)
-            : '';
+      <Suspense fallback={<Skeleton className="h-60 w-full rounded-lg" />}>
+        <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
+          {posts.map((post) => {
+            const processedContent = post.content
+              ? extractText(post.content)
+              : '';
 
-          return (
-            <Suspense
-              key={post.slug}
-              fallback={<Skeleton className="h-full w-full" />}
-            >
+            return (
               <PostPreviewCard
+                key={post.slug}
                 slug={post.slug ?? ''}
                 title={post.title!}
                 content={processedContent} // Pass extracted content
                 image={post.image!}
                 createdAt={post.createdAt!}
               />
-            </Suspense>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      </Suspense>
     </div>
   );
 }

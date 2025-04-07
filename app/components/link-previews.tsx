@@ -10,7 +10,6 @@ import { getPreview } from '@/app/actions/preview';
 
 import { LinkIcon, Loader2 } from 'lucide-react';
 import { Link } from '@prisma/client';
-import { AffiliateLink } from '@/app/components/affiliate-link';
 
 function getLargestFavicon(favicons: string[]): string {
   if (!favicons.length) return '';
@@ -167,9 +166,9 @@ const LinkPreviews = ({
 
   return (
     <div className="w-full mx-auto flex flex-col items-center mb-10">
-      {isEditable ? (
+      {isEditable && (
         <div className="flex flex-col w-full">
-          <div className="flex w-full">
+          <div className="flex w-full mb-7">
             <Input
               className=" bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-sm text-[14px]"
               value={url}
@@ -206,12 +205,10 @@ const LinkPreviews = ({
             </p>
           )}
         </div>
-      ) : (
-        <AffiliateLink />
       )}
 
-      <div className="flex flex-col max-w-[750px] gap-y-5">
-        <div className="grid grid-cols-1 md:flex gap-5 justify-between w-full h-full">
+      <div className="flex flex-col max-w-[750px] md:gap-y-5">
+        <div className="grid grid-cols-1 md:flex gap-2 md:gap-5 justify-between w-full h-full">
           {postLinks.length > 0 &&
             Array.isArray(postLinks) &&
             postLinks.map((link, index) => (

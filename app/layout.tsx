@@ -65,7 +65,7 @@ export default async function RootLayout({
           <SidebarProvider defaultOpen={false}>
             <AppSidebar posts={posts || null} tags={tags || null} />
             <main>
-              <SidebarTrigger className="bg-transparent hover:bg-transparent" />
+              <SidebarTrigger className="hidden md:block md:-mt-7 bg-transparent hover:bg-transparent" />
               <Nav user={user || null} />
               <ClientPage> {children}</ClientPage>
             </main>
