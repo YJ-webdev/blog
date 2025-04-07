@@ -23,7 +23,7 @@ export default async function NewPostPage() {
   });
 
   const tagsData = await prisma.tag.findMany({
-    take: 10,
+    take: 15,
     orderBy: {
       id: 'asc',
     },

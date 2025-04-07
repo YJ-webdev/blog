@@ -9,6 +9,7 @@ import {
   DumbbellIcon,
   HomeIcon,
   MenuIcon,
+  MoreHorizontal,
   TentTreeIcon,
   UserIcon,
 } from 'lucide-react';
@@ -28,6 +29,8 @@ import { createPost } from '../actions/post';
 
 import { toast } from 'sonner';
 import { User } from 'next-auth';
+import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
+import { slugify } from '../lib/utils';
 
 export default function Nav({ user }: { user: User | null }) {
   const userFirstName = user?.name?.split(' ')[0];
@@ -120,52 +123,89 @@ export default function Nav({ user }: { user: User | null }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-48 flex flex-col gap-1"
+                className="w-72 flex flex-col gap-1 px-2"
               >
-                {pathname !== '/' && (
-                  <>
-                    <DropdownMenuItem
-                      onClick={() => router.push('/')}
-                      className="flex items-center "
-                    >
-                      <HomeIcon className="mr-3 h-4 w-4" />
-                      메인 페이지
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="my-0" />
-                  </>
-                )}
-
+                <DropdownMenuLabel className="text-xs text-muted-foreground font-light ml-2 mt-2">
+                  인기 주제
+                </DropdownMenuLabel>
                 <DropdownMenuItem
                   onClick={() => router.push('/tag/식이요법')}
-                  className="flex items-center"
+                  className="flex items-center cursor-pointer"
                 >
-                  <AppleIcon className="mr-3 h-4 w-4" />
+                  <AppleIcon className="mr-2 h-4 w-4" />
                   식이요법
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => router.push('/tag/여행')}
-                  className="flex items-center"
+                  className="flex items-center cursor-pointer"
                 >
-                  <TentTreeIcon className="mr-3 h-4 w-4" />
+                  <TentTreeIcon className="mr-2 h-4 w-4" />
                   여행
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => router.push('/tag/홈트레이닝')}
-                  className="flex items-center"
+                  className="flex items-center cursor-pointer"
                 >
-                  <DumbbellIcon className="mr-3 h-4 w-4" />
+                  <DumbbellIcon className="mr-2 h-4 w-4" />
                   홈트레이닝
                 </DropdownMenuItem>
-
-                {/* <DropdownMenuSeparator className="my-0" />
-
+                <DropdownMenuSeparator className="my-0" />
+                <DropdownMenuLabel className="text-xs text-muted-foreground font-light ml-2 mt-2">
+                  떠오르는 글
+                </DropdownMenuLabel>
                 <DropdownMenuItem
-                  onClick={() => setIsOpen(true)}
-                  className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
+                  onClick={() =>
+                    router.push(
+                      `/post/${slugify('집중력을 높여주는 음식 8가지')}`,
+                    )
+                  }
+                  className="flex items-center  line-clamp-1 p-0 m-2 cursor-pointer"
                 >
-                  <UserRoundPlus className="mr-3 h-4 w-4 " />
-                  로그인
-                </DropdownMenuItem> */}
+                  집중력을 높여주는 음식 8가지
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(
+                      `/post/${slugify('콜라겐: 연구와 연령대별 관리법')}`,
+                    )
+                  }
+                  className="flex items-center  line-clamp-1 p-0 m-2 cursor-pointer"
+                >
+                  콜라겐: 연구와 연령대별 관리법
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(
+                      `/post/${slugify('스트레스: 현대인의 보이지 않는 적')}`,
+                    )
+                  }
+                  className="flex items-center line-clamp-1 p-0 m-2 cursor-pointer"
+                >
+                  스트레스: 현대인의 보이지 않는 적
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(
+                      `/post/${slugify('홈트레이닝 시작 가이드: 운동, 용품, 공간 구성까지!')}`,
+                    )
+                  }
+                  className="flex items-center line-clamp-1 p-0 m-2 cursor-pointer"
+                >
+                  홈트레이닝 시작 가이드: 운동, 용품, 공간 구성까지!
+                </DropdownMenuItem>
+
+                {pathname !== '/' && (
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/`)}
+                    className="flex items-center cursor-pointer"
+                  >
+                    <MoreHorizontal
+                      className="rounded-full mx-auto"
+                      size={16}
+                      strokeWidth={1.5}
+                    />
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 
