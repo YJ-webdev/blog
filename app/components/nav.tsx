@@ -89,7 +89,7 @@ export default function Nav({ user, posts, tags }: NavProps) {
                   </DrawerDescription>
                 </DrawerHeader>
 
-                <DrawerHeader className="flex flex-col gap-4 h-full items-start p-0 flex-grow">
+                <DrawerHeader className="flex flex-col gap-4 h-full items-start p-0 mb-10 flex-grow">
                   <DrawerTitle className="mx-5 mt-9 text-sm text-muted-foreground font-light">
                     떠오르는 글
                   </DrawerTitle>

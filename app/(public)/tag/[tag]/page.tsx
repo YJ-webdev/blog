@@ -1,8 +1,8 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostsByTags } from '@/app/lib/data';
 import { extractText } from '@/app/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Suspense } from 'react';
+import { TagSkeleton } from './tag-skeleton';
 
 export async function generateMetadata({
   params,
@@ -41,7 +41,7 @@ export default async function TagPage({
 
   return (
     <div className="flex flex-col gap-7 w-full sm:mt-4">
-      <Suspense fallback={<Skeleton className="h-60 w-full rounded-lg" />}>
+      <Suspense fallback={<TagSkeleton />}>
         <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
           {posts.map((post) => {
             const processedContent = post.content

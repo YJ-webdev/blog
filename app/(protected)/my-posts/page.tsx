@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma';
 import PreviewMyPost from '@/app/components/preview-my-post';
 import { Suspense } from 'react';
 
-import { TagSkeleton } from '@/app/(public)/tag/[tag]/tag-skeleton';
+import { MyPostSkeleton } from './my-post-skeletion';
 
 export default async function MyPostsPage() {
   const session = await auth();
@@ -36,7 +36,7 @@ export default async function MyPostsPage() {
   });
 
   return (
-    <Suspense fallback={<TagSkeleton />}>
+    <Suspense fallback={<MyPostSkeleton />}>
       <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16 sm:mt-4">
         {posts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">

@@ -33,17 +33,19 @@ export const PostPreviewMain = ({
         </Suspense>
 
         <div className="flex flex-col md:h-80 md:w-2/5">
-          <div className="flex-1 flex flex-col gap-2">
+          <div className="w-full flex flex-col gap-2">
             <div className="flex justify-between items-start">
-              <h3 className="font-semibold  text-lg flex-grow">{title}</h3>
-              <p className=" md:hidden flex-shrink  text-xs text-end h-fit font-light">
+              <h3 className="font-semibold text-lg line-clamp-1 sm:line-clamp-3">
+                {title}
+              </h3>
+              <p className="md:hidden text-xs font-light text-end min-w-fit">
                 {formatDateWithoutYear(createdAt)}
               </p>
             </div>
 
             <p className="text-sm/[23px] truncate-text">{content}</p>
           </div>
-          <p className="hidden md:block w-full text-xs text-end h-fit font-light">
+          <p className="hidden md:block text-xs font-light text-end min-w-fit">
             {formatDateWithoutYear(createdAt)}
           </p>
         </div>

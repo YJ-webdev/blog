@@ -143,6 +143,14 @@ body {
   border: 0 !important; /* Removes the default browser outline */
 }
 
+.blocknote-block[data-content-type='heading'][data-level='2'] {
+  font-size: 26px;
+}
+
+[data-content-type='heading'][data-level='2'] {
+  font-size: 26px;
+}
+
 .blocknote-block a {
   text-decoration: underline;
   position: relative;

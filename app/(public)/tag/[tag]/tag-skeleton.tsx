@@ -8,6 +8,9 @@ export const TagSkeleton = () => {
       <PreviewSkeleton />
       <PreviewSkeleton />
       <PreviewSkeleton />
+      <PreviewSkeleton />
+      <PreviewSkeleton />
+      <PreviewSkeleton />
     </div>
   );
 };
