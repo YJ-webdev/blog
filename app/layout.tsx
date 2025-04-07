@@ -9,6 +9,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './components/app-sidebar';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
+import { SessionProvider } from 'next-auth/react';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -63,7 +64,9 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider defaultOpen={false}>
-            <AppSidebar posts={posts || null} tags={tags || null} />
+            <SessionProvider session={session}>
+              <AppSidebar posts={posts || null} tags={tags || null} />
+            </SessionProvider>
             <main>
               <SidebarTrigger className="hidden md:block md:-mt-7 bg-transparent hover:bg-transparent" />
               <Nav user={user || null} />

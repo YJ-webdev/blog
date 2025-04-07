@@ -39,7 +39,7 @@ export default async function MyPostsPage() {
     <Suspense fallback={<TagSkeleton />}>
       <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16 sm:mt-4">
         {posts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
             {posts.map((post) => {
               const processedContent = post.content
                 ? extractText(post.content)

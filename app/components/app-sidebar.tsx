@@ -21,6 +21,7 @@ import { SidebarPostType } from '../lib/types';
 import { TagLink } from './tag-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { LoginDialog } from './(auth)/login-dialog';
+import { useSession } from 'next-auth/react';
 // import { Input } from '@/components/ui/input';
 
 interface AppSidebarProps {
@@ -29,6 +30,7 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ posts, tags }: AppSidebarProps) {
+  const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -146,7 +148,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               <SidebarGroupLabel className="-ml-2 mt-8 text-muted-foreground">
                 떠오르는 글
               </SidebarGroupLabel>
-              <SidebarGroupContent className="mb-2">
+              <SidebarGroupContent className="mb-3">
                 <div className="flex flex-col gap-2 ">
                   <ul className="list-none space-y-4">
                     {posts?.map((post, index) => (
@@ -176,16 +178,21 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               </SidebarGroupContent>
             </SidebarGroup>
           </div>
+          {/* <div className="w-full h-2 bg-muted mt-2" /> */}
         </ScrollArea>
-        <SidebarFooter className="pl-4">
-          <div
-            onClick={() => setIsOpen(true)}
-            className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
-          >
-            <UserRoundPlus className="w-5 h-5" strokeWidth={1.5} />
-          </div>
+        <SidebarFooter className="pl-4 bg-muted">
+          {session.status === 'unauthenticated' && (
+            <>
+              <div
+                onClick={() => setIsOpen(true)}
+                className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
+              >
+                <UserRoundPlus className="w-5 h-5 mt-1" strokeWidth={1.5} />
+              </div>
 
-          <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+              <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+            </>
+          )}
         </SidebarFooter>
       </Sidebar>
     </>
