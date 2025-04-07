@@ -63,7 +63,7 @@ export default function Nav({ user, posts, tags }: NavProps) {
     <>
       <Drawer>
         <DrawerTrigger className="fixed md:hidden right-4 top-4 z-[9999]">
-          <MenuIcon strokeWidth={1.5} />
+          <MenuIcon strokeWidth={1.5} className="outline-none" />
         </DrawerTrigger>
         <DrawerContent className="z-[99999] w-[90%] flex flex-row gap-2 px-2 py-2">
           <div className="h-[100px] self-center w-2 ml-1 rounded-full bg-muted flex" />

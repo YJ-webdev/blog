@@ -27,11 +27,31 @@ const Drawer = ({
 );
 Drawer.displayName = 'Drawer';
 
-const DrawerTrigger = DrawerPrimitive.Trigger;
+const DrawerTrigger = React.forwardRef<
+  React.ElementRef<typeof DrawerPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <DrawerPrimitive.Trigger
+    ref={ref}
+    className={cn('outline-none', className)}
+    {...props}
+  />
+));
+DrawerTrigger.displayName = DrawerPrimitive.Trigger.displayName;
 
 const DrawerPortal = DrawerPrimitive.Portal;
 
-const DrawerClose = DrawerPrimitive.Close;
+const DrawerClose = React.forwardRef<
+  React.ElementRef<typeof DrawerPrimitive.Close>,
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Close>
+>(({ className, ...props }, ref) => (
+  <DrawerPrimitive.Close
+    ref={ref}
+    className={cn('outline-none', className)}
+    {...props}
+  />
+));
+DrawerClose.displayName = DrawerPrimitive.Close.displayName;
 
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
@@ -73,10 +93,12 @@ const DrawerContent = React.forwardRef<
       <DrawerOverlay />
       <DrawerPrimitive.Content
         ref={ref}
-        className={cn(drawerContentVariants({ direction, className }))}
+        className={cn(
+          'outline-none',
+          drawerContentVariants({ direction, className }),
+        )}
         {...props}
       >
-        {/* <div className='mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted' /> */}
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>

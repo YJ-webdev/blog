@@ -50,7 +50,7 @@ export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
           onContentChange={setContent}
         />
 
-        <div className="w-full flex flex-wrap gap-2 mt-2 md:mb-12 mb-5">
+        <div className="w-full flex flex-wrap gap-2 mt-2 md:mb-12 mb-8">
           {post.tags.map((item) => (
             <PostTags key={item.name} item={item} />
           ))}
