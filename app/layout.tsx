@@ -69,7 +69,11 @@ export default async function RootLayout({
             </SessionProvider>
             <main>
               <SidebarTrigger className="hidden md:block md:-mt-7 bg-transparent hover:bg-transparent" />
-              <Nav user={user || null} />
+              <Nav
+                user={user || null}
+                posts={posts || null}
+                tags={tags || null}
+              />
               <ClientPage> {children}</ClientPage>
             </main>
           </SidebarProvider>
