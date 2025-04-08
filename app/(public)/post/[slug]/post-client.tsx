@@ -38,15 +38,15 @@ export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
       <div className="max-w-[750px] mx-auto flex flex-col mt-2">
         <Suspense
           fallback={
-            <Skeleton className="mb-5 mt-2 md:h-96 h-72 w-[750px] rounded-lg" />
+            <Skeleton className="mb-5 mt-2 md:h-96 h-52 w-[750px] rounded-lg" />
           }
         >
           <Image
-            className="mb-5 mt-2 md:h-96 h-72 w-[750px] object-cover"
+            className="mb-5 mt-2 sm:h-96 h-52 w-[750px] object-cover"
             src={post.image || 'opengraph-image.jpg'}
             alt="post image"
-            width={700}
-            height={200}
+            width={500}
+            height={500}
           />
         </Suspense>
 
