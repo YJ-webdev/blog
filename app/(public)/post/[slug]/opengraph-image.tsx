@@ -14,12 +14,13 @@ export const contentType = 'image/png';
 export default async function OpenGraphImage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const imageData = readFileSync(
     join(process.cwd(), 'public/images/default-image.jpg'),
   );
-  const decodedSlug = decodeURIComponent(params.slug);
+  const decodedSlug = decodeURIComponent(slug);
   const post = await getPostforMetaData(decodedSlug);
 
   if (!post) {
@@ -76,7 +77,7 @@ export default async function OpenGraphImage({
             width: '50%',
             height: '100%',
             backgroundColor: 'white',
-            padding: '60px 40px',
+            padding: '60px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -97,7 +98,7 @@ export default async function OpenGraphImage({
           </h1>
           <p
             style={{
-              fontSize: 30,
+              fontSize: 34,
               color: '#444',
               lineHeight: 1.5,
             }}

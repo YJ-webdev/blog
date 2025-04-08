@@ -13,9 +13,10 @@ export const contentType = 'image/png';
 export default async function OpenGraphImage({
   params,
 }: {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }) {
-  const decodedTag = decodeURIComponent(params.tag);
+  const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
   const imageData = readFileSync(
     join(process.cwd(), `public/images/tag/${decodedTag}.jpg`),
   );
@@ -50,7 +51,7 @@ export default async function OpenGraphImage({
             width: '50%',
             height: '100%',
             backgroundColor: 'white',
-            padding: '60px 40px',
+            padding: '60px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -65,13 +66,14 @@ export default async function OpenGraphImage({
               margin: 0,
               marginBottom: 24,
               lineHeight: 1.3,
+              fontWeight: 700,
             }}
           >
             애쉬저널 | 지식 공유 블로그
           </h1>
           <p
             style={{
-              fontSize: 30,
+              fontSize: 34,
               color: '#444',
               lineHeight: 1.5,
             }}

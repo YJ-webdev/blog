@@ -45,7 +45,7 @@ export default async function OpenGraphImage() {
             width: '50%',
             height: '100%',
             backgroundColor: 'white',
-            padding: '60px 40px',
+            padding: '60px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -67,7 +67,7 @@ export default async function OpenGraphImage() {
           </h1>
           <p
             style={{
-              fontSize: 30,
+              fontSize: 32,
               color: '#444',
               lineHeight: 1.5,
             }}
