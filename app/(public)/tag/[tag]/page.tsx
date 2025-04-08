@@ -4,31 +4,6 @@ import { extractText } from '@/app/lib/utils';
 import { Suspense } from 'react';
 import { TagSkeleton } from './tag-skeleton';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ tag: string }>;
-}) {
-  const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
-
-  const posts = await getPostsByTags(decodedTag);
-  if (posts.length === 0 || posts === null) {
-    return null;
-  }
-
-  return {
-    title: `애쉬저널 | ${decodedTag}`,
-    description: `${decodedTag}을 주제로 한 기사를 모은 블로그입니다.`,
-    openGraph: {
-      title: `애쉬저널 | ${decodedTag}`,
-      description: `${decodedTag}을 주제로 한 기사를 모은 블로그입니다.`,
-      url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${decodedTag}`,
-      images: `/images/tag/${decodedTag}.jpg`,
-    },
-  };
-}
-
 export default async function TagPage({
   params,
 }: {
@@ -36,7 +11,6 @@ export default async function TagPage({
 }) {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
-
   const posts = await getPostsByTags(decodedTag);
 
   return (

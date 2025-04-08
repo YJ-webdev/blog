@@ -1,6 +1,20 @@
 import { prisma } from '@/lib/prisma';
 import { cache } from 'react';
 
+export const getPostforMetaData = cache(async (slug: string) => {
+  const res = await prisma.post.findFirst({
+    where: {
+      slug: slug,
+      published: true,
+    },
+    select: {
+      title: true,
+      image: true,
+    },
+  });
+  return res;
+});
+
 // getPost will be used twice, but execute only once
 export const getPost = cache(async (slug: string) => {
   const res = await prisma.post.findFirst({
