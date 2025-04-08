@@ -167,8 +167,8 @@ const LinkPreviews = ({
   return (
     <div className="w-full mx-auto flex flex-col items-center mb-10">
       {isEditable && (
-        <div className="flex flex-col w-full">
-          <div className="flex w-full mb-7">
+        <div className="flex flex-col w-full mb-7">
+          <div className="flex w-full ">
             <Input
               className=" bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-sm text-[14px]"
               value={url}

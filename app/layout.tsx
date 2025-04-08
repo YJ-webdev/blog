@@ -43,7 +43,7 @@ export default async function RootLayout({
   });
 
   const tags = await prisma.tag.findMany({
-    take: 10,
+    take: 14,
     orderBy: {
       id: 'asc',
     },

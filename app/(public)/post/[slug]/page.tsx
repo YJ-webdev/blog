@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { PostClient } from './post-client';
 import { getPost } from '@/app/lib/data';
+import { extractText } from '@/app/lib/utils';
 
 export async function generateMetadata({
   params,
@@ -15,8 +16,7 @@ export async function generateMetadata({
   if (post === null) {
     return redirect('/not-found');
   }
-  const processedContent = post.content;
-
+  const processedContent = post.content ? extractText(post.content) : '';
   return {
     title: post.title,
     description: processedContent,

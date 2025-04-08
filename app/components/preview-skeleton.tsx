@@ -5,7 +5,7 @@ export const PreviewSkeleton = () => {
     <div className="flex flex-col w-full hover:cursor-pointer group relative group p-4 gap-3 rounded-lg">
       <Skeleton className="h-60 w-full rounded-lg" />
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2 items-start">
         <div className="flex justify-between gap-2 items-start">
           <Skeleton className="h-4 w-[300px] rounded-full" />
           <Skeleton className="h-2 w-[300px] rounded-full" />

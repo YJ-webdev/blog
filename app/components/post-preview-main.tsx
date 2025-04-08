@@ -33,7 +33,7 @@ export const PostPreviewMain = ({
         </Suspense>
 
         <div className="flex flex-col md:h-80 md:w-2/5">
-          <div className="w-full flex flex-col gap-2">
+          <div className="w-full flex flex-col gap-2 flex-grow">
             <div className="flex justify-between items-start">
               <h3 className="font-semibold text-lg line-clamp-1 sm:line-clamp-3">
                 {title}

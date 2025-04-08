@@ -24,7 +24,6 @@ interface EditorProps {
 }
 
 async function uploadFile(file: File) {
-  if (typeof file !== 'string') return '';
   const body = new FormData();
   body.append('file', file);
 

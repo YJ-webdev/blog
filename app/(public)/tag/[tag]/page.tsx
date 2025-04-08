@@ -19,10 +19,10 @@ export async function generateMetadata({
 
   return {
     title: `애쉬저널 | ${decodedTag}`,
-    description: `Browse through all posts tagged with ${decodedTag}.`,
+    description: `애쉬저널에서 주제를 ${decodedTag}으로 필터링한 포스트들을 찾아보세요.`,
     openGraph: {
       title: `애쉬저널 | ${decodedTag}`,
-      description: `Browse through all posts tagged with ${decodedTag}.`,
+      description: `애쉬저널에서 주제를 ${decodedTag}으로 필터링한 포스트들을 찾아보세요.`,
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${decodedTag}`,
       images: `/images/tag-${decodedTag}.jpg`,
     },
