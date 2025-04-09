@@ -97,7 +97,7 @@ export function PostActionsCell({ post }: { post: Post }) {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                {`포스트 "${post.title}"을/를 정말 삭제하시겠습니까?`}
+                {`"${post.title}"를(을) 정말 삭제하시겠습니까?`}
               </AlertDialogTitle>
               <AlertDialogDescription>
                 삭제가 확인된 포스트는 되돌릴 수 없습니다.

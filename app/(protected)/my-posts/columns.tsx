@@ -4,7 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { type Link as LinkType, Tag } from '@prisma/client';
 import Image from 'next/image';
 
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, EyeIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PostActionsCell } from './post-actions-cell';
 
@@ -21,11 +21,15 @@ export type Post = {
 };
 
 export const columns: ColumnDef<Post>[] = [
-  //   {
-  //     accessorKey: '뷰 카운트',
-  //     header: 'View',
-  //     cell: ({ row }) => <div>{row.original.viewcount ?? '-'}</div>,
-  //   },
+  {
+    accessorKey: '뷰 카운트',
+    header: () => (
+      <div className="flex items-center justify-center">
+        <EyeIcon className="w-4 h-4" />
+      </div>
+    ),
+    cell: ({ row }) => <div>{row.original.viewcount ?? '-'}</div>,
+  },
   {
     accessorKey: '이미지',
     header: 'Image',
@@ -53,7 +57,7 @@ export const columns: ColumnDef<Post>[] = [
   },
   {
     accessorKey: '태그',
-    header: 'Tags',
+    header: () => <div className="flex text-center w-fit ml-4">Tags</div>,
     cell: ({ row }) => (
       <div className="flex flex-wrap gap-1">
         {row.original.tags.map((tag, index) => (
@@ -65,6 +69,28 @@ export const columns: ColumnDef<Post>[] = [
           </span>
         ))}
       </div>
+    ),
+  },
+  {
+    accessorKey: 'createdAt', // must match the key from your Post object
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-center self-center">
+          Created At
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            className="px-2 py-0 rounded-lg"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => (
+      <span>
+        {new Date(row.original.createdAt).toLocaleDateString('en-US')}
+      </span>
     ),
   },
   {
@@ -80,29 +106,6 @@ export const columns: ColumnDef<Post>[] = [
       </span>
     ),
   },
-  {
-    accessorKey: 'createdAt', // must match the key from your Post object
-    header: ({ column }) => {
-      return (
-        <div className="flex items-center gap-2">
-          Created At
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="px-2 py-1 rounded-full"
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-    cell: ({ row }) => (
-      <span>
-        {new Date(row.original.createdAt).toLocaleDateString('en-US')}
-      </span>
-    ),
-  },
-
   {
     id: '작업',
     cell: ({ row }) => <PostActionsCell post={row.original} />,

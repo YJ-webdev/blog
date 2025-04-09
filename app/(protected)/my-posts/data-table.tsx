@@ -82,24 +82,22 @@ export function DataTable({ columns, data }: DataTableProps) {
               정렬 <ChevronDown strokeWidth={1.5} />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-44" align="end">
+          <DropdownMenuContent className="w-44 flex flex-col" align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .filter((column) =>
+                ['태그', '링크', '이미지'].includes(column.id),
+              )
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize w-full flex text-end self-end"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -110,7 +108,17 @@ export function DataTable({ columns, data }: DataTableProps) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className="text-nowrap" key={header.id}>
+                    <TableHead
+                      className={`text-nowrap max-w-72 overflow-hidden py-2 ${
+                        header.id === '링크' ||
+                        header.id === '공개' ||
+                        header.id === 'createdAt' ||
+                        header.id === '이미지'
+                          ? 'text-center items-center justify-center'
+                          : ''
+                      } ${header.id === '작업' ? 'w-4 px-0 mx-0' : ''}`}
+                      key={header.id}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -132,8 +140,15 @@ export function DataTable({ columns, data }: DataTableProps) {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="text-nowrap max-w-72 overflow-hidden py-2 px-4"
                       key={cell.id}
+                      className={`text-nowrap max-w-72 overflow-hidden py-2 ${
+                        cell.column.id === '뷰 카운트' ||
+                        cell.column.id === '링크' ||
+                        cell.column.id === '공개' ||
+                        cell.column.id === 'createdAt'
+                          ? 'text-center'
+                          : ''
+                      } ${cell.column.id === '작업' ? 'w-4 -pl-4' : ''}`}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
