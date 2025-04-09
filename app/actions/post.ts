@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Link, Tag } from '@prisma/client';
 import { auth } from '@/auth';
+import { revalidatePath } from 'next/cache';
 
 export async function createPost() {
   const session = await auth();
@@ -150,4 +151,16 @@ export async function deletePost(slug: string) {
   return await prisma.post.delete({
     where: { slug: slug },
   });
+}
+
+export async function togglePublishPost(slug: string) {
+  const post = await prisma.post.findUnique({ where: { slug } });
+  if (!post) return;
+
+  await prisma.post.update({
+    where: { slug },
+    data: { published: !post.published },
+  });
+
+  revalidatePath('/my-posts'); // replace with actual page
 }

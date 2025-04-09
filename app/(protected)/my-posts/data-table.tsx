@@ -132,7 +132,7 @@ export function DataTable({ columns, data }: DataTableProps) {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="text-nowrap max-w-60 overflow-hidden py-2 px-4"
+                      className="text-nowrap max-w-72 overflow-hidden py-2 px-4"
                       key={cell.id}
                     >
                       {flexRender(

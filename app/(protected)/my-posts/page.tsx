@@ -14,6 +14,7 @@ export default async function MyPostPage() {
     select: {
       id: true,
       title: true,
+      slug: true,
       image: true,
       links: true,
       createdAt: true,

@@ -1,42 +1,31 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import {
-  BookMinus,
-  BookPlus,
-  EditIcon,
-  EyeIcon,
-  MoreHorizontal,
-  TrashIcon,
-} from 'lucide-react';
+import { type Link as LinkType, Tag } from '@prisma/client';
 import Image from 'next/image';
-import { Link, Tag } from '@prisma/client';
+
+import { ArrowUpDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { PostActionsCell } from './post-actions-cell';
 
 export type Post = {
   id: string;
   viewcount?: number;
   image: string | null;
   title: string | null;
-  links: Link[];
+  slug: string | null;
+  links: LinkType[];
   tags: Tag[];
   published: boolean;
   createdAt: Date;
 };
 
 export const columns: ColumnDef<Post>[] = [
-  {
-    accessorKey: '뷰 카운트',
-    header: 'View',
-    cell: ({ row }) => <div>{row.original.viewcount ?? '-'}</div>,
-  },
+  //   {
+  //     accessorKey: '뷰 카운트',
+  //     header: 'View',
+  //     cell: ({ row }) => <div>{row.original.viewcount ?? '-'}</div>,
+  //   },
   {
     accessorKey: '이미지',
     header: 'Image',
@@ -92,61 +81,30 @@ export const columns: ColumnDef<Post>[] = [
     ),
   },
   {
-    accessorKey: '날짜',
-    header: 'Created At',
+    accessorKey: 'createdAt', // must match the key from your Post object
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center gap-2">
+          Created At
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            className="px-2 py-1 rounded-full"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => (
       <span>
         {new Date(row.original.createdAt).toLocaleDateString('en-US')}
       </span>
     ),
   },
+
   {
     id: '작업',
-    cell: ({ row }) => {
-      const post = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-40" align="end">
-            <DropdownMenuItem onClick={() => console.log('Edit', post.id)}>
-              <EditIcon />
-              수정
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log('View', post.id)}>
-              <EyeIcon />
-              보기
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                console.log(post.published ? 'Unpublish' : 'Publish', post.id)
-              }
-            >
-              {post.published ? (
-                <>
-                  <BookMinus /> 비공개로 전환
-                </>
-              ) : (
-                <>
-                  <BookPlus /> 공개하기
-                </>
-              )}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => console.log('Delete', post.id)}
-              className="text-red-600 hover:text-red-500"
-            >
-              <TrashIcon />
-              삭제
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <PostActionsCell post={row.original} />,
   },
 ];
