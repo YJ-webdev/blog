@@ -1,65 +1,31 @@
-import { extractText } from '@/app/lib/utils';
+import { prisma } from '@/lib/prisma';
+import { DataTable } from './data-table';
+import { columns } from './columns';
 import { auth } from '@/auth';
-
 import { redirect } from 'next/navigation';
 
-import { NoPost } from './no-post';
-import { prisma } from '@/lib/prisma';
-import PreviewMyPost from '@/app/components/preview-my-post';
-import { Suspense } from 'react';
-
-import { MyPostSkeleton } from './my-post-skeletion';
-
-export default async function MyPostsPage() {
+export default async function MyPostPage() {
   const session = await auth();
   if (!session?.user) return redirect('/');
-
   const userId = session.user.id;
 
   const posts = await prisma.post.findMany({
-    where: {
-      authorId: userId,
-      published: true,
-    },
-    take: 20,
+    where: { authorId: userId },
     select: {
-      slug: true,
+      id: true,
       title: true,
-      content: true,
       image: true,
       links: true,
       createdAt: true,
+      published: true,
+      tags: true,
     },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy: { createdAt: 'desc' },
   });
 
   return (
-    <Suspense fallback={<MyPostSkeleton />}>
-      <div className="flex max-w-[1000px] mx-auto items-center gap-2 mb-16 sm:mt-4">
-        {posts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-            {posts.map((post) => {
-              const processedContent = post.content
-                ? extractText(post.content)
-                : '';
-              return (
-                <PreviewMyPost
-                  key={post.slug}
-                  slug={post.slug}
-                  title={post.title}
-                  content={processedContent}
-                  image={post.image}
-                  createdAt={post.createdAt}
-                />
-              );
-            })}
-          </div>
-        )}
-
-        {posts.length === 0 && <NoPost />}
-      </div>
-    </Suspense>
+    <div className="flex flex-col gap-5 lg:w-[1000px] mx-auto p-4">
+      <DataTable columns={columns} data={posts} />
+    </div>
   );
 }

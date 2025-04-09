@@ -29,7 +29,6 @@ export const getPost = cache(async (slug: string) => {
       content: true,
       tags: true,
       links: true,
-      authorId: true,
       createdAt: true,
     },
   });

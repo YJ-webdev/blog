@@ -146,7 +146,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
               </SidebarGroupContent>
 
               <SidebarGroupLabel className="-ml-2 mt-8 text-muted-foreground">
-                떠오르는 글
+                새로운 글
               </SidebarGroupLabel>
               <SidebarGroupContent className="mb-3">
                 <div className="flex flex-col gap-2 ">

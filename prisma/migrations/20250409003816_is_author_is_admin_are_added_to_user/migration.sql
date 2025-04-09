@@ -6,7 +6,9 @@
 
 */
 -- AlterTable
-ALTER TABLE "User" DROP COLUMN "password";
+ALTER TABLE "User" DROP COLUMN "password",
+ADD COLUMN     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "isAuthor" BOOLEAN NOT NULL DEFAULT false;
 
 -- DropTable
 DROP TABLE "VerificationToken";

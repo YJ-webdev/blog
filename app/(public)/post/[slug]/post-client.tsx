@@ -19,7 +19,6 @@ interface PostClientProps {
     content: string | null;
     tags: Tag[];
     links: Link[];
-    authorId: string;
     createdAt: Date;
   };
   prevPost?: PrevPostType;

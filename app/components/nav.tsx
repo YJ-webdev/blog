@@ -91,7 +91,7 @@ export default function Nav({ user, posts, tags }: NavProps) {
 
                 <DrawerHeader className="flex flex-col gap-4 h-full items-start p-0 mb-10 flex-grow">
                   <DrawerTitle className="mx-5 mt-9 text-sm text-muted-foreground font-light">
-                    떠오르는 글
+                    새로운 글
                   </DrawerTitle>
                   <DrawerDescription className="mx-5 flex flex-col gap-4 text-base font-medium text-primary items-start">
                     {posts?.map((post) => (
@@ -109,9 +109,12 @@ export default function Nav({ user, posts, tags }: NavProps) {
                 <div className="flex-grow" />
               </div>
             </ScrollArea>
-            <p className="right-0 text-xs text-center text-muted-foreground pr-5 mb-5 mt-auto ">
+            <Link
+              href={'/'}
+              className="right-0 text-xs text-center text-muted-foreground pr-5 mb-5 mt-auto "
+            >
               © 2025 ashjournals.com
-            </p>
+            </Link>
           </div>
         </DrawerContent>
       </Drawer>

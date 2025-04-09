@@ -16,6 +16,7 @@ export async function generateMetadata({
   if (post === null) {
     return redirect('/not-found');
   }
+
   const processedContent = post.content ? extractText(post.content) : '';
   return {
     title: post.title,
@@ -62,6 +63,7 @@ export default async function SlugPage({
     },
     orderBy: { createdAt: 'asc' },
   });
+
   const prevPost = await prisma.post.findFirst({
     where: {
       published: true,

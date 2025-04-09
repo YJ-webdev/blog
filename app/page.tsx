@@ -8,7 +8,7 @@ export default async function Home() {
     where: {
       published: true,
     },
-    take: 20,
+    take: 11,
     select: {
       slug: true,
       title: true,
