@@ -6,7 +6,7 @@ import { Tags } from '@/app/components/tags';
 import EditorWrapper from '@/components/dynamic-editor';
 import { Button } from '@/components/ui/button';
 import { Link, Post, Tag } from '@prisma/client';
-import { useActionState, useEffect, useState } from 'react';
+import { Suspense, useActionState, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import LinkPreviews from '@/app/components/link-previews';
@@ -14,6 +14,7 @@ import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { EditorSkeleton } from '@/app/components/editor-skeleton';
 
 interface EditClientProps {
   post: Post & { tags: Tag[]; links: Link[] };
@@ -86,12 +87,14 @@ export const EditClient = ({ post, tagsData }: EditClientProps) => {
       <div className="w-full max-w-[750px] px-4 flex flex-col">
         <ImageDropZone imageKey={imageKey} blob={blob} setBlob={setBlob} />
 
-        <EditorWrapper
-          contentKey={post.id}
-          editable={true}
-          initialContent={content}
-          onContentChange={setContent}
-        />
+        <Suspense fallback={<EditorSkeleton />}>
+          <EditorWrapper
+            contentKey={post.id}
+            editable={true}
+            initialContent={content}
+            onContentChange={setContent}
+          />
+        </Suspense>
 
         <Tags
           tagsKey={tagsKey}
