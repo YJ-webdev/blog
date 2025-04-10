@@ -11,9 +11,9 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.8.0",
     "@auth/supabase-adapter": "^1.7.4",
-    "@blocknote/core": "^0.24.0",
-    "@blocknote/mantine": "^0.24.0",
-    "@blocknote/react": "^0.24.0",
+    "@blocknote/core": "^0.28.0",
+    "@blocknote/mantine": "^0.28.0",
+    "@blocknote/react": "^0.28.0",
     "@blocknote/shadcn": "^0.24.1",
     "@ngrok/ngrok": "^1.4.1",
     "@prisma/client": "^6.5.0",
