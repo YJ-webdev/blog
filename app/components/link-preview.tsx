@@ -28,7 +28,7 @@ const LinkPreview = ({ preview, onClick, isAuthor }: LinkPreviewProps) => {
       >
         <Card className="border-none h-full flex md:flex-col rounded-sm overflow-hidden">
           {preview.image && (
-            <div className="relative aspect-video overflow-hidden w-1/2 md:w-full">
+            <div className="relative aspect-video overflow-hidden w-[45%] md:w-full">
               <Suspense
                 fallback={<Skeleton className="h-full w-full rounded-lg" />}
               >

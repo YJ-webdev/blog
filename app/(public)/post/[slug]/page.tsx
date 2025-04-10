@@ -78,7 +78,7 @@ export default async function SlugPage({
   });
 
   return (
-    <div className="w-dvw md:max-w-[1000px] flex flex-col gap-5 px-4">
+    <div className="max-w-[1000px] mx-auto w-fullflex flex-col gap-5 px-4">
       <PostClient
         post={post}
         prevPost={prevPost || undefined}
