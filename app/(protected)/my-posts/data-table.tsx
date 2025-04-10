@@ -137,6 +137,11 @@ export function DataTable({ columns, data }: DataTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={
+                    !row.original.published
+                      ? 'text-muted-foreground/30 font-semibold'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -148,7 +153,7 @@ export function DataTable({ columns, data }: DataTableProps) {
                         cell.column.id === 'createdAt'
                           ? 'text-center'
                           : ''
-                      } ${cell.column.id === '작업' ? 'w-4 -pl-4' : ''}`}
+                      } ${cell.column.id === '작업' ? 'w-4' : ''}`}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

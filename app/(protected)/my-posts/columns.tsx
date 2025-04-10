@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { ArrowUpDown, EyeIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PostActionsCell } from './post-actions-cell';
+import { cn } from '@/lib/utils';
 
 export type Post = {
   id: string;
@@ -28,48 +29,94 @@ export const columns: ColumnDef<Post>[] = [
         <EyeIcon className="w-4 h-4" />
       </div>
     ),
-    cell: ({ row }) => <div>{row.original.viewcount ?? '-'}</div>,
+    cell: ({ row }) =>
+      !row.original.viewcount ? (
+        <span className="block text-center text-muted-foreground/30 font-semibold uppercase w-full">
+          -
+        </span>
+      ) : (
+        <div className="flex flex-wrap gap-1">{row.original.viewcount}</div>
+      ),
   },
   {
     accessorKey: '이미지',
     header: 'Image',
-    cell: ({ row }) => (
-      <Image
-        src={row.original.image || 'opengraph-image.jpg'}
-        alt="Post image"
-        width={100}
-        height={100}
-        className="w-16 h-16 object-cover rounded-lg"
-      />
-    ),
+    cell: ({ row }) => {
+      const imageSrc = row.original.image || '/images/no-image.png';
+      const isPublished = row.original.published;
+
+      return (
+        <div className="relative w-16 h-16">
+          <Image
+            src={imageSrc}
+            alt="Post image"
+            width={64}
+            height={64}
+            className={`w-16 h-16 object-cover rounded-lg transition-opacity duration-300 ${
+              isPublished || !row.original.image ? '' : 'opacity-20 grayscale'
+            }`}
+          />
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'title',
     header: 'Title',
+    cell: ({ row }) =>
+      row.original.title ? (
+        <span>{row.original.title} </span>
+      ) : (
+        <span className="text-muted-foreground/30 font-semibold uppercase">
+          제목없음
+        </span>
+      ),
   },
   {
     accessorKey: '링크',
     header: 'Links',
     cell: ({ row }) => {
       const count = row.original.links?.length ?? 0;
+      if (count === 0)
+        return (
+          <span className="text-muted-foreground/30 font-semibold uppercase">
+            -
+          </span>
+        );
       return <span>{count}</span>;
     },
   },
   {
     accessorKey: '태그',
     header: () => <div className="flex text-center w-fit ml-4">Tags</div>,
-    cell: ({ row }) => (
-      <div className="flex flex-wrap gap-1">
-        {row.original.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="text-xs bg-gray-200 px-2 py-0.5 rounded-full"
-          >
-            {tag.name}
+    cell: ({ row }) => {
+      const isPublished = row.original.published;
+      const hasNoTags = row.original.tags.length === 0;
+
+      if (hasNoTags) {
+        return (
+          <span className="block text-center text-muted-foreground/30 font-semibold uppercase w-full">
+            -
           </span>
-        ))}
-      </div>
-    ),
+        );
+      }
+
+      return (
+        <div className="flex flex-wrap gap-1">
+          {row.original.tags.map((tag, index) => (
+            <span
+              key={index}
+              className={cn(
+                'text-xs px-2 py-0.5 rounded-full',
+                isPublished ? 'bg-gray-200' : 'bg-gray-100',
+              )}
+            >
+              {tag.name}
+            </span>
+          ))}
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'createdAt', // must match the key from your Post object
@@ -87,11 +134,20 @@ export const columns: ColumnDef<Post>[] = [
         </div>
       );
     },
-    cell: ({ row }) => (
-      <span>
-        {new Date(row.original.createdAt).toLocaleDateString('en-US')}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const { title, image, createdAt } = row.original;
+      const isMissing = !title || !image;
+      const baseClass = 'text-sm';
+      const conditionalClass = isMissing
+        ? 'text-muted-foreground/30 font-semibold'
+        : '';
+
+      return (
+        <span className={`${baseClass} ${conditionalClass}`}>
+          {new Date(createdAt).toLocaleDateString('en-US')}
+        </span>
+      );
+    },
   },
   {
     accessorKey: '공개',

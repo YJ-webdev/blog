@@ -27,7 +27,6 @@ export const PostPreviewMain = ({
             alt={title || 'image-broken'}
             width={500}
             height={500}
-            loading="eager"
             className="object-cover h-60 md:h-80 w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
           />
         </Suspense>

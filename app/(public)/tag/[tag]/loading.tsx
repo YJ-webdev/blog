@@ -1,7 +1,7 @@
 import { PreviewSkeleton } from '@/app/components/preview-skeleton';
 import React from 'react';
 
-export const TagSkeleton = () => {
+export default function Loading() {
   return (
     <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5 sm:grid-cols-2 mb-20">
       <PreviewSkeleton />
@@ -13,4 +13,4 @@ export const TagSkeleton = () => {
       <PreviewSkeleton />
     </div>
   );
-};
+}

@@ -39,78 +39,88 @@ export function PostActionsCell({ post }: { post: Post }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
+        <Button variant="ghost" className="h-8 w-8 p-0 text-primary">
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="center">
         <DropdownMenuItem asChild>
           <Link
-            href={`/edit/${post.slug}`}
+            href={post.slug ? `/edit/${post.slug}` : `/new-post/${post.id}`}
             className="flex items-center gap-2 cursor-pointer"
           >
             <EditIcon />
-            수정
+            {post.slug ? '수정' : '작성하기'}
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            href={`/post/${post.slug}`}
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <EyeIcon />
-            보기
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            startTransition(() => {
-              togglePublishPost(post.slug!);
-              toast.success('공개 설정이 변경되었습니다.');
-            })
-          }
-          disabled={isPending}
-          className={isPending ? 'opacity-50 pointer-events-none' : ''}
-        >
-          {post.published ? (
-            <>
-              <BookMinus /> {isPending ? '변경 중...' : '비공개로 전환'}
-            </>
-          ) : (
-            <>
-              <BookPlus /> {isPending ? '변경 중...' : '공개하기'}
-            </>
-          )}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="my-1" />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
-              className="text-red-600 hover:text-red-500"
+        {post.slug && (
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/post/${post.slug}`}
+              className="flex items-center gap-2 cursor-pointer"
             >
-              <TrashIcon />
-              삭제
-            </DropdownMenuItem>
-          </AlertDialogTrigger>
+              <EyeIcon />
+              보기
+            </Link>
+          </DropdownMenuItem>
+        )}
+        {post.slug && post.image && (
+          <DropdownMenuItem
+            onClick={() =>
+              startTransition(() => {
+                togglePublishPost(post.slug!);
+                toast.success('공개 설정이 변경되었습니다.');
+              })
+            }
+            disabled={isPending}
+            className={isPending ? 'opacity-50 pointer-events-none' : ''}
+          >
+            {post.published ? (
+              <>
+                <BookMinus /> {isPending ? '변경 중...' : '비공개로 전환'}
+              </>
+            ) : (
+              <>
+                <BookPlus /> {isPending ? '변경 중...' : '공개하기'}
+              </>
+            )}
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator className="my-1" />
+        {post.slug ? (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="text-red-600 hover:text-red-500"
+              >
+                <TrashIcon />
+                삭제
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
 
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                {`"${post.title}"를(을) 정말 삭제하시겠습니까?`}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                삭제가 확인된 포스트는 되돌릴 수 없습니다.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>취소</AlertDialogCancel>
-              <AlertDialogAction onClick={() => deletePost(post.slug!)}>
-                확인
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {`"${post.title}"를(을) 정말 삭제하시겠습니까?`}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  삭제가 확인된 포스트는 되돌릴 수 없습니다.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>취소</AlertDialogCancel>
+                <AlertDialogAction onClick={() => deletePost(post.slug!)}>
+                  확인
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        ) : (
+          <span className="flex gap-2 text-sm p-2 cursor-default text-red-600">
+            <TrashIcon size="18" /> 삭제불가
+          </span>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
