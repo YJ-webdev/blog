@@ -29,19 +29,19 @@ export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
   const [content, setContent] = useState(post.content || '');
 
   return (
-    <div className="flex flex-col items-center max-w-[1000px] mx-auto">
-      <h1 className="mt-4 md:w-full w-[100vw] resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-[2.25rem]/[2.5rem] font-bold focus:outline-none text-primary dark:placeholder-stone-400">
+    <div className="flex flex-col items-center md:max-w-[1000px] w-dvw mx-auto">
+      <h1 className="mt-4 md:w-full w-dvw resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-[2.25rem]/[2.5rem] font-bold focus:outline-none text-primary dark:placeholder-stone-400">
         {post.title}
       </h1>
 
-      <div className="md:max-w-[750px] w-[100vw] mx-auto flex flex-col mt-2">
+      <div className="md:max-w-[750px] w-dvw mx-auto flex flex-col mt-2">
         <Suspense
           fallback={
-            <Skeleton className="mb-5 mt-2 md:h-96 h-52 md:w-[750px] w-[100vw] rounded-lg" />
+            <Skeleton className="mb-5 mt-2 md:h-96 h-52 md:w-[750px] w-dvw rounded-lg" />
           }
         >
           <Image
-            className="mb-5 mt-2 sm:h-96 h-52 md:w-[750px] w-[100vw] object-cover"
+            className="mb-5 mt-2 sm:h-96 h-52 md:w-[750px] w-dvw object-cover"
             src={post.image || 'opengraph-image.jpg'}
             alt="post image"
             width={500}
@@ -56,7 +56,7 @@ export const PostClient = ({ post, prevPost, nextPost }: PostClientProps) => {
           onContentChange={setContent}
         />
 
-        <div className="md:w-full w-[100vw] flex flex-wrap gap-2 mt-2 md:mb-12 mb-8">
+        <div className="md:w-full w-dvw flex flex-wrap gap-2 mt-2 md:mb-12 mb-8">
           {post.tags.map((item) => (
             <PostTags key={item.name} item={item} />
           ))}
