@@ -1,0 +1,29 @@
+/* Scope Tiptap content only */
+.tiptap h1 {
+  @apply text-5xl font-bold;
+}
+
+.tiptap h2 {
+  @apply text-4xl font-bold;
+}
+
+.tiptap h3 {
+  @apply text-3xl font-bold;
+}
+
+.tiptap p {
+  @apply text-base font-normal my-4;
+}
+
+.tiptap li {
+  @apply ml-6;
+}
+
+.tiptap a {
+  @apply text-primary text-zinc-600 hover:text-zinc-500 underline cursor-pointer;
+}
+
+/* Global class for active buttons (used in menu) */
+.is-active {
+  @apply bg-muted text-foreground rounded-md;
+}

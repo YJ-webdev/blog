@@ -3,7 +3,7 @@
 import { ImageDropZone } from '@/app/components/image-drop-zone';
 import { Tags } from '@/app/components/tags';
 
-import EditorWrapper from '@/components/dynamic-editor';
+// import EditorWrapper from '@/components/dynamic-editor';
 import { Button } from '@/components/ui/button';
 import { Link, Tag } from '@prisma/client';
 import { useActionState, useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import { slugify } from '@/app/lib/utils';
 import { publishPost } from '@/app/actions/post';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import Tiptap from '@/components/tiptap/tiptap';
 
 interface NewPostClientProps {
   postId: string;
@@ -110,12 +111,7 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
         <div className="w-full max-w-[750px] flex flex-col">
           <ImageDropZone imageKey={imageKey} blob={blob} setBlob={setBlob} />
 
-          <EditorWrapper
-            contentKey={postId}
-            editable={true}
-            initialContent={content}
-            onContentChange={setContent}
-          />
+          <Tiptap />
 
           <Tags
             tagsKey={tagsKey}
