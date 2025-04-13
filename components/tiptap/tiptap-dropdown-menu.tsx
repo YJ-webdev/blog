@@ -1,14 +1,19 @@
 import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
+  // AlignCenter,
+  // AlignLeft,
+  // AlignRight,
+  GripVertical,
   Heading1,
   Heading2,
   Heading3,
   List,
   ListOrdered,
   Plus,
+  SquareCode,
+  Table,
+  TextQuote,
 } from 'lucide-react';
+import { FaYoutube } from 'react-icons/fa6';
 import React from 'react';
 import { TiptapMenu } from './tiptap-menu';
 import {
@@ -24,10 +29,17 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger className="shadow-none bg-white rounded-sm p-1 text-zinc-500 hover:bg-zinc-100">
-          <Plus strokeWidth={1.5} size={24} className="shadow-none" />
+        <DropdownMenuTrigger className="z-10 shadow-none items-center justify-center bg-white rounded-sm -mt-[1px] text-zinc-400/80 flex">
+          <Plus
+            strokeWidth={1.5}
+            className="shadow-none h-6 w-6 p-[1px] rounded-sm  hover:bg-zinc-100 "
+          />
+          <GripVertical
+            strokeWidth={1.5}
+            className="shadow-none h-6 w-6 p-[2px] rounded-sm  hover:bg-zinc-100 "
+          />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="m-0 p-1" align="end">
+        <DropdownMenuContent className="" align="end">
           <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
             Heading
           </DropdownMenuLabel>
@@ -71,9 +83,27 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
             />
           </DropdownMenuItem>
           <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
-            Align
+            Basic blocks
           </DropdownMenuLabel>
           <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() => editor.chain().focus().toggleBlockquote().run()}
+              className={editor.isActive('blockquote') ? 'is-active' : ''}
+              icon={<TextQuote className="" />} // Replace with your actual icon
+              name="Quote"
+              subname="Quote or excerpt"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              className={editor.isActive('codeBlock') ? 'is-active' : ''} // Replace with your actual icon
+              icon={<SquareCode className="" />} // Replace with your actual icon
+              name="Code Block"
+              subname="Quote or excerpt"
+            />
+          </DropdownMenuItem>
+          {/* <DropdownMenuItem>
             <TiptapMenu
               onClick={() => editor.chain().focus().setTextAlign('left').run()}
               className={
@@ -107,7 +137,7 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               name="Align Right"
               subname="Aligning content to the right"
             />
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
             List
           </DropdownMenuLabel>
@@ -127,6 +157,37 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               icon={<ListOrdered className="" />} // Replace with your actual icon
               name="Ordered List"
               subname="List with ordered items"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
+            Embed
+          </DropdownMenuLabel>{' '}
+          <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() => {
+                const url = prompt('Enter YouTube URL');
+                if (!url) return;
+                editor.commands.setYoutubeVideo({
+                  src: url,
+                });
+              }}
+              icon={<FaYoutube className="size-4" />} // Replace with your actual icon
+              name="Youtube"
+              subname="Embed Youtube Video"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                  .run()
+              }
+              icon={<Table className="size-4" />} // Replace with your actual icon
+              name="Table"
+              subname="Table with editable cells"
             />
           </DropdownMenuItem>
         </DropdownMenuContent>

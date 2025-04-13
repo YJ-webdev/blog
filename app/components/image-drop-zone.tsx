@@ -64,7 +64,7 @@ export const ImageDropZone = ({
   return (
     <div
       {...getRootProps()}
-      className={cn('relative w-full md:h-96 h-72 mb-5 mt-2 cursor-pointer')}
+      className={cn('relative w-full md:h-96 h-72 mt-2 cursor-pointer')}
     >
       <input {...getInputProps()} className="hidden" />{' '}
       {/* Hidden file input */}

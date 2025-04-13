@@ -110,9 +110,7 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
         />
         <div className="w-full max-w-[750px] flex flex-col">
           <ImageDropZone imageKey={imageKey} blob={blob} setBlob={setBlob} />
-
           <Tiptap />
-
           <Tags
             tagsKey={tagsKey}
             tagsData={tagsData}

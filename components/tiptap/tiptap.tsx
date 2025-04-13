@@ -5,11 +5,16 @@ import {
   BubbleMenu,
   EditorContent,
   useEditor,
-  FloatingMenu as UIFloatingMenu,
+  FloatingMenu,
 } from '@tiptap/react';
 
+import Youtube from '@tiptap/extension-youtube';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 import StarterKit from '@tiptap/starter-kit';
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { TextAlign } from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
@@ -17,22 +22,55 @@ import Link from '@tiptap/extension-link';
 import {
   Bold,
   Code,
+  Heading1,
+  Heading2,
+  Heading3,
   Highlighter,
   Italic,
   Link2,
+  List,
+  ListOrdered,
+  SquareCode,
   Strikethrough,
+  TextQuote,
   UnderlineIcon,
   Unlink2,
 } from 'lucide-react';
 import { TiptapButton } from './tiptap-button';
 import { TiptapDropdownMenu } from './tiptap-dropdown-menu';
+import { Editor } from '@tiptap/core';
+import { cn } from '@/lib/utils';
 
 const Tiptap = () => {
   const editorRef = useRef<HTMLDivElement>(null);
-  const [floatingElement, setFloatingElement] =
-    React.useState<HTMLElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  const [floatingElement, setFloatingElement] = useState<HTMLElement | null>(
+    null,
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const [positionAbove, setPositionAbove] = useState(false);
+
+  //toggle dropdown position depending on space above/below
+  const toggleDropdown = () => {
+    if (!buttonRef.current) return;
+
+    const rect = buttonRef.current.getBoundingClientRect();
+    const dropdownHeight = 240; // Adjust based on your menu height
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
+      setPositionAbove(true);
+    } else {
+      setPositionAbove(false);
+    }
+
+    setIsOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
     const el = document.querySelector('.floating-menu') as HTMLElement;
     if (el) {
       setFloatingElement(el);
@@ -45,35 +83,75 @@ const Tiptap = () => {
       editable: true,
       extensions: [
         StarterKit.configure({
-          // paragraph: false,
           bulletList: {
             HTMLAttributes: {
-              class: 'list-disc ml-3',
+              class: 'list-disc',
+              types: ['bulletList'],
             },
           },
           orderedList: {
             HTMLAttributes: {
-              class: 'list-decimal ml-3',
+              class: 'list-decimal',
+              types: ['orderedList'],
             },
           },
           blockquote: {
             HTMLAttributes: {
               class: 'border-l-2 border-zinc-500 text-zinc-600 pl-6 my-4',
+              types: ['blockquote'],
+            },
+          },
+          codeBlock: {
+            languageClassPrefix: 'tsx',
+            exitOnTripleEnter: false,
+            HTMLAttributes: {
+              types: ['codeBlock'],
             },
           },
         }),
-
+        Youtube.configure({
+          HTMLAttributes: {
+            class: 'aspect-video w-full h-auto',
+            types: ['youtube'],
+          },
+        }),
+        Table.configure({
+          HTMLAttributes: {
+            class:
+              'table w-full border-collapse table-fixed overflow-hidden mb-6', // matches .tiptap table
+            types: ['table'],
+          },
+        }),
+        TableHeader.configure({
+          HTMLAttributes: {
+            class:
+              'bg-gray-100 font-bold text-left border border-zinc-300 px-2', // matches th styling
+            types: ['tableHeader'],
+          },
+        }),
+        TableCell.configure({
+          HTMLAttributes: {
+            class: 'border border-zinc-300 px-2 text-left align-top', // matches td styling
+            types: ['tableCell'],
+          },
+        }),
+        TableRow.configure({
+          HTMLAttributes: {
+            class: 'border border-zinc-200', // rows themselves usually don't need much unless for hover/effects
+            types: ['tableRow'],
+          },
+        }),
         TextAlign.configure({
           types: ['heading', 'paragraph'],
         }),
         Highlight.configure({
           HTMLAttributes: {
-            class: 'my-custom-class',
+            class: '',
           },
         }),
         Underline.configure({
           HTMLAttributes: {
-            class: 'my-custom-class',
+            class: '',
           },
         }),
         Link.configure({
@@ -148,9 +226,9 @@ const Tiptap = () => {
           },
         }),
       ],
-
       content:
         '<p>Hello World! 🌎️</p><p>Hello World! 🌎️</p><p>Hello World! 🌎️</p>',
+
       editorProps: {
         attributes: {
           class: 'border-none outline-none w-full mb-20',
@@ -193,65 +271,287 @@ const Tiptap = () => {
     }
   }, [editor]);
 
+  //rerender for dropdownmenu reposition on scroll + close on click outside
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const updatePosition = () => {
+      if (!buttonRef.current) return;
+
+      const rect = buttonRef.current.getBoundingClientRect();
+      const dropdownHeight = 270; // Approx. height of your dropdown
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      setPositionAbove(
+        spaceBelow < dropdownHeight && spaceAbove > dropdownHeight,
+      );
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    // Run immediately and set up listeners
+    updatePosition();
+    window.addEventListener('scroll', updatePosition, true);
+    window.addEventListener('resize', updatePosition);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('scroll', updatePosition, true);
+      window.removeEventListener('resize', updatePosition);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  //add additional paragraph if none exists
+  useEffect(() => {
+    if (!editor) return;
+
+    const handleUpdate = ({ editor }: { editor: Editor }) => {
+      const { state, view } = editor;
+      const { doc, schema, tr } = state;
+      const lastNode = doc.lastChild;
+
+      const isLastEmptyParagraph =
+        lastNode?.type.name === 'paragraph' && lastNode.content.size === 0;
+
+      if (!isLastEmptyParagraph) {
+        const paragraph = schema.nodes.paragraph.create();
+        const pos = doc.content.size;
+
+        const transaction = tr.insert(pos, paragraph);
+        view.dispatch(transaction); // this preserves the current selection
+      }
+    };
+
+    editor.on('update', handleUpdate);
+
+    return () => {
+      editor.off('update', handleUpdate);
+    };
+  }, [editor]);
+
   return (
     <>
       {editor && (
         <BubbleMenu
-          className="bg-white rounded-md shadow-md border-2  border-white flex"
-          tippyOptions={{ duration: 100 }}
+          className="bg-white rounded-md shadow-md w-fit border flex"
+          tippyOptions={{
+            duration: 100,
+            appendTo: () => document.body,
+          }}
           editor={editor}
         >
+          {/* DropdownMenu */}
+          <button
+            ref={buttonRef}
+            onClick={() => toggleDropdown()}
+            className="px-3 text-nowrap py-2 flex w-full text-sm rounded hover:bg-zinc-100"
+          >
+            <span className="px-1 mr-2">T</span> Paragraph
+          </button>
+
+          {isOpen && (
+            <div
+              ref={dropdownRef}
+              className={cn(
+                'absolute w-40 bg-white border border-gray-200 rounded shadow-lg z-10',
+                positionAbove ? 'bottom-full mb-1' : 'top-9 mt-1',
+              )}
+            >
+              <div className="py-1 text-sm text-gray-700">
+                <p className="ml-3 mt-1 text-[10px] font-light">Paragraph</p>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().setParagraph().run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'z-50 text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('heading', { level: 1 }) ? 'is-active' : '',
+                  )}
+                >
+                  <span className="mx-[5px]">T</span> Pragraph
+                </TiptapButton>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleHeading({ level: 1 }).run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'z-50 text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('heading', { level: 1 }) ? 'is-active' : '',
+                  )}
+                >
+                  <Heading1 className="w-5 h-5" strokeWidth={1.5} /> Heading 1
+                </TiptapButton>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleHeading({ level: 2 }).run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('heading', { level: 2 }) ? 'is-active' : '',
+                  )}
+                >
+                  <Heading2 className="w-5 h-5" strokeWidth={1.5} /> Heading 2
+                </TiptapButton>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleHeading({ level: 3 }).run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('heading', { level: 3 }) ? 'is-active' : '',
+                  )}
+                >
+                  <Heading3 className="w-5 h-5" strokeWidth={1.5} /> Heading 3
+                </TiptapButton>
+                <p className="ml-3 mt-1 text-[10px] font-light">Lists</p>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleBulletList().run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('bulletList') ? 'is-active' : '',
+                  )}
+                >
+                  <List className="w-5 h-5" strokeWidth={1.5} />
+                  Bullet List
+                </TiptapButton>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleOrderedList().run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('orderedList') ? 'is-active' : '',
+                  )}
+                >
+                  <ListOrdered className="w-5 h-5" strokeWidth={1.5} />
+                  Ordered List
+                </TiptapButton>
+                <p className="ml-3 mt-1 text-[10px] font-light">Others</p>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleBlockquote().run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('blockquote') ? 'is-active' : '',
+                  )}
+                >
+                  <TextQuote className="w-5 h-5" strokeWidth={1.5} />
+                  Quote
+                </TiptapButton>
+                <TiptapButton
+                  onClick={() => {
+                    editor.chain().focus().toggleCodeBlock().run();
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    'text-nowrap w-full px-3 flex items-center gap-4',
+                    editor.isActive('codeBlock') ? 'is-active' : '',
+                  )}
+                >
+                  <SquareCode className="w-5 h-5" strokeWidth={1.5} />
+                  Code block
+                </TiptapButton>
+              </div>
+            </div>
+          )}
+
           <TiptapButton
-            onClick={() => editor.chain().focus().toggleBold().run()}
+            onClick={() => {
+              editor.chain().focus().toggleBold().run();
+              setIsOpen(false);
+            }}
             className={editor.isActive('bold') ? 'is-active' : ''}
           >
             <Bold className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={() => editor.chain().focus().toggleItalic().run()}
+            onClick={() => {
+              editor.chain().focus().toggleItalic().run();
+              setIsOpen(false);
+            }}
             className={editor.isActive('italic') ? 'is-active' : ''}
           >
             <Italic className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={() => editor.chain().focus().toggleStrike().run()}
+            onClick={() => {
+              editor.chain().focus().toggleStrike().run();
+              setIsOpen(false);
+            }}
             className={editor.isActive('strike') ? 'is-active' : ''}
           >
             <Strikethrough className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            onClick={() => {
+              editor.chain().focus().toggleUnderline().run();
+              setIsOpen(false);
+            }}
             className={editor.isActive('underline') ? 'is-active' : ''}
           >
             <UnderlineIcon className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={() => editor.chain().focus().toggleHighlight().run()}
+            onClick={() => {
+              editor.chain().focus().toggleHighlight().run();
+              setIsOpen(false);
+            }}
             className={editor.isActive('highlight') ? 'is-active' : ''}
           >
             <Highlighter className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={() => editor.chain().focus().toggleCode().run()}
-            className={editor.isActive('code') ? 'is-active' : ''}
+            onClick={() => {
+              editor.chain().focus().toggleCodeBlock().run();
+              setIsOpen(false);
+            }}
+            className={editor.isActive('codeBlock') ? 'is-active' : ''}
           >
             <Code className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={setLink}
-            className={editor.isActive('link') ? 'is-active' : ''}
+            onClick={() => {
+              setIsOpen(false);
+              setLink();
+            }}
           >
             <Link2 className="size-4" />
           </TiptapButton>
 
           <TiptapButton
-            onClick={() => editor.chain().focus().unsetLink().run()}
+            onClick={() => {
+              editor.chain().focus().unsetLink().run();
+              setIsOpen(false);
+            }}
             className={editor.isActive('link') ? 'is-active' : ''}
           >
             <Unlink2 className="size-4" />
@@ -260,40 +560,50 @@ const Tiptap = () => {
       )}
       <EditorContent editor={editor} ref={editorRef} />
       {editor && (
-        <UIFloatingMenu
+        <FloatingMenu
           editor={editor}
           tippyOptions={{
+            appendTo: () => document.body,
             getReferenceClientRect: () => {
               const { state, view } = editor;
               const { from } = state.selection;
 
-              // Resolve current position in document
               const resolvedPos = state.doc.resolve(from);
 
-              // Loop upward to find the first block-level node
-              for (let depth = resolvedPos.depth; depth > 0; depth--) {
+              for (let depth = resolvedPos.depth; depth >= 0; depth--) {
                 const node = resolvedPos.node(depth);
 
                 if (node.isBlock) {
-                  const pos = resolvedPos.before(depth);
-                  const dom = view.nodeDOM(pos) as HTMLElement;
+                  try {
+                    const pos = resolvedPos.before(depth + 1);
+                    const dom = view.nodeDOM(pos);
 
-                  if (dom) {
-                    return dom.getBoundingClientRect();
+                    // Ensure it's an actual HTMLElement
+                    if (
+                      dom instanceof HTMLElement &&
+                      typeof dom.getBoundingClientRect === 'function'
+                    ) {
+                      return dom.getBoundingClientRect();
+                    }
+                  } catch (err) {
+                    // nodeDOM might throw if position is invalid
+                    console.warn('Error accessing nodeDOM:', err);
                   }
                 }
               }
 
-              return new DOMRect(); // fallback
+              return new DOMRect(); // fallback to something safe
             },
 
-            placement: 'left-start', // anchor to block's top-left
-            offset: [0, 8], // adjust spacing from the block
+            placement: 'left-start',
+            offset: [0, 8],
           }}
-          shouldShow={({ editor }) => editor.isActive('paragraph')} // only show when the cursor is in a paragraph
+          shouldShow={({ editor }) =>
+            editor.isActive('paragraph') || editor.isActive('heading')
+          }
         >
           <TiptapDropdownMenu editor={editor} />
-        </UIFloatingMenu>
+        </FloatingMenu>
       )}
     </>
   );

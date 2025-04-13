@@ -1,14 +1,14 @@
 /* Scope Tiptap content only */
 .tiptap h1 {
-  @apply text-5xl font-bold;
+  @apply text-4xl font-bold mt-5 mb-2;
 }
 
 .tiptap h2 {
-  @apply text-4xl font-bold;
+  @apply text-3xl font-bold mt-5 mb-2;
 }
 
 .tiptap h3 {
-  @apply text-3xl font-bold;
+  @apply text-2xl font-bold mt-4 mb-2;
 }
 
 .tiptap p {
