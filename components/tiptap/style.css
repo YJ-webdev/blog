@@ -24,7 +24,7 @@
 }
 
 .tiptap img {
-  @apply max-w-[400px] w-full  mt-4 mb-2 mx-auto rounded-sm;
+  @apply max-w-[400px] w-full mx-auto rounded-sm;
 }
 
 figure[data-type='captioned-image'] {

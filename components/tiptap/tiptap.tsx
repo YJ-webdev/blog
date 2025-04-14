@@ -38,6 +38,7 @@ import {
   SquareCode,
   Strikethrough,
   TextQuote,
+  Trash,
   UnderlineIcon,
   Unlink2,
 } from 'lucide-react';
@@ -698,65 +699,15 @@ const Tiptap = () => {
             </TiptapButton>
           )}
 
-          {/* Image alignments */}
-          {editor.isActive('image') && (
-            <>
-              <TiptapButton
-                onClick={() => {
-                  editor
-                    .chain()
-                    .focus()
-                    .updateAttributes('image', {
-                      style:
-                        'display: block; margin-left: 0; margin-right: auto;',
-                      class: '', // to remove Tailwind classes like mx-auto if needed
-                    })
-                    .run();
-                }}
-                className={
-                  editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''
-                }
-              >
-                <AlignLeft className="size-4" />
-              </TiptapButton>
-
-              <TiptapButton
-                onClick={() => {
-                  editor
-                    .chain()
-                    .focus()
-                    .updateAttributes('image', {
-                      style:
-                        'display: block; margin-left: auto; margin-right: auto;',
-                      class: '', // to remove Tailwind classes like mx-auto if needed
-                    })
-                    .run();
-                }}
-                className={
-                  editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''
-                }
-              >
-                <AlignCenter className="size-4" />
-              </TiptapButton>
-              <TiptapButton
-                onClick={() => {
-                  editor
-                    .chain()
-                    .focus()
-                    .updateAttributes('image', {
-                      style:
-                        'display: block; margin-left: auto; margin-right: 0;',
-                      class: '', // to remove Tailwind classes like mx-auto if needed
-                    })
-                    .run();
-                }}
-                className={
-                  editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''
-                }
-              >
-                <AlignRight className="size-4" />
-              </TiptapButton>
-            </>
+          {editor.isActive('captionedImage') && (
+            <TiptapButton
+              onClick={() => {
+                editor.commands.deleteNode('captionedImage');
+              }}
+              // className={editor.isActive('image') ? 'is-active' : ''}
+            >
+              <Trash className="size-4" />
+            </TiptapButton>
           )}
         </BubbleMenu>
       )}

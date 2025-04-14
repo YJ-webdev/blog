@@ -7,23 +7,10 @@ export const CaptionedImage = Image.extend({
       ...this.parent?.(),
       title: {
         default: '',
-        parseHTML: (element) => element.getAttribute('title'),
+        parseHTML: (element) =>
+          element.querySelector('figcaption')?.innerText || '',
         renderHTML: (attributes) => ({
           title: attributes.title,
-        }),
-      },
-      style: {
-        default: null,
-        parseHTML: (element) => element.getAttribute('style'),
-        renderHTML: (attributes) => ({
-          style: attributes.style,
-        }),
-      },
-      class: {
-        default: null,
-        parseHTML: (element) => element.getAttribute('class'),
-        renderHTML: (attributes) => ({
-          class: attributes.class,
         }),
       },
       href: {
@@ -36,27 +23,40 @@ export const CaptionedImage = Image.extend({
           return attributes.href ? { href: attributes.href } : {};
         },
       },
+
+      align: {
+        default: 'center',
+        parseHTML: (element) => {
+          const align = element
+            .getAttribute('style')
+            ?.match(/text-align:\s*(\w+)/);
+          return align?.[1] || 'center';
+        },
+        renderHTML: ({ align }) => ({
+          style: `text-align: ${align}`,
+        }),
+      },
     };
   },
 
   renderHTML({ HTMLAttributes }) {
-    const img = ['img', mergeAttributes(HTMLAttributes)];
-    const linkedImg = HTMLAttributes.href
-      ? [
-          'a',
-          {
-            href: HTMLAttributes.href,
-            target: '_blank',
-            rel: 'noopener noreferrer',
-          },
-          img,
-        ]
-      : img;
+    const { href } = HTMLAttributes;
 
     return [
       'figure',
       { 'data-type': 'captioned-image' },
-      linkedImg,
+      href
+        ? [
+            'a',
+            {
+              href,
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              style: 'display: inline-block',
+            },
+            ['img', mergeAttributes(HTMLAttributes)],
+          ]
+        : ['img', mergeAttributes(HTMLAttributes)],
       ['figcaption', {}, HTMLAttributes.title || ''],
     ];
   },
