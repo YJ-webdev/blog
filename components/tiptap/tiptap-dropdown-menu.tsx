@@ -101,44 +101,9 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               className={editor.isActive('codeBlock') ? 'is-active' : ''} // Replace with your actual icon
               icon={<SquareCode className="" />} // Replace with your actual icon
               name="Code Block"
-              subname="Quote or excerpt"
+              subname="Code blocks is incomplete yet"
             />
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>
-            <TiptapMenu
-              onClick={() => editor.chain().focus().setTextAlign('left').run()}
-              className={
-                editor.isActive('textAlign', 'left') ? 'is-active' : ''
-              }
-              icon={<AlignLeft className="" />} // Replace with your actual icon
-              name="Align Left"
-              subname="Aligning content to the left"
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <TiptapMenu
-              onClick={() =>
-                editor.chain().focus().setTextAlign('center').run()
-              }
-              className={
-                editor.isActive('textAlign', 'center') ? 'is-active' : ''
-              }
-              icon={<AlignCenter className="" />} // Replace with your actual icon
-              name="Align Center"
-              subname="Aligning content to the center"
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <TiptapMenu
-              onClick={() => editor.chain().focus().setTextAlign('right').run()}
-              className={
-                editor.isActive('textAlign', 'right') ? 'is-active' : ''
-              }
-              icon={<AlignRight className="" />} // Replace with your actual icon
-              name="Align Right"
-              subname="Aligning content to the right"
-            />
-          </DropdownMenuItem> */}
           <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
             List
           </DropdownMenuLabel>
@@ -157,7 +122,7 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               className={editor.isActive('orderedList') ? 'is-active' : ''}
               icon={<ListOrdered className="" />} // Replace with your actual icon
               name="Ordered List"
-              subname="List with ordered items"
+              subname="List with numbered items"
             />
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -171,7 +136,7 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               }
               icon={<Table className="size-4" />} // Replace with your actual icon
               name="Table"
-              subname="Table with editable cells"
+              subname="Tables not editable yet"
             />
           </DropdownMenuItem>
           <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
@@ -188,7 +153,7 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               }}
               icon={<FaYoutube className="size-4" />} // Replace with your actual icon
               name="Youtube"
-              subname="full width Youtube Video"
+              subname="Youtube video takes full width"
             />
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -206,7 +171,7 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               }}
               icon={<ImageIcon className="size-4" />} // Replace with your actual icon
               name="Image"
-              subname="resizable image with caption"
+              subname="Images set to 400px width"
             />
           </DropdownMenuItem>
         </DropdownMenuContent>

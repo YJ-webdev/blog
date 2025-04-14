@@ -42,6 +42,9 @@ import {
   UnderlineIcon,
   Unlink2,
 } from 'lucide-react';
+import { TbBracketsOff } from 'react-icons/tb';
+import { LuLink2Off } from 'react-icons/lu';
+
 import { TiptapButton } from './tiptap-button';
 import { TiptapDropdownMenu } from './tiptap-dropdown-menu';
 import { Editor } from '@tiptap/core';
@@ -675,36 +678,50 @@ const Tiptap = () => {
                   unsetImageLink(); // for image
                 }}
               >
-                <Unlink2 className="size-4" />
+                <LuLink2Off className="size-4" />
               </TiptapButton>
             </>
           )}
 
           {/* caption for image */}
           {editor.isActive('image') && (
-            <TiptapButton
-              onClick={() => {
-                const caption = prompt('Enter caption for image');
-                if (!caption) return;
+            <>
+              <TiptapButton
+                onClick={() => {
+                  const caption = prompt('Enter caption for image');
+                  if (!caption) return;
 
-                editor
-                  ?.chain()
-                  .focus()
-                  .updateAttributes('image', { title: caption })
-                  .run();
-              }}
-              // className={editor.isActive('image') ? 'is-active' : ''}
-            >
-              <Brackets className="size-4" />
-            </TiptapButton>
+                  editor
+                    ?.chain()
+                    .focus()
+                    .updateAttributes('image', { title: caption })
+                    .run();
+                }}
+                // className={editor.isActive('image') ? 'is-active' : ''}
+              >
+                <Brackets className="size-4" />
+              </TiptapButton>
+
+              <TiptapButton
+                onClick={() => {
+                  // Assuming 'captionedImage' is your custom node
+                  editor
+                    ?.chain()
+                    .focus()
+                    .updateAttributes('image', { title: '' })
+                    .run();
+                }}
+              >
+                <TbBracketsOff className="size-4" />
+              </TiptapButton>
+            </>
           )}
 
-          {editor.isActive('captionedImage') && (
+          {editor.isActive('image') && (
             <TiptapButton
               onClick={() => {
-                editor.commands.deleteNode('captionedImage');
+                editor.commands.deleteSelection();
               }}
-              // className={editor.isActive('image') ? 'is-active' : ''}
             >
               <Trash className="size-4" />
             </TiptapButton>
