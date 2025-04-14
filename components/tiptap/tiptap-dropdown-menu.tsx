@@ -6,6 +6,7 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  ImageIcon,
   List,
   ListOrdered,
   Plus,
@@ -159,23 +160,6 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               subname="List with ordered items"
             />
           </DropdownMenuItem>
-          <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
-            Embed
-          </DropdownMenuLabel>{' '}
-          <DropdownMenuItem>
-            <TiptapMenu
-              onClick={() => {
-                const url = prompt('Enter YouTube URL');
-                if (!url) return;
-                editor.commands.setYoutubeVideo({
-                  src: url,
-                });
-              }}
-              icon={<FaYoutube className="size-4" />} // Replace with your actual icon
-              name="Youtube"
-              subname="Embed Youtube Video"
-            />
-          </DropdownMenuItem>
           <DropdownMenuItem>
             <TiptapMenu
               onClick={() =>
@@ -188,6 +172,41 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
               icon={<Table className="size-4" />} // Replace with your actual icon
               name="Table"
               subname="Table with editable cells"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
+            Media
+          </DropdownMenuLabel>{' '}
+          <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() => {
+                const url = prompt('Enter YouTube URL');
+                if (!url) return;
+                editor.commands.setYoutubeVideo({
+                  src: url,
+                });
+              }}
+              icon={<FaYoutube className="size-4" />} // Replace with your actual icon
+              name="Youtube"
+              subname="full width Youtube Video"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() => {
+                const url = prompt('Image URL');
+                const caption = prompt('Caption');
+                if (url) {
+                  editor?.commands.setImage({
+                    src: url,
+                    alt: 'blog image',
+                    title: caption || '',
+                  });
+                }
+              }}
+              icon={<ImageIcon className="size-4" />} // Replace with your actual icon
+              name="Image"
+              subname="resizable image with caption"
             />
           </DropdownMenuItem>
         </DropdownMenuContent>

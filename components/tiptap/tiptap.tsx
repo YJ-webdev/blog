@@ -8,6 +8,8 @@ import {
   FloatingMenu,
 } from '@tiptap/react';
 
+// import Image from '@tiptap/extension-image';
+import { CaptionedImage } from './captioned-image';
 import Youtube from '@tiptap/extension-youtube';
 import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
@@ -20,8 +22,11 @@ import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
-  Code,
+  Brackets,
   Heading1,
   Heading2,
   Heading3,
@@ -105,7 +110,7 @@ const Tiptap = () => {
             languageClassPrefix: 'tsx',
             exitOnTripleEnter: false,
             HTMLAttributes: {
-              types: ['codeBlock'],
+              types: ['code'],
             },
           },
         }),
@@ -115,6 +120,7 @@ const Tiptap = () => {
             types: ['youtube'],
           },
         }),
+        CaptionedImage,
         Table.configure({
           HTMLAttributes: {
             class:
@@ -238,6 +244,7 @@ const Tiptap = () => {
     [floatingElement],
   );
 
+  // links for text
   const setLink = useCallback(() => {
     if (!editor) {
       return;
@@ -270,6 +277,60 @@ const Tiptap = () => {
       alert('Invalid URL');
     }
   }, [editor]);
+
+  // links for image
+  const setImageLink = useCallback(() => {
+    if (!editor) return;
+
+    const { from, to } = editor.state.selection;
+    let updated = false;
+
+    editor.commands.command(({ tr, state }) => {
+      state.doc.nodesBetween(from, to, (node, pos) => {
+        if (node.type.name === 'captionedImage' || node.type.name === 'image') {
+          const currentHref = node.attrs.href || '';
+          const url = window.prompt('Enter image link URL', currentHref);
+          if (url === null) return false;
+
+          tr.setNodeMarkup(pos, undefined, {
+            ...node.attrs,
+            href: url || null,
+          });
+
+          updated = true;
+        }
+      });
+
+      return updated;
+    });
+  }, [editor]);
+
+  const unsetImageLink = useCallback(() => {
+    if (!editor) return;
+
+    const { from } = editor.state.selection;
+    const node = editor.state.doc.nodeAt(from);
+
+    if (node?.type.name === 'captionedImage' || node?.type.name === 'image') {
+      editor
+        .chain()
+        .focus()
+        .updateAttributes(node.type.name, { href: null })
+        .run();
+    }
+  }, [editor]);
+
+  const isImageLinked = () => {
+    if (!editor) return false;
+
+    const { from } = editor.state.selection;
+    const node = editor.state.doc.nodeAt(from);
+
+    const isImage =
+      node?.type.name === 'captionedImage' || node?.type.name === 'image';
+
+    return isImage && !!node.attrs.href;
+  };
 
   //rerender for dropdownmenu reposition on scroll + close on click outside
   useEffect(() => {
@@ -354,14 +415,15 @@ const Tiptap = () => {
           editor={editor}
         >
           {/* DropdownMenu */}
-          <button
-            ref={buttonRef}
-            onClick={() => toggleDropdown()}
-            className="px-3 text-nowrap py-2 flex w-full text-sm rounded hover:bg-zinc-100"
-          >
-            <span className="px-1 mr-2">T</span> Paragraph
-          </button>
-
+          {!editor.isActive('image') && (
+            <button
+              ref={buttonRef}
+              onClick={() => toggleDropdown()}
+              className="px-3 text-nowrap py-2 flex w-full text-sm rounded hover:bg-zinc-100"
+            >
+              <span className="px-1 mr-2">T</span> Paragraph
+            </button>
+          )}
           {isOpen && (
             <div
               ref={dropdownRef}
@@ -478,84 +540,224 @@ const Tiptap = () => {
             </div>
           )}
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().toggleBold().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('bold') ? 'is-active' : ''}
-          >
-            <Bold className="size-4" />
-          </TiptapButton>
+          {!editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                editor.chain().focus().toggleBold().run();
+                setIsOpen(false);
+              }}
+              className={editor.isActive('bold') ? 'is-active' : ''}
+            >
+              <Bold className="size-4" />
+            </TiptapButton>
+          )}
+          {!editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                editor.chain().focus().toggleItalic().run();
+                setIsOpen(false);
+              }}
+              className={editor.isActive('italic') ? 'is-active' : ''}
+            >
+              <Italic className="size-4" />
+            </TiptapButton>
+          )}
+          {!editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                editor.chain().focus().toggleStrike().run();
+                setIsOpen(false);
+              }}
+              className={editor.isActive('strike') ? 'is-active' : ''}
+            >
+              <Strikethrough className="size-4" />
+            </TiptapButton>
+          )}
+          {!editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                editor.chain().focus().toggleUnderline().run();
+                setIsOpen(false);
+              }}
+              className={editor.isActive('underline') ? 'is-active' : ''}
+            >
+              <UnderlineIcon className="size-4" />
+            </TiptapButton>
+          )}
+          {!editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                editor.chain().focus().toggleHighlight().run();
+                setIsOpen(false);
+              }}
+              className={editor.isActive('highlight') ? 'is-active' : ''}
+            >
+              <Highlighter className="size-4" />
+            </TiptapButton>
+          )}
+          {/* Text alignments */}
+          {!editor.isActive('image') && (
+            <>
+              <TiptapButton
+                onClick={() => {
+                  editor.chain().focus().setTextAlign('left').run();
+                  setIsOpen(false);
+                }}
+                className={
+                  editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''
+                }
+              >
+                <AlignLeft className="size-4" />
+              </TiptapButton>
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().toggleItalic().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('italic') ? 'is-active' : ''}
-          >
-            <Italic className="size-4" />
-          </TiptapButton>
+              <TiptapButton
+                onClick={() => {
+                  editor.chain().focus().setTextAlign('center').run();
+                  setIsOpen(false);
+                }}
+                className={
+                  editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''
+                }
+              >
+                <AlignCenter className="size-4" />
+              </TiptapButton>
+              <TiptapButton
+                onClick={() => {
+                  editor.chain().focus().setTextAlign('right').run();
+                  setIsOpen(false);
+                }}
+                className={
+                  editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''
+                }
+              >
+                <AlignRight className="size-4" />
+              </TiptapButton>
+            </>
+          )}
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().toggleStrike().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('strike') ? 'is-active' : ''}
-          >
-            <Strikethrough className="size-4" />
-          </TiptapButton>
+          {/* links for text */}
+          {!editor.isActive('image') && (
+            <>
+              <TiptapButton
+                onClick={() => {
+                  setIsOpen(false);
+                  setLink(); // for text
+                }}
+                className={editor.isActive('link') ? 'is-active' : ''}
+              >
+                <Link2 className="size-4" />
+              </TiptapButton>
+              <TiptapButton
+                onClick={() => {
+                  editor.chain().focus().unsetLink().run();
+                  setIsOpen(false);
+                }}
+              >
+                <Unlink2 className="size-4" />
+              </TiptapButton>
+            </>
+          )}
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().toggleUnderline().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('underline') ? 'is-active' : ''}
-          >
-            <UnderlineIcon className="size-4" />
-          </TiptapButton>
+          {/* links for image */}
+          {editor.isActive('image') && (
+            <>
+              <TiptapButton
+                onClick={() => {
+                  setImageLink(); // for image
+                }}
+                className={isImageLinked() ? 'is-active' : ''}
+              >
+                <Link2 className="size-4" />
+              </TiptapButton>
+              <TiptapButton
+                onClick={() => {
+                  unsetImageLink(); // for image
+                }}
+              >
+                <Unlink2 className="size-4" />
+              </TiptapButton>
+            </>
+          )}
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().toggleHighlight().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('highlight') ? 'is-active' : ''}
-          >
-            <Highlighter className="size-4" />
-          </TiptapButton>
+          {/* caption for image */}
+          {editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                const caption = prompt('Enter caption for image');
+                if (!caption) return;
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().toggleCodeBlock().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('codeBlock') ? 'is-active' : ''}
-          >
-            <Code className="size-4" />
-          </TiptapButton>
+                editor
+                  ?.chain()
+                  .focus()
+                  .updateAttributes('image', { title: caption })
+                  .run();
+              }}
+              // className={editor.isActive('image') ? 'is-active' : ''}
+            >
+              <Brackets className="size-4" />
+            </TiptapButton>
+          )}
 
-          <TiptapButton
-            onClick={() => {
-              setIsOpen(false);
-              setLink();
-            }}
-          >
-            <Link2 className="size-4" />
-          </TiptapButton>
+          {/* Image alignments */}
+          {editor.isActive('image') && (
+            <>
+              <TiptapButton
+                onClick={() => {
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('image', {
+                      style:
+                        'display: block; margin-left: 0; margin-right: auto;',
+                      class: '', // to remove Tailwind classes like mx-auto if needed
+                    })
+                    .run();
+                }}
+                className={
+                  editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''
+                }
+              >
+                <AlignLeft className="size-4" />
+              </TiptapButton>
 
-          <TiptapButton
-            onClick={() => {
-              editor.chain().focus().unsetLink().run();
-              setIsOpen(false);
-            }}
-            className={editor.isActive('link') ? 'is-active' : ''}
-          >
-            <Unlink2 className="size-4" />
-          </TiptapButton>
+              <TiptapButton
+                onClick={() => {
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('image', {
+                      style:
+                        'display: block; margin-left: auto; margin-right: auto;',
+                      class: '', // to remove Tailwind classes like mx-auto if needed
+                    })
+                    .run();
+                }}
+                className={
+                  editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''
+                }
+              >
+                <AlignCenter className="size-4" />
+              </TiptapButton>
+              <TiptapButton
+                onClick={() => {
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('image', {
+                      style:
+                        'display: block; margin-left: auto; margin-right: 0;',
+                      class: '', // to remove Tailwind classes like mx-auto if needed
+                    })
+                    .run();
+                }}
+                className={
+                  editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''
+                }
+              >
+                <AlignRight className="size-4" />
+              </TiptapButton>
+            </>
+          )}
         </BubbleMenu>
       )}
       <EditorContent editor={editor} ref={editorRef} />

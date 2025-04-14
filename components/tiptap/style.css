@@ -23,6 +23,19 @@
   @apply text-primary text-zinc-600 hover:text-zinc-500 underline cursor-pointer;
 }
 
+.tiptap img {
+  @apply max-w-[400px] w-full  mt-4 mb-2 mx-auto rounded-sm;
+}
+
+figure[data-type='captioned-image'] {
+  @apply text-center;
+}
+
+figure[data-type='captioned-image'] figcaption {
+  font-size: 0.8em;
+  font-weight: 400;
+}
+
 /* Global class for active buttons (used in menu) */
 .is-active {
   @apply bg-muted text-foreground rounded-md;

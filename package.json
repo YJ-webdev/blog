@@ -36,7 +36,7 @@
     "@tiptap/extension-gapcursor": "^2.11.5",
     "@tiptap/extension-highlight": "^2.11.7",
     "@tiptap/extension-history": "^2.11.5",
-    "@tiptap/extension-image": "^2.11.5",
+    "@tiptap/extension-image": "^2.11.7",
     "@tiptap/extension-link": "^2.11.7",
     "@tiptap/extension-table": "^2.11.7",
     "@tiptap/extension-table-cell": "^2.11.7",
@@ -73,7 +73,9 @@
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
+    "tiptap-extension-resizable-image": "^1.0.7",
     "tiptap-extension-resize-image": "^1.2.1",
+    "tiptap-imagresize": "^1.1.0",
     "tus-js-client": "^4.3.1",
     "uploadthing": "^7.5.2",
     "vaul": "^1.1.2"
