@@ -52,17 +52,32 @@ export async function publishPost(prevstate: any, formData: FormData) {
     const id = formData.get('id') as string;
     const title = formData.get('title') as string;
     const slug = formData.get('slug') as string;
-    const image = formData.get('image') as string;
-    const content = formData.get('content') as string;
+    const contentString = formData.get('content') as string | null;
     const linksString = formData.get('links') as string | null;
     const tagsString = formData.get('tags') as string | null;
+    const image = formData.get('image') as string;
 
-    if (!id || !title || !content || !slug) {
-      return { error: '필수 항목이 누락되었습니다.' };
+    // check if slug is already used by a *different* post
+    const existingPost = await prisma.post.findUnique({ where: { slug } });
+
+    if (existingPost && existingPost.id !== id) {
+      return { error: '이미 생성 된 포스트입니다.' };
     }
 
-    if (image.length > 1024 * 1024 * 2) {
-      return { error: '파일의 크키가 2MB를 초과했습니다.' };
+    let content = null;
+
+    if (typeof contentString === 'string') {
+      try {
+        content = JSON.parse(contentString);
+      } catch (error) {
+        console.error('Invalid JSON string in content:', error);
+
+        content = null;
+      }
+    }
+
+    if (!id || !title || !content || !slug || !image) {
+      return { error: '필수 항목이 누락되었습니다.' };
     }
 
     const post = await prisma.post.findUnique({
@@ -126,7 +141,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
       data: {
         title,
         slug,
-        image: image ?? undefined,
+        image,
         content,
         tags: {
           set: [],
@@ -137,9 +152,10 @@ export async function publishPost(prevstate: any, formData: FormData) {
     });
 
     return { success: true };
-  } catch {
+  } catch (error) {
+    console.error(error);
     return {
-      error: '파일을 업로드할 수 없습니다. 관리자에게 문의해주세요.',
+      error: '게시물을 업로드할 수 없습니다. 관리자에게 문의해주세요.',
     };
   }
 }

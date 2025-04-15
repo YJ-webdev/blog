@@ -6,8 +6,8 @@ export const PreviewSkeleton = () => {
       <Skeleton className="h-60 w-full rounded-lg" />
       <div className="flex flex-col gap-2 items-start">
         <div className="flex justify-between gap-3 items-start">
-          <Skeleton className="h-5 w-[600px] rounded-full" />
-          <Skeleton className="h-3 w-[20px] rounded-full" />
+          <Skeleton className="h-5 w-[455px] rounded-full" />
+          {/* <Skeleton className="h-3 w-[20px] rounded-full" /> */}
         </div>
         <Skeleton className="h-5 w-[300px] rounded-full" />
         <Skeleton className="h-5 w-[200px]" />

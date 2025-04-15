@@ -1,6 +1,7 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostsByTags } from '@/app/lib/data';
-import { extractText } from '@/app/lib/utils';
+import { getFirstParagraphText } from '@/app/lib/utils';
+// import { extractText } from '@/app/lib/utils';
 
 export async function generateMetadata({
   params,
@@ -46,19 +47,15 @@ export default async function TagPage({
   const posts = await getPostsByTags(decodedTag);
 
   return (
-    <div className="flex flex-col gap-7 w-full sm:mt-4">
+    <div className="flex flex-col gap-7 w-full">
       <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
         {posts.map((post) => {
-          const processedContent = post.content
-            ? extractText(post.content)
-            : '';
-
           return (
             <PostPreviewCard
               key={post.slug}
               slug={post.slug ?? ''}
               title={post.title!}
-              content={processedContent} // Pass extracted content
+              content={getFirstParagraphText(post.content)} // Pass extracted content
               image={post.image!}
               createdAt={post.createdAt!}
             />

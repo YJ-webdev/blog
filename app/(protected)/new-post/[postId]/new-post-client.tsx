@@ -1,20 +1,39 @@
 'use client';
 
-import { ImageDropZone } from '@/app/components/image-drop-zone';
-import { Tags } from '@/app/components/tags';
-
-// import EditorWrapper from '@/components/dynamic-editor';
-import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
+import { startTransition, useActionState, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Link, Tag } from '@prisma/client';
-import { useActionState, useEffect, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
+import { publishPost } from '@/app/actions/post';
 
 import LinkPreviews from '@/app/components/link-previews';
+import { Tags } from '@/app/components/tags';
+import { Button } from '@/components/ui/button';
+import TextareaAutosize from 'react-textarea-autosize';
 import { slugify } from '@/app/lib/utils';
-import { publishPost } from '@/app/actions/post';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import Tiptap from '@/components/tiptap/tiptap';
+import { Skeleton } from '@/components/ui/skeleton';
+import { upload } from '@vercel/blob/client';
+const ImageDropZone = dynamic(
+  () => import('@/app/components/image-drop-zone'),
+  {
+    loading: () => <Skeleton className="w-full aspect-video h-auto" />,
+    ssr: false,
+  },
+);
+const Tiptap = dynamic(() => import('@/components/tiptap/tiptap'), {
+  loading: () => (
+    <div className="flex flex-col gap-4 max-w-[750px] w-full mb-6">
+      <Skeleton className="w-full h-6 rounded-full" />
+      <Skeleton className="w-full h-6 rounded-full" />
+      <Skeleton className="w-full h-6 rounded-full" />
+      <Skeleton className="w-full h-6 rounded-full" />
+      <Skeleton className="w-full h-6 rounded-full" />
+      <Skeleton className="w-full h-6 rounded-full" />
+    </div>
+  ),
+  ssr: false,
+});
 
 interface NewPostClientProps {
   postId: string;
@@ -32,8 +51,10 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
   const linksKey = `postLinks_${postId}`;
 
   const [title, setTitle] = useState('');
-  const [blob, setBlob] = useState<null | string>(null);
+  const [file, setFile] = useState<File | null>(null);
+
   const [content, setContent] = useState('');
+
   const [postTags, setPostTags] = useState<Tag[]>([]);
   const [postLinks, setPostLinks] = useState<Array<Link>>([]);
 
@@ -41,31 +62,15 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedTitle = localStorage.getItem(titleKey);
-      const storedBlob = localStorage.getItem(imageKey);
-      const storedContent = localStorage.getItem(contentKey);
       const storedTags = localStorage.getItem(tagsKey);
       const storedLinks = localStorage.getItem(linksKey);
-
       if (storedTitle) setTitle(storedTitle);
-      if (storedBlob) setBlob(JSON.parse(storedBlob));
-      if (storedContent) setContent(storedContent);
       if (storedTags) setPostTags(JSON.parse(storedTags));
       if (storedLinks) setPostLinks(JSON.parse(storedLinks));
     }
   }, [titleKey, imageKey, contentKey, tagsKey, linksKey]);
 
-  const parsedContent =
-    typeof content === 'string' ? JSON.parse(content || '[]') : content;
-
-  const isContentValid =
-    Array.isArray(parsedContent) &&
-    parsedContent.some(
-      (block) =>
-        (block.content && block.content.length > 0) ||
-        (block.children && block.children.length > 0),
-    );
-
-  const isFormValid = title.trim() !== '' && isContentValid && blob !== null;
+  const isFormValid = title.trim() !== '' && content !== '' && file !== null;
 
   useEffect(() => {
     if (status?.success) {
@@ -75,28 +80,42 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
       toast.error(status.error);
     }
   }, [status, router]);
+
+  const handleSubmit = async () => {
+    if (!file) {
+      return toast.error('이미지를 찾을 수 없습니다.');
+    }
+
+    try {
+      // Upload the new file with the same key
+      const { url } = await upload(imageKey, file, {
+        access: 'public',
+        handleUploadUrl: '/api/post/upload',
+      });
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append('id', postId);
+      formData.append('title', title);
+      formData.append('slug', slugify(title));
+      formData.append('content', content);
+      formData.append('image', url);
+      formData.append('links', JSON.stringify(postLinks));
+      formData.append('tags', JSON.stringify(postTags));
+
+      // Submit
+      startTransition(() => {
+        action(formData);
+      });
+    } catch (error) {
+      console.error('❌ Error during image upload or submission:', error);
+      toast.error('업로드 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <>
-      <form
-        action={action}
-        className="flex flex-col max-w-[1000px] px-4 mx-auto items-center"
-      >
-        <input type="hidden" name="id" value={postId} />
-        <input type="hidden" name="title" value={title} />
-        <input type="hidden" name="slug" value={slugify(title)} />
-        <input type="hidden" name="image" value={blob || ''} />
-        <input type="hidden" name="content" value={content} />
-        <input
-          type="hidden"
-          name="tags"
-          value={JSON.stringify(postTags ?? [])}
-        />
-        <input
-          type="hidden"
-          name="links"
-          value={JSON.stringify(postLinks ?? [])}
-        />
-
+      <form className="flex flex-col max-w-[1000px] px-4 mx-auto items-center">
         <TextareaAutosize
           placeholder="제목"
           autoFocus
@@ -105,12 +124,19 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
             localStorage.setItem(titleKey, e.target.value);
             setTitle(e.target.value);
           }}
-          className="w-full mt-4 resize-none overflow-hidden bg-transparent tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+          className="lg:w-[1000px] w-full mt-4 pb-4 resize-none overflow-hidden bg-white tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
           spellCheck={false}
         />
-        <div className="w-full max-w-[750px] flex flex-col">
-          <ImageDropZone imageKey={imageKey} blob={blob} setBlob={setBlob} />
-          <Tiptap />
+
+        <div className="w-full max-w-[750px] flex flex-col z-10 gap-4">
+          <ImageDropZone imageKey={imageKey} setFile={setFile} />
+
+          <Tiptap
+            contentKey={contentKey}
+            editable={true}
+            setContent={setContent}
+          />
+
           <Tags
             tagsKey={tagsKey}
             tagsData={tagsData}
@@ -128,12 +154,10 @@ export const NewPostClient = ({ tagsData, postId }: NewPostClientProps) => {
         </div>
 
         <Button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           className="fixed bottom-5 right-5 z-[99999]"
           disabled={!isFormValid || isPending}
-          onClick={(event) => {
-            event.stopPropagation();
-          }}
         >
           {isPending ? '게시중...' : '개시하기'}
         </Button>

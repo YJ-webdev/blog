@@ -32,9 +32,18 @@ import { deletePost, togglePublishPost } from '@/app/actions/post';
 import { Post } from './columns';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export function PostActionsCell({ post }: { post: Post }) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      await deletePost(post.slug!);
+      router.refresh(); // Refresh the current page
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -110,7 +119,7 @@ export function PostActionsCell({ post }: { post: Post }) {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>취소</AlertDialogCancel>
-                <AlertDialogAction onClick={() => deletePost(post.slug!)}>
+                <AlertDialogAction onClick={handleDelete}>
                   확인
                 </AlertDialogAction>
               </AlertDialogFooter>

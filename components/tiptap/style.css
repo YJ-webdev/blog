@@ -1,18 +1,18 @@
 /* Scope Tiptap content only */
 .tiptap h1 {
-  @apply text-4xl font-bold mt-5 mb-2;
+  @apply text-4xl font-bold mt-5 mb-3;
 }
 
 .tiptap h2 {
-  @apply text-3xl font-bold mt-5 mb-2;
+  @apply text-3xl font-bold mt-5 mb-3;
 }
 
 .tiptap h3 {
-  @apply text-2xl font-bold mt-4 mb-2;
+  @apply text-2xl font-bold mt-4 mb-3;
 }
 
 .tiptap p {
-  @apply text-base font-normal my-4;
+  @apply text-base/8 font-normal;
 }
 
 .tiptap li {
@@ -25,6 +25,11 @@
 
 .tiptap img {
   @apply max-w-[400px] w-full mx-auto rounded-sm mt-2;
+}
+
+.tiptap iframe {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 figure[data-type='captioned-image'] {

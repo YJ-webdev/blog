@@ -33,11 +33,11 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
         <DropdownMenuTrigger className="z-10 shadow-none items-center justify-center bg-white rounded-sm -mt-[1px] text-zinc-400/80 flex">
           <Plus
             strokeWidth={1.5}
-            className="shadow-none h-6 w-6 p-[1px] rounded-sm  hover:bg-zinc-100 "
+            className="shadow-none h-6 w-6 p-[1px] mt-1 rounded-sm  hover:bg-zinc-100 "
           />
           <GripVertical
             strokeWidth={1.5}
-            className="shadow-none h-6 w-6 p-[2px] rounded-sm  hover:bg-zinc-100 "
+            className="shadow-none h-6 w-6 p-[2px] mt-1 rounded-sm  hover:bg-zinc-100 "
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="" align="end">

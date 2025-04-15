@@ -16,7 +16,12 @@ export default async function EditPage({
 
   const post = await prisma.post.findUnique({
     where: { slug: decodedSlug },
-    include: {
+    select: {
+      id: true,
+      authorId: true,
+      title: true,
+      content: true,
+      image: true,
       tags: true,
       links: true,
     },
@@ -38,5 +43,15 @@ export default async function EditPage({
     },
   });
 
-  return <EditClient post={post} tagsData={tagsData} />;
+  return (
+    <EditClient
+      postId={post.id}
+      postTitle={post.title || ''}
+      postContent={post.content as string}
+      postImage={post.image || ''}
+      postLinks={post.links}
+      postTags={post.tags}
+      tagsData={tagsData}
+    />
+  );
 }

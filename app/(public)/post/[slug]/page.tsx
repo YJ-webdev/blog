@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { PostClient } from './post-client';
 import { getPost } from '@/app/lib/data';
-import { extractText } from '@/app/lib/utils';
+// import { extractText } from '@/app/lib/utils';
 
 export async function generateMetadata({
   params,
@@ -17,7 +17,7 @@ export async function generateMetadata({
     return redirect('/not-found');
   }
 
-  const processedContent = post.content ? extractText(post.content) : '';
+  const processedContent = post.content ? post.content : '';
   return {
     title: post.title,
     description: processedContent,
@@ -78,9 +78,15 @@ export default async function SlugPage({
   });
 
   return (
-    <div className="max-w-[1000px] mx-auto w-fullflex flex-col gap-5 px-4">
+    <div className="lg:w-[1000px] w-full mx-auto w-fullflex flex-col gap-5 px-4">
       <PostClient
-        post={post}
+        postId={post.id}
+        postTitle={post.title}
+        postContent={post.content as string}
+        postImage={post.image}
+        postLinks={post.links}
+        postTags={post.tags}
+        postCreatedAt={post.createdAt}
         prevPost={prevPost || undefined}
         nextPost={nextPost || undefined}
       />

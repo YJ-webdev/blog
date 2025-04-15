@@ -55,7 +55,6 @@ interface LinkPreviewsProps {
   postLinks: Link[];
   setPostLinks: React.Dispatch<React.SetStateAction<Array<Link>>>;
   isEditable: boolean;
-  isAuthor?: boolean;
 }
 
 const LinkPreviews = ({
@@ -63,7 +62,6 @@ const LinkPreviews = ({
   postLinks,
   setPostLinks,
   isEditable,
-  isAuthor,
 }: LinkPreviewsProps) => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -96,7 +94,7 @@ const LinkPreviews = ({
     const trimmedUrl = url.trim();
 
     if (!trimmedUrl || !isValidUrl(trimmedUrl)) {
-      setError('Please enter a valid URL');
+      setError('유효하지 않은 URL입니다.');
       setTimeout(() => setError(null), 3000);
       return;
     }
@@ -112,7 +110,7 @@ const LinkPreviews = ({
           (link) => typeof link !== 'string' && link.url === normalizedUrl,
         )
       ) {
-        setError('This link is already added');
+        setError('이미 추가된 링크입니다.');
         setTimeout(() => setError(null), 3000);
         return;
       }
@@ -165,10 +163,10 @@ const LinkPreviews = ({
   };
 
   return (
-    <div className="max-w-[750px] w-full mx-auto flex flex-col items-center mb-10">
+    <div className=" max-w-[750px] w-full mx-auto flex flex-col items-center mb-10">
       {isEditable && (
-        <div className="flex flex-col w-full mb-7">
-          <div className="flex w-full ">
+        <div className="flex flex-col w-full mb-6">
+          <div className=" relative flex w-full mb-2">
             <Input
               className=" bg-zinc-100 dark:bg-zinc-800 rounded-none rounded-l-sm text-[14px]"
               value={url}
@@ -196,18 +194,17 @@ const LinkPreviews = ({
                   <LinkIcon /> 입력
                 </p>
               )}
-            </Button>
+            </Button>{' '}
+            {error && (
+              <p className="absolute left-1/2 -bottom-4 -translate-x-1/2 flex items-center h-2 pt-2 justify-center text-center mt-1 text-xs font-normal">
+                <>{error}</>
+              </p>
+            )}
           </div>
-
-          {error && (
-            <p className="flex items-center h-2 pt-2 justify-center text-center mt-1 text-xs font-normal">
-              <>{error}</>
-            </p>
-          )}
         </div>
       )}
 
-      <div className="flex flex-col max-w-[750px] md:gap-y-5">
+      <div className="relative flex flex-col max-w-[750px] md:gap-y-5">
         <div className="grid grid-cols-1 md:flex gap-2 md:gap-5 justify-between w-full h-full">
           {postLinks.length > 0 &&
             Array.isArray(postLinks) &&
@@ -220,12 +217,12 @@ const LinkPreviews = ({
                   e.stopPropagation();
                   handleDelete(link.id); // your actual delete logic
                 }}
-                isAuthor={isAuthor}
+                isEditable={isEditable}
               />
             ))}
-        </div>
+        </div>{' '}
       </div>
-      <p className="text-xs text-center text-muted-foreground mt-4">
+      <p className="text-xs text-center text-muted-foreground mt-3">
         이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를
         제공받습니다.
       </p>

@@ -13,18 +13,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 interface LinkPreviewProps {
   preview: LinkType;
-  isAuthor?: boolean;
+  isEditable?: boolean;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const LinkPreview = ({ preview, onClick, isAuthor }: LinkPreviewProps) => {
+const LinkPreview = ({ preview, onClick, isEditable }: LinkPreviewProps) => {
   return (
-    <div className="relative mb-2 rounded-sm shadow-md md:max-w-[250px] w-full mx-auto">
+    <div className="relative mb-2 rounded-sm shadow-md md:max-w-[250px] w-full mx-auto border">
       <Link
         href={preview.url!}
         target="_blank"
         rel="noopener noreferrer"
-        className=" text-primary  overflow-hidden sm:hover:underline transition-all duration-150 ease-linear "
+        className="text-primary  overflow-hidden sm:hover:underline transition-all duration-150 ease-linear "
       >
         <Card className="border-none h-full flex md:flex-col rounded-sm overflow-hidden">
           {preview.image && (
@@ -72,11 +72,11 @@ const LinkPreview = ({ preview, onClick, isAuthor }: LinkPreviewProps) => {
             )}
           </CardContent>
         </Card>
-      </Link>{' '}
-      {isAuthor && (
+      </Link>
+      {isEditable && (
         <button
           type="button"
-          className="absolute rounded-full bg-red-600 hover:scale-95 transition-all duration-100 shadow-lg p-1 -top-3 -right-3"
+          className="absolute -top-3 -right-3 rounded-full bg-red-600 hover:scale-95 transition-all duration-100 shadow-lg p-1"
           onClick={onClick}
         >
           <X className="text-white bg-none w-4 h-4" />

@@ -57,7 +57,7 @@ model Post {
   title        String?
   slug         String?    @unique
   image        String?
-  content      String?
+  content      Json?
   authorId     String
   published    Boolean    @default(false)
   createdAt    DateTime   @default(now())

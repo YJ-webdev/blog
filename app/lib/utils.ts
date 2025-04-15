@@ -1,6 +1,3 @@
-import { Block } from '@blocknote/core';
-// import { Post } from '@prisma/client';
-
 export const formatDateWithoutYear = (
   dateString: Date,
   locale: string = 'locale',
@@ -9,28 +6,31 @@ export const formatDateWithoutYear = (
   return date.toLocaleDateString(locale, { month: 'long', day: 'numeric' });
 };
 
-export const extractText = (content: string): string => {
-  let contentBlocks: Block[] = [];
+// export function getFirstParagraph(doc: any): string | null {
+//   // Iterate through the content array to find the first paragraph
+//   const firstParagraph = doc.content.find(
+//     (item: any) => item.type === 'paragraph',
+//   );
 
-  try {
-    contentBlocks = JSON.parse(content) as Block[];
-  } catch (error) {
-    console.error('Error parsing content:', error);
-    return '';
-  }
+//   // If a paragraph is found, extract and return its text content
+//   if (firstParagraph) {
+//     const textContent = firstParagraph.content
+//       .map((textNode: any) => textNode.text)
+//       .join(' ');
+//     return textContent;
+//   }
+//   return null;
+// }
 
-  const firstParagraph = contentBlocks.find(
-    (item) => item?.type === 'paragraph',
+export function getFirstParagraphText(content: any): string {
+  const firstParagraph = content?.content?.find(
+    (item: any) => item.type === 'paragraph',
   );
-
-  if (firstParagraph) {
-    return firstParagraph.content
-      .map((subItem) => (subItem.type === 'text' ? subItem.text : ''))
-      .join('');
-  }
-
-  return '';
-};
+  return (
+    firstParagraph?.content?.map((block: any) => block.text ?? '').join('') ??
+    ''
+  );
+}
 
 export const slugify = (text: string) =>
   text

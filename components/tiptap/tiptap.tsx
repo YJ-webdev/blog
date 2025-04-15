@@ -1,30 +1,32 @@
 'use client';
 
-import './style.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import {
   BubbleMenu,
   EditorContent,
   useEditor,
   FloatingMenu,
 } from '@tiptap/react';
-
-// import Image from '@tiptap/extension-image';
+import { Editor } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
 import { CaptionedImage } from './captioned-image';
 import Youtube from '@tiptap/extension-youtube';
 import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
-import StarterKit from '@tiptap/starter-kit';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { TextAlign } from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
+
+import './style.css';
+import { cn } from '@/lib/utils';
 import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
+  // AlignCenter,
+  // AlignLeft,
+  // AlignRight,
   Bold,
   Brackets,
   Heading1,
@@ -40,17 +42,24 @@ import {
   TextQuote,
   Trash,
   UnderlineIcon,
-  Unlink2,
 } from 'lucide-react';
-import { TbBracketsOff } from 'react-icons/tb';
 import { LuLink2Off } from 'react-icons/lu';
-
+import { TbBracketsOff } from 'react-icons/tb';
 import { TiptapButton } from './tiptap-button';
 import { TiptapDropdownMenu } from './tiptap-dropdown-menu';
-import { Editor } from '@tiptap/core';
-import { cn } from '@/lib/utils';
 
-const Tiptap = () => {
+interface TiptapProps {
+  contentKey: string;
+  editable: boolean;
+  setContent: (content: string) => void;
+  initialContent?: string;
+}
+const Tiptap = ({
+  contentKey,
+  editable,
+  setContent,
+  initialContent,
+}: TiptapProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -89,7 +98,7 @@ const Tiptap = () => {
   const editor = useEditor(
     {
       immediatelyRender: false,
-      editable: true,
+      editable,
       extensions: [
         StarterKit.configure({
           bulletList: {
@@ -171,65 +180,36 @@ const Tiptap = () => {
           protocols: ['http', 'https'],
           isAllowedUri: (url, ctx) => {
             try {
-              // construct URL
               const parsedUrl = url.includes(':')
                 ? new URL(url)
                 : new URL(`${ctx.defaultProtocol}://${url}`);
-
-              // use default validation
-              if (!ctx.defaultValidate(parsedUrl.href)) {
-                return false;
-              }
-
-              // disallowed protocols
+              if (!ctx.defaultValidate(parsedUrl.href)) return false;
               const disallowedProtocols = ['ftp', 'file', 'mailto'];
               const protocol = parsedUrl.protocol.replace(':', '');
-
-              if (disallowedProtocols.includes(protocol)) {
-                return false;
-              }
-
-              // only allow protocols specified in ctx.protocols
+              if (disallowedProtocols.includes(protocol)) return false;
               const allowedProtocols = ctx.protocols.map((p) =>
                 typeof p === 'string' ? p : p.scheme,
               );
-
-              if (!allowedProtocols.includes(protocol)) {
-                return false;
-              }
-
-              // disallowed domains
+              if (!allowedProtocols.includes(protocol)) return false;
               const disallowedDomains = [
                 'example-phishing.com',
                 'malicious-site.net',
               ];
-              const domain = parsedUrl.hostname;
-
-              if (disallowedDomains.includes(domain)) {
-                return false;
-              }
-
-              // all checks have passed
-              return true;
+              return !disallowedDomains.includes(parsedUrl.hostname);
             } catch {
               return false;
             }
           },
           shouldAutoLink: (url) => {
             try {
-              // construct URL
               const parsedUrl = url.includes(':')
                 ? new URL(url)
                 : new URL(`https://${url}`);
-
-              // only auto-link if the domain is not in the disallowed list
               const disallowedDomains = [
                 'example-no-autolink.com',
                 'another-no-autolink.com',
               ];
-              const domain = parsedUrl.hostname;
-
-              return !disallowedDomains.includes(domain);
+              return !disallowedDomains.includes(parsedUrl.hostname);
             } catch {
               return false;
             }
@@ -237,8 +217,15 @@ const Tiptap = () => {
         }),
       ],
       content:
-        '<p>Hello World! 🌎️</p><p>Hello World! 🌎️</p><p>Hello World! 🌎️</p>',
-
+        initialContent ||
+        JSON.parse(localStorage.getItem(contentKey) || 'null'),
+      onUpdate: ({ editor }) => {
+        const json = editor.getJSON();
+        // send the content to an API here
+        const stringfiedJson = JSON.stringify(json);
+        localStorage.setItem(contentKey, stringfiedJson);
+        setContent(stringfiedJson);
+      },
       editorProps: {
         attributes: {
           class: 'border-none outline-none w-full mb-20',
@@ -600,7 +587,7 @@ const Tiptap = () => {
             </TiptapButton>
           )}
           {/* Text alignments */}
-          {!editor.isActive('image') && (
+          {/* {!editor.isActive('image') && (
             <>
               <TiptapButton
                 onClick={() => {
@@ -637,7 +624,7 @@ const Tiptap = () => {
                 <AlignRight className="size-4" />
               </TiptapButton>
             </>
-          )}
+          )} */}
 
           {/* links for text */}
           {!editor.isActive('image') && (
@@ -657,7 +644,7 @@ const Tiptap = () => {
                   setIsOpen(false);
                 }}
               >
-                <Unlink2 className="size-4" />
+                <LuLink2Off className="size-4" />
               </TiptapButton>
             </>
           )}
@@ -728,8 +715,8 @@ const Tiptap = () => {
           )}
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} ref={editorRef} />
-      {editor && (
+      <EditorContent editor={editor} ref={editorRef} spellCheck={false} />
+      {editor && editable && (
         <FloatingMenu
           editor={editor}
           tippyOptions={{

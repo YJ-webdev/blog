@@ -1,82 +1,92 @@
-import * as React from 'react';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useDropzone, FileRejection } from 'react-dropzone';
 import { ImageIcon, Trash } from 'lucide-react';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { upload } from '@vercel/blob/client';
-// import { PutBlobResult } from '@vercel/blob';
 import { toast } from 'sonner';
 
 type ImageDropZoneProps = {
   imageKey: string;
-  setBlob: React.Dispatch<React.SetStateAction<null | string>>;
-  blob: null | string;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  image?: string | null;
 };
 
-export const ImageDropZone = ({
+export default function ImageDropZone({
   imageKey,
-  setBlob,
-  blob,
-}: ImageDropZoneProps) => {
+  setFile,
+  image,
+}: ImageDropZoneProps) {
+  const [preview, setPreview] = useState(image || null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const storedImage = localStorage.getItem(imageKey);
+    if (storedImage) {
+      setPreview(storedImage);
+    }
+  }, []);
+
   const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
-
-  // React.useEffect(() => {
-  //   const stored = localStorage.getItem(imageKey);
-  //   if (stored) setBlob(JSON.parse(stored));
-  // }, [imageKey, setBlob]);
-
-  const onDropAccepted = async (acceptedFiles: File[]) => {
+  // base64 only & auto replace image
+  const onDropAccepted = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
-    try {
-      const newBlob = await upload(`${imageKey}/${file.name}`, file, {
-        access: 'public',
-        handleUploadUrl: '/api/post/upload',
-      });
-      setBlob(newBlob.url);
-      localStorage.setItem(imageKey, JSON.stringify(newBlob));
-    } catch (error) {
-      console.error('Upload failed:', error);
-      toast.error('이미지 업로드에 실패했습니다.');
-    }
-  };
+    if (!file) return;
 
-  const onDropRejected = (fileRejections: FileRejection[]) => {
-    const error = fileRejections[0].errors[0];
-    if (error.code === 'file-too-large') {
-      toast.error('파일 크기가 3MB를 초과했습니다.');
-    }
-  };
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64Image = reader.result as string;
+      setPreview(base64Image);
+      setFile(file);
+      localStorage.setItem(imageKey, base64Image);
+    };
+  }, []);
+
+  const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
+    fileRejections.forEach((rejection) => {
+      rejection.errors.forEach((error) => {
+        if (error.code === 'file-too-large') {
+          toast.warning('Image too large. Maximum file size is 3MB.');
+        } else {
+          toast.error('Upload error: ' + error.message);
+        }
+      });
+    });
+  }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
     maxSize: MAX_FILE_SIZE,
-    onDropAccepted,
-    onDropRejected,
     multiple: false,
     accept: { 'image/*': [] },
+    onDropRejected,
+    onDropAccepted,
   });
 
+  // Remove the image
   const removeImage = (event: React.MouseEvent) => {
     event.stopPropagation();
-    setBlob(null);
-    localStorage.removeItem(imageKey);
+    setPreview(null);
+    localStorage.removeItem(imageKey); // Remove from localStorage
   };
 
   return (
     <div
       {...getRootProps()}
-      className={cn('relative w-full md:h-96 h-72 mt-2 cursor-pointer')}
+      className={cn('relative w-full aspect-video h-auto cursor-pointer')}
     >
       <input {...getInputProps()} className="hidden" />{' '}
       {/* Hidden file input */}
       <div
         className={cn(
           'absolute top-0 left-0 w-full h-full bg-transparent flex items-center justify-center',
-          blob ? '' : 'bg-muted-foreground/10 dark:bg-zinc-800',
+          preview ? '' : 'bg-muted-foreground/10 dark:bg-zinc-800',
         )}
       >
-        {blob ? (
+        {preview ? (
           <Image
-            src={blob as string}
+            src={preview}
             alt="Image Preview"
             height={200}
             width={700}
@@ -89,7 +99,7 @@ export const ImageDropZone = ({
           />
         )}
       </div>
-      {blob && (
+      {preview && (
         <div
           onClick={removeImage}
           className="absolute top-4 right-5 rounded-full w-10 h-10 flex items-center justify-center text-white hover:bg-stone-800/30 bg-stone-300/60 cursor-pointer"
@@ -99,4 +109,4 @@ export const ImageDropZone = ({
       )}
     </div>
   );
-};
+}
