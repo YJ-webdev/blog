@@ -11,6 +11,7 @@ export default async function MyPostPage() {
 
   const posts = await prisma.post.findMany({
     where: { authorId: userId },
+    take: 10,
     select: {
       id: true,
       title: true,

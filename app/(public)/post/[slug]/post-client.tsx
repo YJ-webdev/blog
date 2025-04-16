@@ -64,7 +64,7 @@ export const PostClient = ({
           setContent={setContent}
         />
 
-        <div className="max-w-[750px] w-full flex flex-wrap gap-2 mt-2 md:mb-12 mb-8">
+        <div className="max-w-[750px] w-full flex flex-wrap gap-2 md:mb-12 mb-8">
           {postTags.map((item) => (
             <PostTags key={item.name} item={item} />
           ))}

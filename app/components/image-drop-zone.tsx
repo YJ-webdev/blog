@@ -28,7 +28,7 @@ export default function ImageDropZone({
     }
   }, []);
 
-  const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
+  const MAX_FILE_SIZE = 1 * 1024 * 1024; // 3MB
   // base64 only & auto replace image
   const onDropAccepted = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -90,7 +90,7 @@ export default function ImageDropZone({
             alt="Image Preview"
             height={200}
             width={700}
-            className="w-full h-full object-cover"
+            className="max-w-[750px] w-full h-full object-cover"
           />
         ) : (
           <ImageIcon

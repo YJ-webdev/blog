@@ -105,7 +105,7 @@ export const EditClient = ({
       formData.append('id', postId);
       formData.append('title', title);
       formData.append('slug', slugify(title));
-      formData.append('content', content);
+      formData.append('content', content as string);
       formData.append('image', url);
       formData.append('links', JSON.stringify(links));
       formData.append('tags', JSON.stringify(tags));
@@ -116,6 +116,7 @@ export const EditClient = ({
       });
     } catch (error) {
       console.error('❌ Error during image upload or submission:', error);
+
       toast.error('업로드 중 오류가 발생했습니다.');
     }
   };
@@ -123,16 +124,18 @@ export const EditClient = ({
   return (
     <>
       <form className="flex flex-col max-w-[1000px] px-4 mx-auto items-center">
-        <TextareaAutosize
-          placeholder="제목"
-          autoFocus
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          className="lg:w-[1000px] w-full mt-4 pb-4 resize-none overflow-hidden bg-white tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
-          spellCheck={false}
-        />
+        <div className="h-full">
+          <TextareaAutosize
+            placeholder="제목"
+            autoFocus
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            className="lg:w-[1000px] md:w-[800px] sm:w-[650px] w-[90vw] mt-4 md:pb-3 pb-1 resize-none overflow-hidden bg-white tracking-tight lg:text-6xl sm:text-5xl text-4xl font-bold focus:outline-none text-primary dark:placeholder-stone-400"
+            spellCheck={false}
+          />
+        </div>
 
         <div className="w-full max-w-[750px] flex flex-col z-10 gap-4">
           <ImageDropZone

@@ -16,19 +16,21 @@ export async function createPost() {
   const existingPost = await prisma.post.findFirst({
     where: {
       authorId: userId,
-      published: false,
     },
     select: {
       id: true,
+      slug: true,
+      published: true,
     },
     orderBy: {
       createdAt: 'desc',
     },
   });
 
-  if (existingPost) {
+  if (existingPost && !existingPost.slug && !existingPost.published) {
     return existingPost.id;
   }
+
   const newPost = await prisma.post.create({
     data: {
       author: {
@@ -64,20 +66,32 @@ export async function publishPost(prevstate: any, formData: FormData) {
       return { error: '이미 생성 된 포스트입니다.' };
     }
 
-    let content = null;
+    let content;
 
-    if (typeof contentString === 'string') {
-      try {
+    try {
+      if (typeof contentString === 'string') {
+        // If it's accidentally stringified as "[object Object]", it's invalid
+        if (contentString.trim() === '[object Object]') {
+          throw new Error('Invalid stringified object');
+        }
+
         content = JSON.parse(contentString);
-      } catch (error) {
-        console.error('Invalid JSON string in content:', error);
-
-        content = null;
+      } else if (typeof contentString === 'object' && contentString !== null) {
+        // If it’s already a valid object
+        content = contentString;
+      } else {
+        throw new Error('Unsupported content type');
       }
+    } catch (err) {
+      console.error('Failed to parse content:', err);
+      throw new Error('콘텐츠 파싱 중 문제가 발생했습니다.');
     }
 
     if (!id || !title || !content || !slug || !image) {
-      return { error: '필수 항목이 누락되었습니다.' };
+      return {
+        error:
+          '컨텐츠 형식이 잘못 되었거나 이미지가 제대로 입력되지 않았습니다.',
+      };
     }
 
     const post = await prisma.post.findUnique({
@@ -153,7 +167,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
 
     return { success: true };
   } catch (error) {
-    console.error(error);
+    console.error('🔥 Final catch block error:', error);
     return {
       error: '게시물을 업로드할 수 없습니다. 관리자에게 문의해주세요.',
     };

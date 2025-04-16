@@ -12,7 +12,7 @@
 }
 
 .tiptap p {
-  @apply text-base/8 font-normal;
+  @apply text-base/8 font-normal pb-2;
 }
 
 .tiptap li {
@@ -24,7 +24,7 @@
 }
 
 .tiptap img {
-  @apply max-w-[400px] w-full mx-auto rounded-sm mt-2;
+  @apply max-w-[500px] w-full mx-auto rounded-sm mt-2;
 }
 
 .tiptap iframe {
