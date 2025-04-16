@@ -169,7 +169,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
   } catch (error) {
     console.error('🔥 Final catch block error:', error);
     return {
-      error: '게시물을 업로드할 수 없습니다. 관리자에게 문의해주세요.',
+      error: '컨텐츠를 수정해주세요.',
     };
   }
 }
