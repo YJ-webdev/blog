@@ -37,6 +37,8 @@ figure[data-type='captioned-image'] {
 }
 
 figure[data-type='captioned-image'] figcaption {
+  margin-top: 4px;
+  margin-bottom: 4px;
   font-size: 0.8em;
   font-weight: 400;
 }

@@ -2,7 +2,6 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { PostClient } from './post-client';
 import { getPost } from '@/app/lib/data';
-// import { extractText } from '@/app/lib/utils';
 
 export async function generateMetadata({
   params,
@@ -17,13 +16,12 @@ export async function generateMetadata({
     return redirect('/not-found');
   }
 
-  const processedContent = post.content ? post.content : '';
   return {
     title: post.title,
-    description: processedContent,
+    description: post.content,
     openGraph: {
       title: post.title,
-      description: processedContent,
+      description: post.content,
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${decodedSlug}`,
       images: [
         {

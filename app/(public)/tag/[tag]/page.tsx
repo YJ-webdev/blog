@@ -1,7 +1,6 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostsByTags } from '@/app/lib/data';
 import { getFirstParagraphText } from '@/app/lib/utils';
-// import { extractText } from '@/app/lib/utils';
 
 export async function generateMetadata({
   params,

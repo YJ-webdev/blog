@@ -16,7 +16,7 @@ const inter = Inter({ subsets: ['latin'], display: 'swap' });
 export const metadata: Metadata = {
   title: '애쉬저널 | 지식 공유 블로그',
   description:
-    '원하는 정보를 주제별로 찾아보세요. 일상에 필요한 생활 정보에서부터 전문적 지식이 담긴 주제의 이야기까지 블로그 하나로 커뮤니티를 생성 하는 곳. ',
+    '일상에 필요한 생활 정보에서부터 전문적 지식이 담긴 주제의 이야기까지 블로그 하나로 커뮤니티를 생성 하는 곳.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_VERCEL_URL!),
   openGraph: {
     images: [
