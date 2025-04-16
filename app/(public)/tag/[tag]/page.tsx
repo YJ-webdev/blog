@@ -1,6 +1,5 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostsByTags } from '@/app/lib/data';
-import { getFirstParagraphText } from '@/app/lib/utils';
 
 export async function generateMetadata({
   params,
@@ -54,7 +53,7 @@ export default async function TagPage({
               key={post.slug}
               slug={post.slug ?? ''}
               title={post.title!}
-              content={getFirstParagraphText(post.content)} // Pass extracted content
+              content={post.content} // Pass extracted content
               image={post.image!}
               createdAt={post.createdAt!}
             />

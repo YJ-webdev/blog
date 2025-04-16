@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDateWithoutYear, getFirstParagraphText } from '../lib/utils';
+import { formatDateWithoutYear, extractFirstParagraphText } from '../lib/utils';
 import { PostPreviewType } from '../lib/types';
 import { Suspense } from 'react';
 import { PreviewSkeleton } from './preview-skeleton';
 import { Skeleton } from '@/components/ui/skeleton';
+import { JSONContent } from '@tiptap/core';
 
 export const PostPreviewMain = ({
   slug,
@@ -43,7 +44,7 @@ export const PostPreviewMain = ({
             </div>
 
             <p className="text-sm/[23px] truncate-text">
-              {getFirstParagraphText(content)}
+              {extractFirstParagraphText(content as JSONContent)}
             </p>
           </div>
           <p className="hidden md:block text-xs font-light text-end min-w-fit">

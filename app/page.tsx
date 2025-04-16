@@ -1,7 +1,6 @@
 import { PostPreviewMain } from './components/post-preview-main';
 import PostPreviewCard from './components/post-preview-card';
 import { prisma } from '@/lib/prisma';
-import { getFirstParagraphText } from './lib/utils';
 
 export default async function Home() {
   const posts = await prisma.post.findMany({
@@ -22,13 +21,16 @@ export default async function Home() {
 
   const [mainPost, ...otherPosts] = posts;
 
+  console.log('Content type:', typeof mainPost.content);
+  console.log(mainPost.content);
+
   return (
     <div className="flex max-w-[1000px] mx-auto flex-col w-full -mt-5 sm:mt-4 gap-5 mb-10">
       <div className="mt-5 sm:mt-0">
         <PostPreviewMain
           slug={mainPost.slug ?? ''}
           title={mainPost.title!}
-          content={getFirstParagraphText(mainPost.content)}
+          content={mainPost.content}
           image={mainPost.image!}
           createdAt={mainPost.createdAt!}
         />
@@ -41,7 +43,7 @@ export default async function Home() {
               key={post.slug}
               slug={post.slug ?? ''}
               title={post.title!}
-              content={getFirstParagraphText(post.content)}
+              content={post.content}
               image={post.image!}
               createdAt={post.createdAt!}
             />

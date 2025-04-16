@@ -1,4 +1,4 @@
-import { JsonValue } from '@prisma/client/runtime/library';
+import { JSONContent } from '@tiptap/core';
 
 export const formatDateWithoutYear = (
   dateString: Date,
@@ -16,73 +16,31 @@ export const slugify = (text: string) =>
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-// export function getFirstParagraph(doc: any): string | null {
-//   // Iterate through the content array to find the first paragraph
-//   const firstParagraph = doc.content.find(
-//     (item: any) => item.type === 'paragraph',
-//   );
+type Content = string | JSONContent;
 
-//   // If a paragraph is found, extract and return its text content
-//   if (firstParagraph) {
-//     const textContent = firstParagraph.content
-//       .map((textNode: any) => textNode.text)
-//       .join(' ');
-//     return textContent;
-//   }
-//   return null;
-// }
-
-interface TextNode {
-  type: 'text';
-  text: string;
-}
-
-interface ParagraphNode {
-  type: 'paragraph';
-  content?: TextNode[];
-}
-
-interface DocNode {
-  type: 'doc';
-  content: ParagraphNode[];
-}
-
-// Type guard helpers
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function isTextNode(node: unknown): node is TextNode {
-  return (
-    isRecord(node) && node.type === 'text' && typeof node.text === 'string'
-  );
-}
-
-function isParagraphNode(node: unknown): node is ParagraphNode {
-  return (
-    isRecord(node) &&
-    node.type === 'paragraph' &&
-    (node.content === undefined ||
-      (Array.isArray(node.content) && node.content.every(isTextNode)))
-  );
-}
-
-function isDocNode(value: unknown): value is DocNode {
-  return (
-    isRecord(value) &&
-    value.type === 'doc' &&
-    Array.isArray(value.content) &&
-    value.content.every(isParagraphNode)
-  );
-}
-
-// Main function
-export function getFirstParagraphText(content: JsonValue | null): string {
-  if (isDocNode(content)) {
-    const firstParagraph = content.content.find((p) => p.type === 'paragraph');
-
-    return firstParagraph?.content?.map((node) => node.text).join('') ?? '';
+// Example function to extract the first paragraph's text
+export function extractFirstParagraphText(content: Content): string | null {
+  // If content is a string, return the first line
+  if (typeof content === 'string') {
+    return content.split('\n')[0];
   }
 
-  return '';
+  // If content is in JSON format (Tiptap document)
+  const doc = content.toJSON ? content.toJSON() : content;
+
+  if (!doc || !Array.isArray(doc.content)) {
+    return null;
+  }
+
+  // Iterate through the document nodes to find the first paragraph
+  for (const node of doc.content) {
+    if (node.type === 'paragraph' && Array.isArray(node.content)) {
+      // Extract the text from the paragraph's content
+      return node.content
+        .map((child) => (child.type === 'text' ? child.text : ''))
+        .join('');
+    }
+  }
+
+  return null;
 }

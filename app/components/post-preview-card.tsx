@@ -4,9 +4,10 @@ import { type PostPreviewType } from '../lib/types';
 import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDateWithoutYear, getFirstParagraphText } from '../lib/utils';
+import { formatDateWithoutYear, extractFirstParagraphText } from '../lib/utils';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import { JSONContent } from '@tiptap/core';
 
 export const PostPreviewCard = ({
   slug,
@@ -44,7 +45,7 @@ export const PostPreviewCard = ({
           </p>
         </div>
         <p className="text-sm/[23px] overflow-hidden ">
-          {getFirstParagraphText(content)}
+          {extractFirstParagraphText(content as JSONContent)}
         </p>
       </div>
     </Link>
