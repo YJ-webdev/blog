@@ -57,7 +57,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
     const contentString = formData.get('content') as string | null;
     const linksString = formData.get('links') as string | null;
     const tagsString = formData.get('tags') as string | null;
-    const image = formData.get('image') as string;
+    const image = formData.get('image') as string | null;
 
     // check if slug is already used by a *different* post
     const existingPost = await prisma.post.findUnique({ where: { slug } });
@@ -89,8 +89,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
 
     if (!id || !title || !content || !slug) {
       return {
-        error:
-          '컨텐츠 형식이 잘못 되었거나 이미지가 제대로 입력되지 않았습니다.',
+        error: '컨텐츠 형식이 잘못 되었습니다.',
       };
     }
 
@@ -155,7 +154,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
       data: {
         title,
         slug,
-        image,
+        ...(image ? { image } : {}),
         content,
         tags: {
           set: [],

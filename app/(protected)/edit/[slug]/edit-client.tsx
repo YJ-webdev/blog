@@ -78,7 +78,7 @@ export const EditClient = ({
     }
   }, [linksKey]);
 
-  const isFormValid = title.trim() !== '' && content !== '' && file !== null;
+  const isFormValid = title.trim() !== '' && content !== '';
 
   useEffect(() => {
     if (status?.success) {
@@ -90,37 +90,37 @@ export const EditClient = ({
   }, [status, router]);
 
   const handleSubmit = async () => {
-    console.log(content);
-    if (!file) {
-      return toast.error('이미지를 찾을 수 없습니다.');
-    }
+    let imageUrl: string | null = null;
 
-    try {
+    if (file !== null) {
       // Upload the new file with the same key
       const { url } = await upload(imageKey, file, {
         access: 'public',
         handleUploadUrl: '/api/post/upload',
       });
 
-      // Prepare form data
-      const formData = new FormData();
-      formData.append('id', postId);
-      formData.append('title', title);
-      formData.append('slug', slugify(title));
-      formData.append('content', content as string);
-      formData.append('image', url);
-      formData.append('links', JSON.stringify(links));
-      formData.append('tags', JSON.stringify(tags));
-
-      // Submit
-      startTransition(() => {
-        action(formData);
-      });
-    } catch (error) {
-      console.error('❌ Error during image upload or submission:', error);
-
-      toast.error('업로드 중 오류가 발생했습니다.');
+      imageUrl = url;
     }
+
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('id', postId);
+    formData.append('title', title);
+    formData.append('slug', slugify(title));
+    formData.append('content', content as string);
+
+    // Append image only if it exists
+    if (imageUrl) {
+      formData.append('image', imageUrl);
+    }
+
+    formData.append('links', JSON.stringify(links));
+    formData.append('tags', JSON.stringify(tags));
+
+    // Submit
+    startTransition(() => {
+      action(formData);
+    });
   };
 
   return (
