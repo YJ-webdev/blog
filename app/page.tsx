@@ -21,9 +21,6 @@ export default async function Home() {
 
   const [mainPost, ...otherPosts] = posts;
 
-  console.log('Content type:', typeof mainPost.content);
-  console.log(mainPost.content);
-
   return (
     <div className="flex max-w-[1000px] mx-auto flex-col w-full -mt-5 sm:mt-4 gap-5 mb-10">
       <div className="mt-5 sm:mt-0">

@@ -1,6 +1,5 @@
 import { Tag } from '@prisma/client';
 import { JsonValue } from '@prisma/client/runtime/library';
-import { JSONContent } from '@tiptap/core';
 
 export type SidebarPostType = {
   slug: string | null;

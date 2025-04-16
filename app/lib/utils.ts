@@ -36,9 +36,12 @@ export function extractFirstParagraphText(content: Content): string | null {
   for (const node of doc.content) {
     if (node.type === 'paragraph' && Array.isArray(node.content)) {
       // Extract the text from the paragraph's content
-      return node.content
-        .map((child: any) => (child.type === 'text' ? child.text : ''))
-        .join('');
+      return (
+        node.content
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((child: any) => (child.type === 'text' ? child.text : ''))
+          .join('')
+      );
     }
   }
 
