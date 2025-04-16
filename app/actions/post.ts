@@ -72,7 +72,7 @@ export async function publishPost(prevstate: any, formData: FormData) {
       if (typeof contentString === 'string') {
         // If it's accidentally stringified as "[object Object]", it's invalid
         if (contentString.trim() === '[object Object]') {
-          throw new Error('Invalid stringified object');
+          return { error: '컨텐츠를 수정해주세요.' };
         }
 
         content = JSON.parse(contentString);
@@ -80,14 +80,14 @@ export async function publishPost(prevstate: any, formData: FormData) {
         // If it’s already a valid object
         content = contentString;
       } else {
-        throw new Error('Unsupported content type');
+        return { error: '유효하지 않은 형식의 콘텐츠입니다.' };
       }
     } catch (err) {
       console.error('Failed to parse content:', err);
-      throw new Error('콘텐츠 파싱 중 문제가 발생했습니다.');
+      return { error: '콘텐츠 파싱 중 문제가 발생했습니다.' };
     }
 
-    if (!id || !title || !content || !slug || !image) {
+    if (!id || !title || !content || !slug) {
       return {
         error:
           '컨텐츠 형식이 잘못 되었거나 이미지가 제대로 입력되지 않았습니다.',

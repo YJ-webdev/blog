@@ -14,6 +14,7 @@ import { slugify } from '@/app/lib/utils';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { upload } from '@vercel/blob/client';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 const ImageDropZone = dynamic(
   () => import('@/app/components/image-drop-zone'),
@@ -39,7 +40,7 @@ const Tiptap = dynamic(() => import('@/components/tiptap/tiptap'), {
 interface NewPostClientProps {
   postId: string;
   postTitle: string;
-  postContent: string;
+  postContent: JsonValue;
   postImage: string;
   postLinks: Link[];
   postTags: Tag[];
@@ -65,7 +66,7 @@ export const EditClient = ({
 
   const [title, setTitle] = useState(postTitle || '');
   const [file, setFile] = useState<File | null>(null);
-  const [content, setContent] = useState(postContent || '');
+  const [content, setContent] = useState(postContent as string);
   const [tags, setTags] = useState<Tag[]>(postTags || []);
   const [links, setLinks] = useState<Array<Link>>(postLinks || []);
 
@@ -89,6 +90,7 @@ export const EditClient = ({
   }, [status, router]);
 
   const handleSubmit = async () => {
+    console.log(content);
     if (!file) {
       return toast.error('이미지를 찾을 수 없습니다.');
     }
@@ -148,6 +150,7 @@ export const EditClient = ({
             contentKey={contentKey}
             editable={true}
             setContent={setContent}
+            initialContent={content}
           />
 
           <Tags

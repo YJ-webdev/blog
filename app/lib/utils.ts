@@ -37,7 +37,7 @@ export function extractFirstParagraphText(content: Content): string | null {
     if (node.type === 'paragraph' && Array.isArray(node.content)) {
       // Extract the text from the paragraph's content
       return node.content
-        .map((child) => (child.type === 'text' ? child.text : ''))
+        .map((child: any) => (child.type === 'text' ? child.text : ''))
         .join('');
     }
   }

@@ -26,15 +26,13 @@ export const PostPreviewCard = ({
       <Suspense
         fallback={<Skeleton className="h-[300px] w-[500px] rounded-lg" />}
       >
-        <div className="w-full h-60">
-          <Image
-            src={image || '/images/no-image.png'}
-            alt="Preview"
-            height={500}
-            width={500}
-            className="object-cover h-full w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
-          />
-        </div>{' '}
+        <Image
+          src={image || '/images/no-image.png'}
+          alt="Preview"
+          height={500}
+          width={500}
+          className="object-cover aspect-video h-auto w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
+        />
       </Suspense>
 
       <div className="flex flex-col dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-white gap-y-2">

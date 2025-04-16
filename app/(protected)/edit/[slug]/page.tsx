@@ -47,7 +47,7 @@ export default async function EditPage({
     <EditClient
       postId={post.id}
       postTitle={post.title || ''}
-      postContent={post.content as string}
+      postContent={post.content}
       postImage={post.image || ''}
       postLinks={post.links}
       postTags={post.tags}
