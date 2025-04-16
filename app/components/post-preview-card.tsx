@@ -4,7 +4,7 @@ import { type PostPreviewType } from '../lib/types';
 import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDateWithoutYear } from '../lib/utils';
+import { formatDateWithoutYear, getFirstParagraphText } from '../lib/utils';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -43,7 +43,9 @@ export const PostPreviewCard = ({
             {formatDateWithoutYear(createdAt)}
           </p>
         </div>
-        <p className="text-sm/[23px] overflow-hidden ">{content}</p>
+        <p className="text-sm/[23px] overflow-hidden ">
+          {getFirstParagraphText(content)}
+        </p>
       </div>
     </Link>
   );

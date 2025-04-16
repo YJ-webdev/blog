@@ -75,7 +75,7 @@ export const EditClient = ({
       const storedLinks = localStorage.getItem(linksKey);
       if (storedLinks) setLinks(JSON.parse(storedLinks));
     }
-  }, []);
+  }, [linksKey]);
 
   const isFormValid = title.trim() !== '' && content !== '' && file !== null;
 

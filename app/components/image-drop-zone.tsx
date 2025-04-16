@@ -26,23 +26,26 @@ export default function ImageDropZone({
     if (storedImage) {
       setPreview(storedImage);
     }
-  }, []);
+  }, [imageKey]);
 
   const MAX_FILE_SIZE = 1 * 1024 * 1024; // 3MB
   // base64 only & auto replace image
-  const onDropAccepted = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (!file) return;
+  const onDropAccepted = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const base64Image = reader.result as string;
-      setPreview(base64Image);
-      setFile(file);
-      localStorage.setItem(imageKey, base64Image);
-    };
-  }, []);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64Image = reader.result as string;
+        setPreview(base64Image);
+        setFile(file);
+        localStorage.setItem(imageKey, base64Image);
+      };
+    },
+    [imageKey, setPreview, setFile],
+  );
 
   const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
     fileRejections.forEach((rejection) => {

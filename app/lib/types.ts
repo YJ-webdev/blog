@@ -1,4 +1,5 @@
 import { Tag } from '@prisma/client';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 export type SidebarPostType = {
   slug: string | null;
@@ -8,7 +9,7 @@ export type SidebarPostType = {
 
 export type PostPreviewType = SidebarPostType & {
   image?: string | null;
-  content: string | null;
+  content: JsonValue;
   tags?: Tag[];
   authorId?: string;
   bookmarkedBy?: boolean;

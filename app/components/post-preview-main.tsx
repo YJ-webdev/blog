@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDateWithoutYear } from '../lib/utils';
+import { formatDateWithoutYear, getFirstParagraphText } from '../lib/utils';
 import { PostPreviewType } from '../lib/types';
 import { Suspense } from 'react';
 import { PreviewSkeleton } from './preview-skeleton';
@@ -42,7 +42,9 @@ export const PostPreviewMain = ({
               </p>
             </div>
 
-            <p className="text-sm/[23px] truncate-text">{content}</p>
+            <p className="text-sm/[23px] truncate-text">
+              {getFirstParagraphText(content)}
+            </p>
           </div>
           <p className="hidden md:block text-xs font-light text-end min-w-fit">
             {formatDateWithoutYear(createdAt)}
