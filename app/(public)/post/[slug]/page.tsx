@@ -19,17 +19,16 @@ export async function generateMetadata({
   }
 
   const firstParagraph = extractFirstParagraphText(post.content as JSONContent);
+  const shortDescription = firstParagraph?.substring(0, 150);
 
   return {
     title: post.title,
-    description: firstParagraph,
+    description: shortDescription,
     openGraph: {
-      url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/og-preview/post/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${slug}`,
       images: [
         {
           url: post.image,
-          width: '1200',
-          height: '630',
           alt: post.title,
         },
       ],

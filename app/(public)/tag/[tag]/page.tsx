@@ -21,8 +21,6 @@ export async function generateMetadata({
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${decodedTag}`,
       images: [
         {
-          width: '1200',
-          height: '630',
           alt: `${decodedTag} 주제 모음`,
           type: 'image/jpg',
           url: `/images/tag/${decodedTag}.jpg`,
