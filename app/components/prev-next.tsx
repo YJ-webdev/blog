@@ -27,7 +27,10 @@ export const PrevNext = ({ prevPost, nextPost }: PrevNextProps) => {
           <HoverCardTrigger asChild className="fixed bottom-20 left-0 z-30">
             <Link href={`/post/${prevPost.slug}`}>
               <button className={cn(' bg-white dark:bg-[#1f1f1f] p-3')}>
-                <ArrowLeft strokeWidth={1} className="md:size-14 sm:size-10" />
+                <ArrowLeft
+                  strokeWidth={1}
+                  className="md:size-14 sm:size-10 hover:-translate-x-1 transition-all duration-100"
+                />
               </button>
             </Link>
           </HoverCardTrigger>
@@ -54,7 +57,10 @@ export const PrevNext = ({ prevPost, nextPost }: PrevNextProps) => {
           <HoverCardTrigger asChild className="fixed bottom-20 right-0 z-30 ">
             <Link href={`/post/${nextPost.slug}`}>
               <button className={cn(' bg-white dark:bg-[#1f1f1f] p-3')}>
-                <ArrowRight strokeWidth={1} className="md:size-14 sm:size-10" />
+                <ArrowRight
+                  strokeWidth={1}
+                  className="md:size-14 sm:size-10 hover:translate-x-1 transition-all duration-100"
+                />
               </button>
             </Link>
           </HoverCardTrigger>

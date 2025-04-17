@@ -27,6 +27,10 @@
   @apply max-w-[500px] w-full mx-auto rounded-sm mt-2;
 }
 
+.tiptap img.small {
+  @apply max-w-[250px];
+}
+
 .tiptap iframe {
   margin-top: 1rem;
   margin-bottom: 1rem;

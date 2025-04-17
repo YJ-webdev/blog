@@ -16,32 +16,16 @@ export const slugify = (text: string) =>
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-type Content = string | JSONContent;
-
 // Example function to extract the first paragraph's text
-export function extractFirstParagraphText(content: Content): string | null {
-  // If content is a string, return the first line
-  if (typeof content === 'string') {
-    return content.split('\n')[0];
-  }
-
-  // If content is in JSON format (Tiptap document)
-  const doc = content.toJSON ? content.toJSON() : content;
-
-  if (!doc || !Array.isArray(doc.content)) {
-    return null;
-  }
-
+export function extractFirstParagraphText(content: JSONContent): string | null {
+  if (!content?.content) return null;
   // Iterate through the document nodes to find the first paragraph
-  for (const node of doc.content) {
+  for (const node of content.content) {
     if (node.type === 'paragraph' && Array.isArray(node.content)) {
       // Extract the text from the paragraph's content
-      return (
-        node.content
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .map((child: any) => (child.type === 'text' ? child.text : ''))
-          .join('')
-      );
+      return node.content
+        .map((child: JSONContent) => (child.type === 'text' ? child.text : ''))
+        .join('');
     }
   }
 

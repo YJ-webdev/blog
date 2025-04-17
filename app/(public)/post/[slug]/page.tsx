@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { PostClient } from './post-client';
 import { getPost } from '@/app/lib/data';
+import { extractFirstParagraphText } from '@/app/lib/utils';
+import { JSONContent } from '@tiptap/core';
 
 export async function generateMetadata({
   params,
@@ -12,16 +14,20 @@ export async function generateMetadata({
   const decodedSlug = decodeURIComponent(slug);
 
   const post = await getPost(decodedSlug);
-  if (post === null) {
+  if (post === null || post.content === null) {
     return redirect('/not-found');
   }
+
+  const firstParagraph = extractFirstParagraphText(post.content as JSONContent);
+
+  const metaDescription = firstParagraph?.slice(0, 150); // or use sentence-based splitting
 
   return {
     title: post.title,
     description: post.content,
     openGraph: {
       title: post.title,
-      description: post.content,
+      description: metaDescription,
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${decodedSlug}`,
       images: [
         {

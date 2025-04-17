@@ -16,6 +16,7 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import { TextAlign } from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
@@ -33,6 +34,7 @@ import {
   Heading2,
   Heading3,
   Highlighter,
+  ImagePlay,
   Italic,
   Link2,
   List,
@@ -171,6 +173,11 @@ const Tiptap = ({
         Underline.configure({
           HTMLAttributes: {
             class: '',
+          },
+        }),
+        HorizontalRule.configure({
+          HTMLAttributes: {
+            class: 'my-4',
           },
         }),
         Link.configure({
@@ -647,6 +654,23 @@ const Tiptap = ({
                 <LuLink2Off className="size-4" />
               </TiptapButton>
             </>
+          )}
+
+          {editor.isActive('image') && (
+            <TiptapButton
+              onClick={() => {
+                const node = editor.getAttributes('image');
+                const currentSmall = node.small || false;
+
+                editor
+                  .chain()
+                  .focus()
+                  .updateAttributes('image', { small: !currentSmall })
+                  .run();
+              }}
+            >
+              <ImagePlay className="size-4" />
+            </TiptapButton>
           )}
 
           {/* links for image */}

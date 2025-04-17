@@ -36,6 +36,12 @@ export const CaptionedImage = Image.extend({
           style: `text-align: ${align}`,
         }),
       },
+      small: {
+        default: false,
+        parseHTML: (element) => element.getAttribute('data-small') === 'true',
+        renderHTML: (attributes) =>
+          attributes.small ? { 'data-small': 'true', class: 'small' } : {},
+      },
     };
   },
 
