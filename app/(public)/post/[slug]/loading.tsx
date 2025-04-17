@@ -1,3 +1,4 @@
+import { PreviewSkeleton } from '@/app/components/preview-skeleton';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Loading() {
@@ -27,6 +28,9 @@ export default function Loading() {
             <Skeleton className="h-5 w-[200px]" />
           </div>
         </div>
+      </div>
+      <div className="flex md:hidden mt-5 px-4 mx-auto">
+        <PreviewSkeleton />
       </div>
     </>
   );

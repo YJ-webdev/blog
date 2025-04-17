@@ -68,7 +68,7 @@ export default function Nav({ user, posts, tags }: NavProps) {
         <DrawerContent className="z-[99999] w-[90%] flex flex-row gap-2 px-2 py-2">
           <div className="h-[100px] self-center w-2 ml-1 rounded-full bg-muted flex" />
           <div className="relative flex flex-col gap-4 w-full h-[100vh]">
-            <ScrollArea className="h-full w-full p-0 mb-6">
+            <ScrollArea className="h-full w-full p-0 pb-6">
               <div className=" flex flex-col h-full mb-5">
                 <DrawerHeader className="flex flex-col gap-2 h-full items-start p-0 m-0">
                   <DrawerTitle className="mx-5 mt-4 text-sm text-muted-foreground font-light">
