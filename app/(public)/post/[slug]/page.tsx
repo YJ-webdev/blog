@@ -20,15 +20,11 @@ export async function generateMetadata({
 
   const firstParagraph = extractFirstParagraphText(post.content as JSONContent);
 
-  const metaDescription = firstParagraph?.slice(0, 150); // or use sentence-based splitting
-
   const encodedSlug = encodeURIComponent(decodedSlug);
   return {
     title: post.title,
-    description: post.content,
+    description: firstParagraph,
     openGraph: {
-      title: post.title,
-      description: metaDescription,
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/post/${encodedSlug}`,
       images: [
         {
