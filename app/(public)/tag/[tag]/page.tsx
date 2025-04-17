@@ -1,5 +1,6 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { getPostsByTags } from '@/app/lib/data';
+import TagLayout from './layout';
 
 export async function generateMetadata({
   params,
@@ -15,11 +16,9 @@ export async function generateMetadata({
   }
 
   return {
-    title: `애쉬저널 | ${decodedTag}`,
-    description: `Articles related to ${decodedTag}`,
     openGraph: {
       title: `애쉬저널 | ${decodedTag}`,
-      description: `${decodedTag} articles`,
+      description: `${decodedTag}을 주제로 한 아티클 모음`,
       url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/tag/${decodedTag}`,
       images: [
         {
@@ -45,21 +44,23 @@ export default async function TagPage({
   const posts = await getPostsByTags(decodedTag);
 
   return (
-    <div className="flex flex-col gap-7 w-full">
-      <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
-        {posts.map((post) => {
-          return (
-            <PostPreviewCard
-              key={post.slug}
-              slug={post.slug ?? ''}
-              title={post.title!}
-              content={post.content} // Pass extracted content
-              image={post.image!}
-              createdAt={post.createdAt!}
-            />
-          );
-        })}
+    <TagLayout>
+      <div className="flex flex-col gap-7 w-full">
+        <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5  sm:grid-cols-2 mb-20">
+          {posts.map((post) => {
+            return (
+              <PostPreviewCard
+                key={post.slug}
+                slug={post.slug ?? ''}
+                title={post.title!}
+                content={post.content} // Pass extracted content
+                image={post.image!}
+                createdAt={post.createdAt!}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </TagLayout>
   );
 }
