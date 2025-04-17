@@ -22,16 +22,14 @@ export default async function Home() {
   const [mainPost, ...otherPosts] = posts;
 
   return (
-    <div className="flex max-w-[1000px] mx-auto flex-col w-full -mt-5 sm:mt-4 gap-5 mb-10">
-      <div className="mt-5 sm:mt-0">
-        <PostPreviewMain
-          slug={mainPost.slug ?? ''}
-          title={mainPost.title!}
-          content={mainPost.content}
-          image={mainPost.image!}
-          createdAt={mainPost.createdAt!}
-        />
-      </div>
+    <div className="flex max-w-[1000px] mx-auto flex-col w-full gap-5 mb-10">
+      <PostPreviewMain
+        slug={mainPost.slug ?? ''}
+        title={mainPost.title!}
+        content={mainPost.content}
+        image={mainPost.image!}
+        createdAt={mainPost.createdAt!}
+      />
 
       {otherPosts.length > 0 && (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">

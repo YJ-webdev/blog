@@ -17,9 +17,12 @@ export default function Loading() {
           <Skeleton className="h-6 w-1/3 rounded-full" />
           <Skeleton className="h-6 w-1/3 rounded-full" />
         </div>
-        <div className="flex md:hidden flex-col gap-4 w-full mt-5 px-4 mx-auto">
-          <PreviewSkeleton />
-        </div>
+      </div>
+      <div className="flex md:hidden flex-col gap-4 w-full mt-5 px-4 mx-auto">
+        <PreviewSkeleton />
+        <PreviewSkeleton />
+        <PreviewSkeleton />
+        <PreviewSkeleton />
       </div>
     </>
   );

@@ -25,6 +25,9 @@ import Link from '@tiptap/extension-link';
 import './style.css';
 import { cn } from '@/lib/utils';
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   // AlignCenter,
   // AlignLeft,
   // AlignRight,
@@ -117,7 +120,8 @@ const Tiptap = ({
           },
           blockquote: {
             HTMLAttributes: {
-              class: 'border-l-2 border-zinc-500 text-zinc-600 pl-6 my-4',
+              class:
+                'border-l-2 border-zinc-500 text-zinc-600 pl-6 my-4 italic',
               types: ['blockquote'],
             },
           },
@@ -594,7 +598,7 @@ const Tiptap = ({
             </TiptapButton>
           )}
           {/* Text alignments */}
-          {/* {!editor.isActive('image') && (
+          {!editor.isActive('image') && (
             <>
               <TiptapButton
                 onClick={() => {
@@ -631,7 +635,7 @@ const Tiptap = ({
                 <AlignRight className="size-4" />
               </TiptapButton>
             </>
-          )} */}
+          )}
 
           {/* links for text */}
           {!editor.isActive('image') && (
