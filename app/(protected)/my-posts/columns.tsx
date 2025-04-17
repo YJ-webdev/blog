@@ -68,19 +68,12 @@ export const columns: ColumnDef<Post>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          title
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Title
+          <ArrowUpDown />
         </Button>
       );
     },
-    cell: ({ row }) =>
-      row.original.title ? (
-        <span>{row.original.title} </span>
-      ) : (
-        <span className="text-muted-foreground/30 font-semibold uppercase">
-          제목없음
-        </span>
-      ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue('title')}</div>,
   },
   {
     accessorKey: '링크',
