@@ -1,5 +1,5 @@
 import Image from '@tiptap/extension-image';
-import { mergeAttributes } from '@tiptap/core';
+import { mergeAttributes, Command, RawCommands } from '@tiptap/core';
 
 export const CaptionedImage = Image.extend({
   addAttributes() {
@@ -42,6 +42,35 @@ export const CaptionedImage = Image.extend({
         renderHTML: (attributes) =>
           attributes.small ? { 'data-small': 'true', class: 'small' } : {},
       },
+    };
+  },
+
+  addCommands(): Partial<RawCommands> {
+    return {
+      setImage:
+        (attrs): Command =>
+        ({ state, chain }) => {
+          const { $from } = state.selection;
+          const depth = $from.depth;
+
+          // Prevent inserting image in nested blocks like listItem
+          if (depth > 1) {
+            return chain()
+              .liftEmptyBlock()
+              .insertContent({
+                type: this.name,
+                attrs,
+              })
+              .run();
+          }
+
+          return chain()
+            .insertContent({
+              type: this.name,
+              attrs,
+            })
+            .run();
+        },
     };
   },
 

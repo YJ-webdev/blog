@@ -9,6 +9,7 @@ import {
   ImageIcon,
   List,
   ListOrdered,
+  Pilcrow,
   Plus,
   SquareCode,
   Table,
@@ -44,6 +45,17 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
           <DropdownMenuLabel className="text-xs mx-2 text-muted-foreground font-normal">
             Heading
           </DropdownMenuLabel>
+          <DropdownMenuItem>
+            <TiptapMenu
+              onClick={() => editor.chain().focus().setParagraph().run()}
+              className={
+                editor.isActive('heading', { level: 1 }) ? 'is-active' : ''
+              }
+              icon={<Pilcrow />} // Replace with your actual icon
+              name="Paragraph"
+              subname="Plain text"
+            />
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <TiptapMenu
               onClick={() =>

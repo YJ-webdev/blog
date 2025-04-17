@@ -4,7 +4,7 @@ import React from 'react';
 interface TiptapMenuProps {
   onClick: () => void;
   className?: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   name?: string;
   subname?: string;
 }
