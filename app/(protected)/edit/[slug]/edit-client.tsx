@@ -72,13 +72,15 @@ export const EditClient = ({
 
   // Load saved values from localStorage
   useEffect(() => {
+    console.log(typeof content);
     if (typeof window !== 'undefined') {
+      console.log(content);
       const storedLinks = localStorage.getItem(linksKey);
       if (storedLinks) setLinks(JSON.parse(storedLinks));
     }
-  }, [linksKey]);
+  }, [linksKey, content]);
 
-  const isFormValid = title.trim() !== '' && content !== '';
+  const isFormValid = title.trim() !== '' && typeof content === 'string';
 
   useEffect(() => {
     if (status?.success) {

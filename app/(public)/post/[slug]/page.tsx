@@ -80,7 +80,7 @@ export default async function SlugPage({
     <div className="lg:w-[1000px] w-full mx-auto w-fullflex flex-col gap-5 px-4">
       <PostClient
         postId={post.id}
-        postTitle={post.title}
+        // postTitle={post.title}
         postContent={post.content as string}
         postImage={post.image}
         postLinks={post.links}

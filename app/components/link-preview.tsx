@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import {
   Card,
@@ -9,7 +9,6 @@ import {
 import Link from 'next/link';
 import { Link as LinkType } from '@prisma/client';
 import { X } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
 
 interface LinkPreviewProps {
   preview: LinkType;
@@ -28,17 +27,15 @@ const LinkPreview = ({ preview, onClick, isEditable }: LinkPreviewProps) => {
       >
         <Card className="border-none h-full flex md:flex-col rounded-sm overflow-hidden">
           {preview.image && (
-            <div className="relative aspect-video overflow-hidden w-[45%] md:w-full">
-              <Suspense
-                fallback={<Skeleton className="h-full w-full rounded-lg" />}
-              >
-                <Image
-                  src={preview.image}
-                  alt="Link preview"
-                  layout="fill"
-                  className="object-cover"
-                />
-              </Suspense>
+            <div className="relative aspect-[3/2] overflow-hidden w-[45%] md:w-full">
+              <Image
+                src={preview.image}
+                alt="Link preview"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+                className="object-cover"
+              />
             </div>
           )}
 

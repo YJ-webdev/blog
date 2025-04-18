@@ -30,9 +30,9 @@ export const ClientPage = ({ children }: ClientPageProps) => {
           // open && '!-translate-x-52 transition-transform duration-300',
         )}
       >
-        {!pathname.includes('/post') &&
-          !pathname.includes('/edit') &&
-          !pathname.includes('/new-post') && <Title />}
+        {!pathname.includes('/edit') && !pathname.includes('/new-post') && (
+          <Title />
+        )}
         <main className="flex-1">{children}</main>
         <Toaster />
         <Footer />

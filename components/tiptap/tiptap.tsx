@@ -16,7 +16,6 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import { TextAlign } from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
@@ -106,6 +105,11 @@ const Tiptap = ({
       editable,
       extensions: [
         StarterKit.configure({
+          horizontalRule: {
+            HTMLAttributes: {
+              class: 'my-4',
+            },
+          },
           bulletList: {
             HTMLAttributes: {
               class: 'list-disc',
@@ -177,11 +181,6 @@ const Tiptap = ({
         Underline.configure({
           HTMLAttributes: {
             class: '',
-          },
-        }),
-        HorizontalRule.configure({
-          HTMLAttributes: {
-            class: 'my-4',
           },
         }),
         Link.configure({
