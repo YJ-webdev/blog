@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { upload } from '@vercel/blob/client';
 import { JsonValue } from '@prisma/client/runtime/library';
+import { Loader2 } from 'lucide-react';
 
 const ImageDropZone = dynamic(
   () => import('@/app/components/image-drop-zone'),
@@ -177,7 +178,15 @@ export const EditClient = ({
           className="fixed bottom-5 right-5 z-[99999]"
           disabled={!isFormValid || isPending}
         >
-          {isPending ? '게시중...' : '개시하기'}
+          {!isFormValid ? (
+            '내용을 수정하세요'
+          ) : isPending ? (
+            <>
+              수정 중 <Loader2 className="ml-2 animate-spin" />
+            </>
+          ) : (
+            '수정 완료 및 개시하기'
+          )}
         </Button>
       </form>
     </>

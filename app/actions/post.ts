@@ -182,6 +182,15 @@ export async function deletePost(slug: string) {
   });
 }
 
+export async function deletePostById(id: string) {
+  const session = await auth();
+  if (!session) return redirect('/');
+
+  return await prisma.post.delete({
+    where: { id: id },
+  });
+}
+
 export async function togglePublishPost(slug: string) {
   const post = await prisma.post.findUnique({ where: { slug } });
   if (!post) return;

@@ -28,7 +28,11 @@ import {
   MoreHorizontal,
   TrashIcon,
 } from 'lucide-react';
-import { deletePost, togglePublishPost } from '@/app/actions/post';
+import {
+  deletePost,
+  deletePostById,
+  togglePublishPost,
+} from '@/app/actions/post';
 import { Post } from './columns';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -40,7 +44,12 @@ export function PostActionsCell({ post }: { post: Post }) {
 
   const handleDelete = () => {
     startTransition(async () => {
-      await deletePost(post.slug!);
+      if (post.slug) {
+        await deletePost(post.slug);
+      } else {
+        deletePostById(post.id);
+      }
+
       router.refresh(); // Refresh the current page
     });
   };
@@ -96,40 +105,33 @@ export function PostActionsCell({ post }: { post: Post }) {
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator className="my-1" />
-        {post.slug ? (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <DropdownMenuItem
-                onSelect={(e) => e.preventDefault()}
-                className="text-red-600 hover:text-red-500"
-              >
-                <TrashIcon />
-                삭제
-              </DropdownMenuItem>
-            </AlertDialogTrigger>
 
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {`"${post.title}"를(을) 정말 삭제하시겠습니까?`}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  삭제가 확인된 포스트는 되돌릴 수 없습니다.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>취소</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>
-                  확인
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        ) : (
-          <span className="flex gap-2 text-sm p-2 cursor-default text-red-600">
-            <TrashIcon size="18" /> 삭제불가
-          </span>
-        )}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="text-red-600 hover:text-red-500"
+            >
+              <TrashIcon />
+              삭제
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                {`"${post.title}"를(을) 정말 삭제하시겠습니까?`}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                삭제가 확인된 포스트는 되돌릴 수 없습니다.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>취소</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>확인</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DropdownMenuContent>
     </DropdownMenu>
   );
