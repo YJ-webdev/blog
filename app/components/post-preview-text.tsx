@@ -13,7 +13,7 @@ export const PostPreviewText = ({
   return (
     <Link
       href={`/post/${slug}`}
-      className="flex flex-col mx-auto py-4 px-7 gap-2 h-full border-l group"
+      className="flex flex-col mx-auto py-4 md:px-7 px-4 gap-2 h-full border-l group"
     >
       <h3 className="text-[18px] font-semibold group-hover:underline">
         {title}

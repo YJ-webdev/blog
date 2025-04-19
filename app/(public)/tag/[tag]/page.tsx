@@ -59,7 +59,7 @@ export default async function TagPage({
         />
         {/* <hr className="mx-4" /> */}
         {otherPosts.length > 0 && (
-          <div className="grid grid-cols-1 md:gap-3 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:gap-5 md:grid-cols-2">
             {otherPosts.map((post) => (
               <PostPreviewCard
                 key={post.slug}

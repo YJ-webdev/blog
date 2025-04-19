@@ -44,7 +44,7 @@ export default async function Home() {
         />
         {/* <hr className="mx-4" /> */}
         {secondToFifthPosts.length > 0 && (
-          <div className="grid grid-cols-1 md:gap-3 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:gap-5 md:grid-cols-2">
             {secondToFifthPosts.map((post) => (
               <PostPreviewCard
                 key={post.slug}
