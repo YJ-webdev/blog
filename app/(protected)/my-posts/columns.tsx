@@ -73,7 +73,14 @@ export const columns: ColumnDef<Post>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('title')}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('title') || '제목 없음'}</div>
+    ),
+    filterFn: (row, columnId, filterValue) => {
+      const value = row.getValue(columnId);
+      if (typeof value !== 'string') return false;
+      return value.toLowerCase().includes(filterValue.toLowerCase());
+    },
   },
   {
     accessorKey: '링크',

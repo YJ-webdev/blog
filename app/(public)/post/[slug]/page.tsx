@@ -4,7 +4,6 @@ import { PostClient } from './post-client';
 import { getPost } from '@/app/lib/data';
 import { extractFirstParagraphText } from '@/app/lib/utils';
 import { JSONContent } from '@tiptap/core';
-import { Advertisement } from '@/app/components/advertisement';
 
 export async function generateMetadata({
   params,
@@ -79,7 +78,7 @@ export default async function SlugPage({
 
   return (
     <>
-      <Advertisement />
+      {/* <Advertisement /> */}
       <div className="lg:w-[1000px] w-full mx-auto w-fullflex flex-col gap-5 px-4">
         <PostClient
           postId={post.id}

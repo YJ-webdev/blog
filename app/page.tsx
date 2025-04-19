@@ -32,7 +32,7 @@ export default async function Home() {
 
   return (
     <>
-      <Advertisement />
+      {/* <Advertisement /> */}
       <div className="flex max-w-[1000px] mx-auto flex-col w-full gap-5 mb-10">
         <PostPreviewMain
           slug={posts[0].slug ?? ''}
