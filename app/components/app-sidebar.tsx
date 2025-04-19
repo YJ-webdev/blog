@@ -136,9 +136,9 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                             href={`/post/${post.slug}`}
                             // href={`/tag/${encodeURIComponent(item.name)}`}
 
-                            className="flex flex-col gap-2 items-stretch justify-between postlists"
+                            className="flex flex-col gap-1 items-stretch justify-between border-l border-zinc-500 pl-2"
                           >
-                            <span className="text-[15px]/[22px] dark:text-zinc-200 text-start h-full flex-1 line-clamp-3 hover:underline ">
+                            <span className="text-base dark:text-zinc-200 text-start h-full flex-1 line-clamp-3 tracking-tight hover:underline ">
                               {post.title}
                             </span>
                             <p className="flex items-end w-fit self-end text-xs text-muted-foreground tracking-tighter">

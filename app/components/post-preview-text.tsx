@@ -22,7 +22,7 @@ export const PostPreviewText = ({
         {' '}
         {extractFirstParagraphText(content as JSONContent)}
       </p>
-      <div className="flex self-end text-xs font-light mt-auto pt-2">
+      <div className="flex self-end text-xs text-muted-foreground mt-auto pt-2">
         <p>{timeAgo(createdAt)}</p>{' '}
         {tags && (
           <p>

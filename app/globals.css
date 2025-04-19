@@ -93,13 +93,3 @@ body {
     @apply relative mt-5 mb-2 inline-block text-primary dark:text-primary before:absolute before:left-0 before:right-0 before:bottom-0 before:-z-10 before:rounded-full before:bg-yellow-100 before:dark:bg-sky-800 before:h-[16px] before:translate-y-1 before:-translate-x-3;
   }
 }
-
-.postlists {
-  border-left: 1px solid #333; /* Adjust thickness and color */
-  padding-left: 10px; /* Space between line and text */
-}
-
-.dark .postlists {
-  border-left: 1px solid #ffffff; /* Adjust thickness and color */
-  padding-left: 10px; /* Space between line and text */
-}

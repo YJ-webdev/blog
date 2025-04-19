@@ -47,7 +47,7 @@ export const PostPreviewCard = ({
           </p>
         </div>
 
-        <div className="text-xs flex font-light text-end min-w-fit mt-2 tracking-loose self-end">
+        <div className="text-xs flex text-end min-w-fit mt-2 text-muted-foreground self-end">
           <p>{timeAgo(createdAt)}</p>{' '}
           {tags && (
             <p>
