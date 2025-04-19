@@ -1,6 +1,6 @@
 'use client';
 
-import { PanelLeft, PanelLeftDashed, UserRoundPlus } from 'lucide-react';
+import { PanelLeft, PanelLeftDashed } from 'lucide-react';
 
 import {
   Sidebar,
@@ -81,6 +81,17 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
     );
     if (newTimeAgoValues) setTimeAgoValues(newTimeAgoValues);
   }, [posts]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'z') {
+        setIsOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <>
@@ -183,12 +194,12 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
         <SidebarFooter className="pl-4">
           {session.status === 'unauthenticated' && (
             <>
-              <div
+              {/* <div
                 onClick={() => setIsOpen(true)}
                 className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
               >
                 <UserRoundPlus className="w-5 h-5" strokeWidth={1.5} />
-              </div>
+              </div> */}
 
               <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             </>
