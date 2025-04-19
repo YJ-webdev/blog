@@ -1,3 +1,4 @@
+import { Advertisement } from '@/app/components/advertisement';
 import PostPreviewCard from '@/app/components/post-preview-card';
 import { PostPreviewMain } from '@/app/components/post-preview-main';
 import { getPostsByTags } from '@/app/lib/data';
@@ -46,29 +47,33 @@ export default async function TagPage({
   const [firstPost, ...otherPosts] = posts;
 
   return (
-    <div className="flex max-w-[1000px] mx-auto flex-col w-full gap-5 mb-10">
-      <PostPreviewMain
-        slug={firstPost.slug ?? ''}
-        title={firstPost.title!}
-        content={firstPost.content}
-        image={firstPost.image!}
-        createdAt={firstPost.createdAt!}
-      />
-      {/* <hr className="mx-4" /> */}
-      {otherPosts.length > 0 && (
-        <div className="grid grid-cols-1 md:gap-3 md:grid-cols-2">
-          {otherPosts.map((post) => (
-            <PostPreviewCard
-              key={post.slug}
-              slug={post.slug ?? ''}
-              title={post.title!}
-              content={post.content}
-              image={post.image!}
-              createdAt={post.createdAt!}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      <Advertisement />
+      <div className="flex max-w-[1000px] mx-auto flex-col w-full gap-5 mb-10">
+        <PostPreviewMain
+          slug={firstPost.slug ?? ''}
+          title={firstPost.title!}
+          content={firstPost.content}
+          image={firstPost.image!}
+          createdAt={firstPost.createdAt!}
+        />
+        {/* <hr className="mx-4" /> */}
+        {otherPosts.length > 0 && (
+          <div className="grid grid-cols-1 md:gap-3 md:grid-cols-2">
+            {otherPosts.map((post) => (
+              <PostPreviewCard
+                key={post.slug}
+                slug={post.slug ?? ''}
+                title={post.title!}
+                content={post.content}
+                image={post.image!}
+                createdAt={post.createdAt!}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      <Advertisement />
+    </>
   );
 }

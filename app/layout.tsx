@@ -11,7 +11,11 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { SessionProvider } from 'next-auth/react';
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+});
 
 export const metadata: Metadata = {
   title: '애쉬저널 | 지식 공유 블로그',
@@ -75,13 +79,6 @@ export default async function RootLayout({
   const user = session?.user;
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* <head>
-        <meta
-          name="naver-site-verification"
-          content="640268bc6657654ab1509bc3533928003d279c12"
-        />
-      </head> */}
-
       <body
         className={`${inter.className} antialiased`}
         suppressHydrationWarning

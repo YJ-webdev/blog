@@ -17,10 +17,13 @@ import {
   Trash,
 } from 'lucide-react';
 import { FaYoutube } from 'react-icons/fa6';
+import { RiAdvertisementFill } from 'react-icons/ri';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { TiptapMenu } from './tiptap-menu';
 import { Editor } from '@tiptap/core';
 import { insertTopLevelBlock } from './insert-top-level-block';
+import { createCoupangDeeplink } from '@/app/actions/coupang';
 
 export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
   const [plusOpen, setPlusOpen] = useState(false);
@@ -276,6 +279,15 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
             name="Image"
             subname="Set to 400px width"
           />
+          <TiptapMenu
+            onClick={() => {
+              createCoupangDeeplink();
+              setPlusOpen(false);
+            }}
+            icon={<RiAdvertisementFill strokeWidth={1} size={24} />}
+            name="Coupang Ad"
+            subname="Insert a Coupang Ad"
+          />
         </div>
       )}
       {gripOpen && (
@@ -289,16 +301,18 @@ export const TiptapDropdownMenu = ({ editor }: { editor: Editor }) => {
             type="button"
             className="flex items-center gap-5 w-full p-2 text-sm hover:bg-zinc-100 "
             onClick={() => {
-              editor.commands.command(({ state, dispatch }) => {
+              editor?.commands.command(({ state, dispatch }) => {
                 const { $from } = state.selection;
                 const node = $from.node($from.depth);
 
-                if (!node || !dispatch) return false;
+                // prevent errors when at root level
+                if (!node || !dispatch || $from.depth === 0) return false;
 
                 const pos = $from.before($from.depth);
                 dispatch(state.tr.delete(pos, pos + node.nodeSize));
                 return true;
               });
+
               setGripOpen(false);
             }}
           >

@@ -9,7 +9,7 @@ export const PostPreviewText = ({
   tags,
 }: PostPreviewType) => {
   return (
-    <div className="flex flex-col mx-4 gap-1 h-full">
+    <div className="flex flex-col mx-auto p-4 gap-1 h-full border-l">
       <h3 className="text-[18px] font-semibold">{title}</h3>
       <p className="line-clamp-3 md:line-clamp-4">
         {' '}
