@@ -137,23 +137,24 @@ export default function Nav({ user, posts, tags }: NavProps) {
                     onClick={handleCreatePost}
                     disabled={isPending}
                   >
-                    <div className="flex items-center">
-                      <PencilLine className="mr-5 h-4 w-4" />
+                    <div className="flex items-center text-[15px]/[22px]">
+                      <PencilLine className="mr-5 size-6" />
                       작성하기
                     </div>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href={'/my-posts'} className="flex items-center">
-                      <List className="mr-3 h-4 w-4" />내 포스트
+                    <Link href={'/my-posts'} className="flex items-center ">
+                      <List className="mr-3 size-6" />
+                      <p className="text-[15px]/[22px]">내 포스트</p>
                     </Link>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem asChild>
                     <Link
                       href={'/'}
-                      className="flex items-center cursor-pointer"
+                      className="flex items-center cursor-pointer text-[15px]/[22px]"
                     >
-                      <House className="mr-3 h-4 w-4" />
+                      <House className="mr-3 size-6" />
                       홈으로 가기
                     </Link>
                   </DropdownMenuItem>
@@ -162,9 +163,9 @@ export default function Nav({ user, posts, tags }: NavProps) {
 
                   <DropdownMenuItem
                     onClick={handleSignOut}
-                    className="cursor-pointer flex items-center text-muted-foreground hover:text-primary"
+                    className="cursor-pointer flex items-center text-muted-foreground hover:text-primary text-[15px]/[22px]"
                   >
-                    <UserRoundMinus className="mr-3 h-4 w-4 " />
+                    <UserRoundMinus className="mr-3 size-6" />
                     로그아웃
                   </DropdownMenuItem>
                 </DropdownMenuContent>
