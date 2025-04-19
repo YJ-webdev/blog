@@ -18,6 +18,7 @@ export const getPostforMetaData = cache(async (slug: string) => {
 // getPost will be used twice, but execute only once
 export const getPost = cache(async (slug: string) => {
   const res = await prisma.post.findFirst({
+    cacheStrategy: { ttl: 60 },
     where: {
       slug: slug,
       published: true,
@@ -37,6 +38,7 @@ export const getPost = cache(async (slug: string) => {
 
 export const getPostsByTags = cache(async (tag: string) => {
   const res = await prisma.post.findMany({
+    cacheStrategy: { ttl: 60 },
     where: {
       tags: {
         some: {

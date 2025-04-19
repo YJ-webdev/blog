@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 
 export default async function Home() {
   const posts = await prisma.post.findMany({
+    cacheStrategy: { ttl: 60 },
     where: { published: true },
     take: 11,
     select: {
