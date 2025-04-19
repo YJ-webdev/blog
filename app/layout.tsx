@@ -37,6 +37,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const posts = await prisma.post.findMany({
+    cacheStrategy: { ttl: 60 },
     where: {
       published: true,
     },
@@ -53,6 +54,7 @@ export default async function RootLayout({
   });
 
   const tags = await prisma.tag.findMany({
+    cacheStrategy: { ttl: 60 },
     take: 14,
     orderBy: {
       posts: {
