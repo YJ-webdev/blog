@@ -1,4 +1,5 @@
 import PostPreviewCard from '@/app/components/post-preview-card';
+import { PostPreviewMain } from '@/app/components/post-preview-main';
 import { getPostsByTags } from '@/app/lib/data';
 
 export async function generateMetadata({
@@ -40,22 +41,34 @@ export default async function TagPage({
 
   const posts = await getPostsByTags(decodedTag);
 
+  if (!posts || posts.length === 0) return null;
+
+  const [firstPost, ...otherPosts] = posts;
+
   return (
-    <div className="flex flex-col gap-7 w-full">
-      <div className="max-w-[1000px] mx-auto grid grid-cols-1 gap-5 md:grid-cols-2 mb-20">
-        {posts.map((post) => {
-          return (
+    <div className="flex max-w-[1000px] mx-auto flex-col w-full gap-5 mb-10">
+      <PostPreviewMain
+        slug={firstPost.slug ?? ''}
+        title={firstPost.title!}
+        content={firstPost.content}
+        image={firstPost.image!}
+        createdAt={firstPost.createdAt!}
+      />
+      {/* <hr className="mx-4" /> */}
+      {otherPosts.length > 0 && (
+        <div className="grid grid-cols-1 md:gap-3 md:grid-cols-2">
+          {otherPosts.map((post) => (
             <PostPreviewCard
               key={post.slug}
               slug={post.slug ?? ''}
               title={post.title!}
-              content={post.content} // Pass extracted content
+              content={post.content}
               image={post.image!}
               createdAt={post.createdAt!}
             />
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

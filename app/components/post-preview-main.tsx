@@ -39,8 +39,16 @@ export const PostPreviewMain = ({
             {extractFirstParagraphText(content as JSONContent)}
           </p>
         </div>
-        <div className="text-xs flex gap-2 font-light text-end min-w-fit h-fit justify-end self-end mt-auto">
-          <p>{timeAgo(createdAt)}</p> <p>|</p> <p>{tags?.[0].name}</p>
+        <div className="text-xs flex font-light text-end min-w-fit h-fit justify-end self-end mt-auto">
+          <p>
+            {timeAgo(createdAt)}
+            {tags && tags[0] && (
+              <>
+                <span className="px-2">|</span>
+                {tags[0].name}
+              </>
+            )}
+          </p>
         </div>
       </div>
     </Link>
