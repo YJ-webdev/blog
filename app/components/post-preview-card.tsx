@@ -20,7 +20,7 @@ export const PostPreviewCard = ({
     <Link
       href={`/post/${slug}`}
       className={cn(
-        'flex md:flex-col flex-row w-screen md:w-full hover:cursor-pointer group relative group p-4 gap-4 rounded-lg',
+        'flex md:flex-col flex-row w-screen md:w-full hover:cursor-pointer relative group p-4 gap-4 rounded-lg',
       )}
     >
       {image ? (
@@ -39,10 +39,10 @@ export const PostPreviewCard = ({
 
       <div className="flex-1 flex flex-col justify-between dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-white">
         <div className="flex flex-col gap-2 justify-between items-start">
-          <h3 className="w-full text-[16px] sm:text-xl font-semibold tracking-tight">
+          <h3 className="w-full text-[18px] sm:text-xl font-semibold tracking-tight group-hover:underline">
             {title}
           </h3>{' '}
-          <p className="hidden sm:block sm:line-clamp-2 md:line-clamp-none text-sm/[23px] truncate-text">
+          <p className="hidden sm:block sm:line-clamp-2 md:line-clamp-none text-base truncate-text">
             {extractFirstParagraphText(content as JSONContent)}
           </p>
         </div>

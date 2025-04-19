@@ -32,7 +32,7 @@ export const PostPreviewMain = ({
 
       <div className="flex flex-col md:h-80 md:w-[30%] md:min-w-[28%] px-4 md:px-0">
         <div className="w-full flex flex-col gap-1 ">
-          <h3 className="font-semibold text-xl md:text-3xl line-clamp-3 h-fit">
+          <h3 className="font-semibold text-xl md:text-3xl line-clamp-3 h-fit group-hover:underline">
             {title}
           </h3>
           <p className="line-clamp-2 md:h-30 overflow-hidden md:line-clamp-[8] mb-2">
