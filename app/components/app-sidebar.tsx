@@ -101,7 +101,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                 />
               </SidebarGroupContent> */}
 
-              <SidebarGroupLabel className="-ml-2 text-muted-foreground ">
+              <SidebarGroupLabel className="-ml-2 text-muted-foreground font-normal mb-2 -mt-2">
                 주제
               </SidebarGroupLabel>
               <SidebarGroupContent>
@@ -120,7 +120,7 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                 </div>
               </SidebarGroupContent>
 
-              <SidebarGroupLabel className="-ml-2 mt-8 text-muted-foreground">
+              <SidebarGroupLabel className="-ml-2 mt-6 text-muted-foreground font-normal mb-2">
                 새로운 글
               </SidebarGroupLabel>
               <SidebarGroupContent className="mb-3">
@@ -136,12 +136,12 @@ export function AppSidebar({ posts, tags }: AppSidebarProps) {
                             href={`/post/${post.slug}`}
                             // href={`/tag/${encodeURIComponent(item.name)}`}
 
-                            className="flex gap-2 items-stretch justify-between"
+                            className="flex flex-col gap-2 items-stretch justify-between postlists"
                           >
-                            <span className="text-[14px] dark:text-zinc-200 text-start h-full flex-1 tracking-tight line-clamp-3 postlists hover:underline">
+                            <span className="text-[15px]/[22px] dark:text-zinc-200 text-start h-full flex-1 line-clamp-3 hover:underline ">
                               {post.title}
                             </span>
-                            <p className="flex items-end w-fit text-right text-xs text-muted-foreground tracking-tighter">
+                            <p className="flex items-end w-fit self-end text-xs text-muted-foreground tracking-tighter">
                               {timeAgoValues[index]}
                             </p>
                           </Link>

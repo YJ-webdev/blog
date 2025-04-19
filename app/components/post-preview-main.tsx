@@ -31,7 +31,7 @@ export const PostPreviewMain = ({
       )}
 
       <div className="flex flex-col md:h-80 md:w-[30%] md:min-w-[28%] px-4 md:px-0">
-        <div className="w-full flex flex-col gap-1 ">
+        <div className="w-full flex flex-col gap-2">
           <h3 className="font-semibold text-xl md:text-3xl line-clamp-3 h-fit group-hover:underline">
             {title}
           </h3>
