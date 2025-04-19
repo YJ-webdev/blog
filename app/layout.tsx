@@ -29,6 +29,9 @@ export const metadata: Metadata = {
       },
     ],
   },
+  other: {
+    'naver-site-verification': '640268bc6657654ab1509bc3533928003d279c12',
+  },
 };
 
 export default async function RootLayout({
@@ -72,6 +75,13 @@ export default async function RootLayout({
   const user = session?.user;
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* <head>
+        <meta
+          name="naver-site-verification"
+          content="640268bc6657654ab1509bc3533928003d279c12"
+        />
+      </head> */}
+
       <body
         className={`${inter.className} antialiased`}
         suppressHydrationWarning

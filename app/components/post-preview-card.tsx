@@ -30,7 +30,7 @@ export const PostPreviewCard = ({
             alt="Preview"
             height={500}
             width={500}
-            className="object-cover rounded-md md:rounded-none aspect-video w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
+            className="object-cover rounded-md md:rounded-none aspect-[3/2] md:aspect-video w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
           />
         </div>
       ) : (
@@ -39,16 +39,22 @@ export const PostPreviewCard = ({
 
       <div className="flex-1 flex flex-col justify-between dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-white">
         <div className="flex flex-col gap-2 justify-between items-start">
-          <h3 className="w-full text-base md:text-xl font-semibold tracking-tight">
+          <h3 className="w-full text-[16px] sm:text-xl font-semibold tracking-tight">
             {title}
           </h3>{' '}
-          <p className="hidden md:block text-sm/[23px] overflow-hidden ">
+          <p className="hidden sm:block sm:line-clamp-2 md:line-clamp-none text-sm/[23px] truncate-text">
             {extractFirstParagraphText(content as JSONContent)}
           </p>
         </div>
 
-        <div className="text-xs flex gap-2 font-light text-end min-w-fit mt-2 tracking-loose self-end">
-          <p>{timeAgo(createdAt)}</p> <p>|</p> <p>{tags?.[0].name}</p>
+        <div className="text-xs flex font-light text-end min-w-fit mt-2 tracking-loose self-end">
+          <p>{timeAgo(createdAt)}</p>{' '}
+          {tags && (
+            <p>
+              <span className="mx-2">|</span>
+              {tags?.[0].name}
+            </p>
+          )}
         </div>
       </div>
     </Link>
