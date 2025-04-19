@@ -53,15 +53,15 @@ export const PrevNext = ({ prevPost, nextPost }: PrevNextProps) => {
         </HoverCard>
       )}
       {nextPost && (
-        <HoverCard>
-          <HoverCardTrigger asChild className="fixed bottom-20 right-0 z-30 ">
+        <HoverCard openDelay={0} closeDelay={100}>
+          <HoverCardTrigger asChild className="fixed bottom-20 right-0 z-30">
             <Link
               href={`/post/${nextPost.slug}`}
               className="bg-white dark:bg-[#1f1f1f] p-3"
             >
               <ArrowRight
                 strokeWidth={1}
-                className="md:size-14 sm:size-10 hover:translate-x-1 transition-all duration-100"
+                className="md:size-14 sm:size-10 hover:translate-x-1 transition-all"
               />
             </Link>
           </HoverCardTrigger>

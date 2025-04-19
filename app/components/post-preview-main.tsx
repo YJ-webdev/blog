@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDateWithoutYear, extractFirstParagraphText } from '../lib/utils';
+import { extractFirstParagraphText, timeAgo } from '../lib/utils';
 import { PostPreviewType } from '../lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { JSONContent } from '@tiptap/core';
@@ -11,11 +11,12 @@ export const PostPreviewMain = ({
   image,
   content,
   createdAt,
+  tags,
 }: PostPreviewType) => {
   return (
     <Link
       href={`/post/${slug}`}
-      className="flex flex-col md:flex-row gap-4 w-full p-4 group"
+      className="flex flex-col md:flex-row gap-3 md:gap-10 w-full py-4 md:p-4 group "
     >
       {image ? (
         <Image
@@ -29,24 +30,19 @@ export const PostPreviewMain = ({
         <Skeleton className="h-60 md:h-80 w-full rouned-lg" />
       )}
 
-      <div className="flex flex-col md:h-80 md:w-2/5">
-        <div className="w-full flex flex-col gap-2 flex-grow">
-          <div className="flex justify-between items-start">
-            <h3 className="font-semibold text-lg line-clamp-1 sm:line-clamp-3">
-              {title}
-            </h3>
-            <p className="md:hidden text-xs font-light text-end min-w-fit">
-              {formatDateWithoutYear(createdAt)}
-            </p>
-          </div>
+      <div className="flex flex-col md:h-80 md:w-[30%] px-4 md:px-0 flex-shrink-0">
+        <div className="w-full flex flex-col gap-1 flex-grow">
+          <h3 className="font-semibold text-xl md:text-3xl line-clamp-3">
+            {title}
+          </h3>
 
-          <p className="text-sm/[23px] truncate-text">
+          <p className="text-base truncate-text line-clamp-2 md:line-clamp-none">
             {extractFirstParagraphText(content as JSONContent)}
           </p>
         </div>
-        <p className="hidden md:block text-xs font-light text-end min-w-fit">
-          {formatDateWithoutYear(createdAt)}
-        </p>
+        <div className="text-xs flex gap-2 font-light text-end min-w-fit mt-2 self-end">
+          <p>{timeAgo(createdAt)}</p> <p>|</p> <p>{tags?.[0].name}</p>
+        </div>
       </div>
     </Link>
   );

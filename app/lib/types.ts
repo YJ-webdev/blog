@@ -7,10 +7,14 @@ export type SidebarPostType = {
   createdAt: Date;
 };
 
+type tagname = {
+  name: string;
+};
+
 export type PostPreviewType = SidebarPostType & {
   image?: string | null;
   content: JsonValue;
-  tags?: Tag[];
+  tags?: tagname[];
   authorId?: string;
   bookmarkedBy?: boolean;
   myPosts?: boolean;

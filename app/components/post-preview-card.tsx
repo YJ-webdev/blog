@@ -3,7 +3,7 @@
 import { type PostPreviewType } from '../lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDateWithoutYear, extractFirstParagraphText } from '../lib/utils';
+import { extractFirstParagraphText, timeAgo } from '../lib/utils';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { JSONContent } from '@tiptap/core';
@@ -11,6 +11,7 @@ import { JSONContent } from '@tiptap/core';
 export const PostPreviewCard = ({
   slug,
   title,
+  tags,
   image,
   content,
   createdAt,
@@ -19,31 +20,36 @@ export const PostPreviewCard = ({
     <Link
       href={`/post/${slug}`}
       className={cn(
-        'flex flex-col w-full hover:cursor-pointer group relative group p-4 gap-3 rounded-lg',
+        'flex md:flex-col flex-row w-screen md:w-full hover:cursor-pointer group relative group p-4 gap-4 rounded-lg',
       )}
     >
       {image ? (
-        <Image
-          src={image || '/images/no-image.png'}
-          alt="Preview"
-          height={500}
-          width={500}
-          className="object-cover aspect-video h-auto w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
-        />
+        <div className="w-[45%] md:w-full ">
+          <Image
+            src={image}
+            alt="Preview"
+            height={500}
+            width={500}
+            className="object-cover rounded-md md:rounded-none aspect-video w-full transition-all duration-300 group-hover:filter group-hover:brightness-110"
+          />
+        </div>
       ) : (
-        <Skeleton className="aspect-video h-auto w-full rounded-lg" />
+        <Skeleton className="w-[45%] h-full rounded-lg" />
       )}
 
-      <div className="flex flex-col dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-white gap-y-2">
-        <div className="flex justify-between items-start">
-          <h3 className="w-full text-lg font-semibold line-clamp-1">{title}</h3>
-          <p className="text-xs font-light text-end min-w-fit">
-            {formatDateWithoutYear(createdAt)}
+      <div className="flex-1 flex flex-col justify-between dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-white">
+        <div className="flex flex-col gap-2 justify-between items-start">
+          <h3 className="w-full text-base md:text-xl font-semibold tracking-tight">
+            {title}
+          </h3>{' '}
+          <p className="hidden md:block text-sm/[23px] overflow-hidden ">
+            {extractFirstParagraphText(content as JSONContent)}
           </p>
         </div>
-        <p className="text-sm/[23px] overflow-hidden ">
-          {extractFirstParagraphText(content as JSONContent)}
-        </p>
+
+        <div className="text-xs flex gap-2 font-light text-end min-w-fit mt-2 tracking-loose self-end">
+          <p>{timeAgo(createdAt)}</p> <p>|</p> <p>{tags?.[0].name}</p>
+        </div>
       </div>
     </Link>
   );

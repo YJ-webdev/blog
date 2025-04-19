@@ -12,8 +12,13 @@ export default async function Home() {
       title: true,
       content: true,
       image: true,
-      tags: true,
       createdAt: true,
+      tags: {
+        take: 1,
+        select: {
+          name: true,
+        },
+      },
     },
     orderBy: { createdAt: 'desc' },
   });
@@ -30,10 +35,11 @@ export default async function Home() {
         content={mainPost.content}
         image={mainPost.image!}
         createdAt={mainPost.createdAt!}
+        tags={mainPost.tags}
       />
-
+      {/* <hr className="mx-4" /> */}
       {otherPosts.length > 0 && (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:gap-3 sm:grid-cols-2">
           {otherPosts.map((post) => (
             <PostPreviewCard
               key={post.slug}
@@ -42,6 +48,7 @@ export default async function Home() {
               content={post.content}
               image={post.image!}
               createdAt={post.createdAt!}
+              tags={post.tags}
             />
           ))}
         </div>
